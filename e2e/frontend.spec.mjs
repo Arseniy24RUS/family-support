@@ -14,7 +14,7 @@ test('приложение и обязательные локальные рес
     '/assets/hero-family.jpg', '/assets/favicon.png', '/assets/logo-sovetmam-horizontal.jpg',
     '/assets/logo-sovetmam-round.svg', '/assets/logo-gosuslugi.svg', '/assets/logo-sfr.png',
     '/manifest.webmanifest', '/vendor/lucide.min.js', '/data/measures.json', '/data/meta.json',
-    '/data/ru-regions.geojson'
+    '/data/ru-regions.geojson', '/data/details/manifest.json'
   ]) {
     const response = await page.request.get(path);
     expect(response.ok(), path).toBeTruthy();
@@ -29,18 +29,18 @@ test('приложение и обязательные локальные рес
   expect(health.failedRequests).toEqual([]);
 });
 
-test('header содержит только основной заголовок и партнёрский блок', async ({ page }) => {
+test('header объединяет логотипы организаций слева и не содержит правого партнёрского блока', async ({ page }) => {
   await openReady(page);
-  await expect(page.locator('.institution-brand img')).toBeVisible();
+  const organizations = page.locator('.header-organizations');
+  await expect(organizations.locator('.institution-brand img')).toBeVisible();
+  await expect(organizations.locator('.header-organizations__divider')).toBeVisible();
+  await expect(organizations.locator('.council-brand img')).toBeVisible();
   await expect(page.locator('.product-brand')).toHaveText('Меры поддержки семей с детьми');
   await expect(page.getByText(/Федеральный каталог/i)).toHaveCount(0);
   await expect(page.locator('header nav, #menu-toggle')).toHaveCount(0);
-  const partner = page.locator('.header-partner');
-  await expect(partner).toContainText('При поддержке Совета матерей');
-  await expect(partner).toHaveAttribute('href', 'https://app.sovetmam.ru/');
-  await expect(partner).toHaveAttribute('rel', /noopener/);
-  await expect(partner).toHaveAttribute('rel', /noreferrer/);
-  await expect(partner.locator('img')).toBeVisible();
+  await expect(page.locator('.header-partner')).toHaveCount(0);
+  await expect(page.getByText(/при поддержке/i)).toHaveCount(0);
+  await expect(page.locator('a[href*="app.sovetmam.ru"]')).toHaveCount(0);
 });
 
 test('интерфейс показывает полный рабочий снимок и фактическую статистику', async ({ page }) => {

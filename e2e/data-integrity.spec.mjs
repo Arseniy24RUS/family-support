@@ -3,15 +3,19 @@ import { jsonFrom, openReady } from './helpers.mjs';
 
 test('снимок данных полон, уникален и согласован с meta и справочником регионов', async ({ page }) => {
   await openReady(page);
-  const [measures, meta, regionsBase] = await Promise.all([
+  const [measures, meta, regionsBase, detailManifest] = await Promise.all([
     jsonFrom(page, '/data/measures.json'),
     jsonFrom(page, '/data/meta.json'),
-    jsonFrom(page, '/data/regions-base.json')
+    jsonFrom(page, '/data/regions-base.json'),
+    jsonFrom(page, '/data/details/manifest.json')
   ]);
   expect(measures.length).toBeGreaterThanOrEqual(1000);
   expect(meta.measure_count).toBe(measures.length);
   expect(meta.loaded_link_count).toBe(measures.length);
   expect(meta.parse_error_count).toBe(0);
+  expect(meta.detail_error_count).toBe(0);
+  expect(meta.detail_count).toBe(measures.length);
+  expect(detailManifest.detail_count).toBe(measures.length);
   expect(measures.length / meta.page_reported_count).toBeGreaterThanOrEqual(0.97);
   expect(new Set(measures.map((item) => item.id)).size).toBe(measures.length);
   expect(new Set(regionsBase).size).toBe(89);
@@ -22,6 +26,20 @@ test('снимок данных полон, уникален и согласов
     expect(item.source_url).toMatch(/^https:\/\/app\.sovetmam\.ru\/catalog\/[a-z0-9-]+$/i);
     expect(item.content_hash).toMatch(/^[a-f0-9]{64}$/);
     if (item.level === 'regional') expect(regionsBase).toContain(item.region);
+  }
+
+  const shards = await Promise.all(Array.from({ length: detailManifest.shard_count }, (_, index) =>
+    jsonFrom(page, `/data/details/${String(index).padStart(2, '0')}.json`)
+  ));
+  const details = Object.assign({}, ...shards);
+  expect(Object.keys(details)).toHaveLength(measures.length);
+  const allowedHosts = new Set(['gosuslugi.ru', 'www.gosuslugi.ru', 'sfr.gov.ru', 'nalog.gov.ru', 'www.nalog.gov.ru', 'trudvsem.ru', 'www.trudvsem.ru']);
+  for (const measure of measures) {
+    const detail = details[measure.id];
+    expect(detail, measure.id).toBeTruthy();
+    expect(detail.steps.length, measure.id).toBeGreaterThan(0);
+    expect(detail.official_links.length, measure.id).toBeGreaterThan(0);
+    for (const link of detail.official_links) expect(allowedHosts.has(new URL(link.url).hostname), link.url).toBeTruthy();
   }
 });
 

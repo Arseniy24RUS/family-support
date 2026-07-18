@@ -28,3 +28,17 @@ test('диалог региона помещается в viewport и сохра
   await mkdir('artifacts', { recursive: true });
   await page.screenshot({ path: 'artifacts/region-dialog.png', fullPage: true });
 });
+
+test('подробная карточка меры помещается в viewport и сохраняется как визуальный артефакт', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.startsWith('mobile'), 'Отдельный эталон подробной карточки сохраняется на desktop.');
+  await openReady(page);
+  await page.locator('.measure-card__link').first().click();
+  await expect(page.locator('.measure-detail-section').first()).toBeVisible();
+  const box = await page.locator('#measure-dialog').boundingBox();
+  expect(box.x).toBeGreaterThanOrEqual(0);
+  expect(box.y).toBeGreaterThanOrEqual(0);
+  expect(box.x + box.width).toBeLessThanOrEqual(1672);
+  expect(box.y + box.height).toBeLessThanOrEqual(941);
+  await mkdir('artifacts', { recursive: true });
+  await page.screenshot({ path: 'artifacts/measure-dialog.png', fullPage: true });
+});

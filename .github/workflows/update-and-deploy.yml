@@ -62,6 +62,7 @@ jobs:
         env:
           MIN_MEASURES: "1000"
           PARSER_TIMEOUT_MS: "20000"
+          DETAIL_CONCURRENCY: "16"
 
       - name: Повторно проверить проект после обновления
         run: npm run check

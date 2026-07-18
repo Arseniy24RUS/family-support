@@ -11,7 +11,10 @@ const state = {
   regionalCounts: new Map(),
   federalCount: 0,
   geoData: null,
-  searchTimer: null
+  searchTimer: null,
+  detailShards: new Map(),
+  detailShardCount: 32,
+  selectedMeasure: null
 };
 
 const elements = {
@@ -45,6 +48,10 @@ const elements = {
   regionDialog: document.querySelector('#region-dialog'),
   regionSearch: document.querySelector('#region-search'),
   regionList: document.querySelector('#region-list'),
+  measureDialog: document.querySelector('#measure-dialog'),
+  measureDialogTitle: document.querySelector('#measure-dialog-title'),
+  measureDialogScope: document.querySelector('#measure-dialog-scope'),
+  measureDialogBody: document.querySelector('#measure-dialog-body'),
   toast: document.querySelector('#toast'),
   currentYear: document.querySelector('#current-year')
 };
@@ -112,12 +119,22 @@ function refreshIcons() {
   });
 }
 
-function safeUrl(value) {
+const OFFICIAL_HOSTS = new Set([
+  'gosuslugi.ru',
+  'www.gosuslugi.ru',
+  'sfr.gov.ru',
+  'nalog.gov.ru',
+  'www.nalog.gov.ru',
+  'trudvsem.ru',
+  'www.trudvsem.ru'
+]);
+
+function officialUrl(value) {
   try {
-    const url = new URL(value, window.location.href);
-    return ['http:', 'https:'].includes(url.protocol) ? url.href : '#';
+    const url = new URL(value);
+    return url.protocol === 'https:' && OFFICIAL_HOSTS.has(url.hostname) ? url.href : null;
   } catch {
-    return '#';
+    return null;
   }
 }
 
@@ -243,19 +260,18 @@ function createPopularItem(measure) {
   const title = document.createElement('h3');
   title.textContent = measure.title;
   const summary = document.createElement('p');
-  summary.textContent = measure.summary || measure.benefit || 'Полное описание доступно на странице источника.';
+  summary.textContent = measure.summary || measure.benefit || 'Подробные условия доступны во внутренней карточке меры.';
   const meta = document.createElement('div');
   meta.className = 'popular-item__meta';
   meta.append(createStatusTag(levelLabel(measure)));
   if (measure.category) meta.append(createStatusTag(measure.category, true));
   body.append(title, summary, meta);
 
-  const link = document.createElement('a');
+  const link = document.createElement('button');
+  link.type = 'button';
   link.className = 'popular-item__link';
-  link.href = safeUrl(measure.source_url);
-  link.target = '_blank';
-  link.rel = 'noopener noreferrer';
   link.textContent = 'Подробнее';
+  link.addEventListener('click', () => openMeasureDialog(measure));
 
   article.append(iconBox, body, link);
   return article;
@@ -519,7 +535,7 @@ function createMeasureCard(measure) {
 
   const summary = document.createElement('p');
   summary.className = 'measure-card__summary';
-  summary.textContent = measure.summary || 'Краткое описание отсутствует. Полные условия доступны на странице источника.';
+  summary.textContent = measure.summary || 'Краткое описание отсутствует. Откройте внутреннюю карточку с условиями.';
 
   article.append(top, title, summary);
 
@@ -539,14 +555,13 @@ function createMeasureCard(measure) {
   source.className = 'measure-card__source';
   source.textContent = `Источник: ${sourceName(measure)}`;
 
-  const link = document.createElement('a');
+  const link = document.createElement('button');
+  link.type = 'button';
   link.className = 'measure-card__link';
-  link.href = safeUrl(measure.source_url);
-  link.target = '_blank';
-  link.rel = 'noopener noreferrer';
   const linkText = document.createElement('span');
-  linkText.textContent = 'К источнику';
-  link.append(linkText, icon('external-link'));
+  linkText.textContent = 'Подробнее';
+  link.append(linkText, icon('arrow-right'));
+  link.addEventListener('click', () => openMeasureDialog(measure));
   footer.append(source, link);
   article.append(footer);
   return article;
@@ -710,7 +725,167 @@ function openRegionDialog() {
 
 function closeRegionDialog() {
   if (elements.regionDialog?.open) elements.regionDialog.close();
-  document.body.classList.remove('dialog-open');
+  syncDialogState();
+}
+
+function detailShardKey(id, shardCount = state.detailShardCount) {
+  let hash = 2166136261;
+  for (const character of String(id)) {
+    hash ^= character.codePointAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0) % shardCount;
+}
+
+async function loadMeasureDetail(measure) {
+  const shardKey = String(detailShardKey(measure.id)).padStart(2, '0');
+  if (!state.detailShards.has(shardKey)) {
+    const response = await fetch(`./data/details/${shardKey}.json`, { cache: 'force-cache' });
+    if (!response.ok) throw new Error('Не удалось загрузить подробную карточку.');
+    state.detailShards.set(shardKey, await response.json());
+  }
+  const detail = state.detailShards.get(shardKey)?.[measure.id];
+  if (!detail) throw new Error('Подробная карточка этой меры временно недоступна.');
+  return detail;
+}
+
+function createDetailSection(title, items, { ordered = false, iconName = 'list-checks' } = {}) {
+  if (!Array.isArray(items) || !items.length) return null;
+  const section = document.createElement('section');
+  section.className = 'measure-detail-section';
+  const heading = document.createElement('h3');
+  heading.append(icon(iconName));
+  const headingText = document.createElement('span');
+  headingText.textContent = title;
+  heading.append(headingText);
+  const list = document.createElement(ordered ? 'ol' : 'ul');
+  for (const item of items) {
+    const listItem = document.createElement('li');
+    listItem.textContent = item;
+    list.append(listItem);
+  }
+  section.append(heading, list);
+  return section;
+}
+
+function renderMeasureDetail(measure, detail) {
+  const fragment = document.createDocumentFragment();
+
+  const overview = document.createElement('div');
+  overview.className = 'measure-detail-overview';
+  if (measure.summary) {
+    const summary = document.createElement('p');
+    summary.textContent = measure.summary;
+    overview.append(summary);
+  }
+  if (measure.benefit) {
+    const benefit = document.createElement('div');
+    benefit.className = 'measure-detail-benefit';
+    benefit.append(icon('gift'));
+    const text = document.createElement('span');
+    text.textContent = measure.benefit;
+    benefit.append(text);
+    overview.append(benefit);
+  }
+  fragment.append(overview);
+
+  const sections = [
+    createDetailSection('Как оформить', detail.steps, { ordered: true, iconName: 'list-ordered' }),
+    createDetailSection('Какие документы нужны', detail.documents, { iconName: 'files' }),
+    createDetailSection('Полезно знать', detail.notes, { iconName: 'lightbulb' })
+  ].filter(Boolean);
+  fragment.append(...sections);
+
+  const links = (detail.official_links ?? [])
+    .map((link) => ({ ...link, safeUrl: officialUrl(link.url) }))
+    .filter((link) => link.safeUrl);
+  const actionSection = document.createElement('section');
+  actionSection.className = 'measure-detail-actions';
+  const actionTitle = document.createElement('h3');
+  actionTitle.textContent = 'Официальные сервисы';
+  const actionHint = document.createElement('p');
+  actionHint.textContent = 'Проверить право и подать заявление можно только на сайте соответствующего государственного сервиса.';
+  actionSection.append(actionTitle, actionHint);
+  const actionList = document.createElement('div');
+  actionList.className = 'measure-detail-actions__list';
+  for (const link of links) {
+    const anchor = document.createElement('a');
+    anchor.href = link.safeUrl;
+    anchor.target = '_blank';
+    anchor.rel = 'noopener noreferrer';
+    const label = document.createElement('span');
+    const service = document.createElement('small');
+    service.textContent = link.service;
+    const title = document.createElement('strong');
+    title.textContent = link.title;
+    label.append(service, title);
+    anchor.append(label, icon('arrow-up-right'));
+    actionList.append(anchor);
+  }
+  actionSection.append(actionList);
+  fragment.append(actionSection);
+
+  const attribution = document.createElement('p');
+  attribution.className = 'measure-detail-attribution';
+  attribution.textContent = 'Описание систематизировано по материалам информационного каталога «Шпаргалка для родителей». Перед обращением проверьте актуальные условия на официальном сервисе.';
+  fragment.append(attribution);
+
+  elements.measureDialogBody.replaceChildren(fragment);
+  refreshIcons();
+}
+
+function renderMeasureDetailError(error) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'measure-detail-error';
+  wrapper.append(icon('triangle-alert'));
+  const title = document.createElement('h3');
+  title.textContent = 'Подробности не загрузились';
+  const message = document.createElement('p');
+  message.textContent = String(error?.message ?? error);
+  const retry = document.createElement('button');
+  retry.type = 'button';
+  retry.textContent = 'Попробовать ещё раз';
+  retry.addEventListener('click', () => openMeasureDialog(state.selectedMeasure, { reuse: true }));
+  wrapper.append(title, message, retry);
+  elements.measureDialogBody.replaceChildren(wrapper);
+  refreshIcons();
+}
+
+function syncDialogState() {
+  document.body.classList.toggle('dialog-open', Boolean(elements.regionDialog?.open || elements.measureDialog?.open));
+}
+
+async function openMeasureDialog(measure, { reuse = false } = {}) {
+  if (!measure || !elements.measureDialog?.showModal) return;
+  state.selectedMeasure = measure;
+  elements.measureDialogTitle.textContent = measure.title;
+  elements.measureDialogScope.textContent = [levelLabel(measure), measure.region, measure.category].filter(Boolean).join(' · ');
+
+  const loading = document.createElement('div');
+  loading.className = 'measure-dialog__loading';
+  loading.append(icon('loader-circle'));
+  const loadingText = document.createElement('p');
+  loadingText.textContent = 'Загружаем подробные условия…';
+  loading.append(loadingText);
+  elements.measureDialogBody.replaceChildren(loading);
+  if (!reuse && !elements.measureDialog.open) elements.measureDialog.showModal();
+  syncDialogState();
+  refreshIcons();
+
+  try {
+    const detail = await loadMeasureDetail(measure);
+    if (state.selectedMeasure?.id === measure.id && elements.measureDialog.open) {
+      renderMeasureDetail(measure, detail);
+    }
+  } catch (error) {
+    if (state.selectedMeasure?.id === measure.id && elements.measureDialog.open) renderMeasureDetailError(error);
+  }
+}
+
+function closeMeasureDialog() {
+  if (elements.measureDialog?.open) elements.measureDialog.close();
+  state.selectedMeasure = null;
+  syncDialogState();
 }
 
 let toastTimer;
@@ -766,11 +941,24 @@ function bindEvents() {
   });
 
   elements.regionSearch.addEventListener('input', () => renderRegionList(elements.regionSearch.value));
-  elements.regionDialog.addEventListener('close', () => document.body.classList.remove('dialog-open'));
+  elements.regionDialog.addEventListener('close', syncDialogState);
   elements.regionDialog.addEventListener('click', (event) => {
     const bounds = elements.regionDialog.getBoundingClientRect();
     const inside = event.clientX >= bounds.left && event.clientX <= bounds.right && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
     if (!inside) closeRegionDialog();
+  });
+
+  document.querySelectorAll('[data-close-measure]').forEach((button) => {
+    button.addEventListener('click', closeMeasureDialog);
+  });
+  elements.measureDialog.addEventListener('close', () => {
+    state.selectedMeasure = null;
+    syncDialogState();
+  });
+  elements.measureDialog.addEventListener('click', (event) => {
+    const bounds = elements.measureDialog.getBoundingClientRect();
+    const inside = event.clientX >= bounds.left && event.clientX <= bounds.right && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
+    if (!inside) closeMeasureDialog();
   });
 
   window.addEventListener('scroll', () => {
@@ -803,6 +991,7 @@ async function init() {
     const { measures, meta, baseRegions, geoData } = await loadData();
     state.measures = Array.isArray(measures) ? measures : [];
     state.meta = meta;
+    state.detailShardCount = Math.max(1, Number(meta.detail_shard_count) || 32);
     state.geoData = geoData;
 
     const baseRegionNames = regionNamesFromPayload(baseRegions);

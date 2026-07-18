@@ -23,27 +23,36 @@ const required = [
   'data/meta.json',
   'data/regions.json',
   'data/regions-base.json',
-  'data/ru-regions.geojson'
+  'data/ru-regions.geojson',
+  'data/details/manifest.json',
+  ...Array.from({ length: 32 }, (_, index) => `data/details/${String(index).padStart(2, '0')}.json`)
 ];
 
 for (const relative of required) {
   await access(resolve(root, relative));
 }
 
-const [html, css, js, measuresText, metaText, regionsBaseText, geoText] = await Promise.all([
+const [html, css, js, measuresText, metaText, regionsBaseText, geoText, detailManifestText, ...detailShardTexts] = await Promise.all([
   readFile(resolve(root, 'index.html'), 'utf8'),
   readFile(resolve(root, 'styles.css'), 'utf8'),
   readFile(resolve(root, 'app.js'), 'utf8'),
   readFile(resolve(root, 'data/measures.json'), 'utf8'),
   readFile(resolve(root, 'data/meta.json'), 'utf8'),
   readFile(resolve(root, 'data/regions-base.json'), 'utf8'),
-  readFile(resolve(root, 'data/ru-regions.geojson'), 'utf8')
+  readFile(resolve(root, 'data/ru-regions.geojson'), 'utf8'),
+  readFile(resolve(root, 'data/details/manifest.json'), 'utf8'),
+  ...Array.from({ length: 32 }, (_, index) => readFile(
+    resolve(root, `data/details/${String(index).padStart(2, '0')}.json`),
+    'utf8'
+  ))
 ]);
 
 const forbidden = [
   ['index.html', html, /Версия для слабовидящих|>Войти<|login-link|a11y-toggle/i],
+  ['index.html', html, /href=["']https:\/\/app\.sovetmam\.ru/i],
   ['styles.css', css, /a11y-mode|login-link|a11y-toggle/i],
-  ['app.js', js, /family-support-a11y|a11yToggle|setA11yMode/i]
+  ['app.js', js, /family-support-a11y|a11yToggle|setA11yMode/i],
+  ['app.js', js, /safeUrl\(measure\.source_url\)|href\s*=\s*measure\.source_url/i]
 ];
 for (const [name, content, pattern] of forbidden) {
   if (pattern.test(content)) throw new Error(`${name}: найдена удалённая функция интерфейса (${pattern}).`);
@@ -53,6 +62,8 @@ const measures = JSON.parse(measuresText);
 const meta = JSON.parse(metaText);
 const regionsBase = JSON.parse(regionsBaseText);
 const regionsGeo = JSON.parse(geoText);
+const detailManifest = JSON.parse(detailManifestText);
+const detailShards = detailShardTexts.map((text) => JSON.parse(text));
 if (!Array.isArray(measures) || measures.length === 0) throw new Error('Каталог мер пуст.');
 if (!Array.isArray(regionsBase) || regionsBase.length !== 89) {
   throw new Error(`В базовом списке должно быть 89 регионов; получено ${regionsBase?.length ?? 'неизвестно'}.`);
@@ -85,6 +96,12 @@ if (missingGeometry.length || unknownGeometry.length) {
 if (Number(meta.measure_count) !== measures.length) {
   throw new Error(`meta.measure_count (${meta.measure_count}) не совпадает с числом карточек (${measures.length}).`);
 }
+if (Number(meta.detail_shard_count) !== detailShards.length || Number(detailManifest.shard_count) !== detailShards.length) {
+  throw new Error('Количество файлов подробных карточек не совпадает с метаданными.');
+}
+if (Number(meta.detail_count) !== measures.length || Number(detailManifest.detail_count) !== measures.length) {
+  throw new Error('Подробные карточки есть не для всех мер.');
+}
 if (meta.source !== 'demo') {
   if (meta.source !== 'sovetmam' || meta.demo === true) throw new Error('Рабочий снимок имеет неверный источник или demo-флаг.');
   if (measures.length < 1000) throw new Error(`Рабочий снимок содержит только ${measures.length} мер.`);
@@ -112,6 +129,34 @@ for (const measure of measures) {
   if (!measure.content_hash || !measure.fetched_at) throw new Error(`Нет метаданных целостности у ${measure.id}.`);
 }
 
+const officialHosts = new Set([
+  'gosuslugi.ru', 'www.gosuslugi.ru', 'sfr.gov.ru', 'nalog.gov.ru',
+  'www.nalog.gov.ru', 'trudvsem.ru', 'www.trudvsem.ru'
+]);
+const detailsById = new Map();
+for (const shard of detailShards) {
+  if (!shard || Array.isArray(shard) || typeof shard !== 'object') throw new Error('Некорректный файл подробных карточек.');
+  for (const [id, detail] of Object.entries(shard)) {
+    if (detailsById.has(id)) throw new Error(`Подробная карточка ${id} встречается дважды.`);
+    for (const key of ['steps', 'documents', 'notes', 'official_links']) {
+      if (!Array.isArray(detail?.[key])) throw new Error(`В подробной карточке ${id} поле ${key} должно быть массивом.`);
+    }
+    if (!detail.steps.length) throw new Error(`В подробной карточке ${id} не указан порядок оформления.`);
+    if (!detail.official_links.length) throw new Error(`В подробной карточке ${id} нет ссылки на официальный сервис.`);
+    for (const link of detail.official_links) {
+      const url = new URL(link.url);
+      if (url.protocol !== 'https:' || !officialHosts.has(url.hostname)) {
+        throw new Error(`В карточке ${id} недопустимая внешняя ссылка: ${link.url}`);
+      }
+    }
+    detailsById.set(id, detail);
+  }
+}
+for (const id of ids) {
+  if (!detailsById.has(id)) throw new Error(`Нет подробной карточки для ${id}.`);
+}
+if (detailsById.size !== measures.length) throw new Error('Количество подробных карточек не совпадает с каталогом.');
+
 const localReferences = [...html.matchAll(/(?:src|href)="(\.\/[^"?#]+)(?:[?#][^"]*)?"/g)]
   .map((match) => match[1])
   .filter((value) => !value.startsWith('./#'));
@@ -119,4 +164,4 @@ for (const reference of new Set(localReferences)) {
   await access(resolve(root, reference.slice(2)));
 }
 
-console.log(`Проверка завершена: ${measures.length} карточек, ${regionsBase.length} регионов, все локальные ресурсы доступны.`);
+console.log(`Проверка завершена: ${measures.length} мер и подробных карточек, ${regionsBase.length} регионов, внешние ссылки ведут только на официальные сервисы.`);

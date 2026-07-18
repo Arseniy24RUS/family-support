@@ -2,6 +2,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { chromium } from 'playwright';
 import { parseCatalogCard, parseCatalogPayloadMeasure } from '../lib/parse-card.mjs';
+import { parseMeasureDetailsHtml } from '../lib/details.mjs';
 
 const DEFAULT_URL = 'https://app.sovetmam.ru/catalog';
 const CARD_LINK_SELECTOR = 'a[href*="/catalog/"]';
@@ -119,6 +120,59 @@ async function collectDomCards(page, reportedCount) {
   });
 }
 
+async function collectMeasureDetails(request, measures, timeout) {
+  const concurrency = Math.max(1, Math.min(24, Number(process.env.DETAIL_CONCURRENCY ?? 12)));
+  const details = new Array(measures.length);
+  const errors = [];
+  let cursor = 0;
+  let completed = 0;
+
+  async function worker() {
+    while (cursor < measures.length) {
+      const index = cursor;
+      cursor += 1;
+      const measure = measures[index];
+      let lastError;
+
+      for (let attempt = 1; attempt <= 3; attempt += 1) {
+        try {
+          const response = await request.get(measure.source_url, {
+            timeout: Math.max(30_000, timeout),
+            failOnStatusCode: false,
+            headers: { accept: 'text/html,application/xhtml+xml' }
+          });
+          if (!response.ok()) throw new Error(`HTTP ${response.status()}`);
+          const html = await response.text();
+          const parsed = parseMeasureDetailsHtml(html, measure);
+          if (!parsed.steps.length) throw new Error('не найден раздел «Как оформить»');
+          details[index] = { id: measure.id, ...parsed };
+          lastError = null;
+          break;
+        } catch (error) {
+          lastError = error;
+          if (attempt < 3) await new Promise((resolvePromise) => setTimeout(resolvePromise, attempt * 350));
+        }
+      }
+
+      if (lastError) {
+        errors.push({
+          id: measure.id,
+          url: measure.source_url,
+          message: String(lastError?.message ?? lastError)
+        });
+      }
+
+      completed += 1;
+      if (completed % 100 === 0 || completed === measures.length) {
+        console.log(`Подробные карточки: ${completed}/${measures.length}`);
+      }
+    }
+  }
+
+  await Promise.all(Array.from({ length: concurrency }, () => worker()));
+  return { details: details.filter(Boolean), errors };
+}
+
 export async function scrapeSovetmam(options = {}) {
   const url = options.url ?? process.env.SOVETMAM_URL ?? DEFAULT_URL;
   const debugDir = options.debugDir ?? 'debug';
@@ -206,6 +260,10 @@ export async function scrapeSovetmam(options = {}) {
     diagnostics.reportedCount = reportedCount;
     diagnostics.loadedLinkCount = loadedLinkCount;
     diagnostics.parsedCount = measures.length;
+
+    const detailResult = await collectMeasureDetails(context.request, measures, parserTimeout);
+    diagnostics.detailCount = detailResult.details.length;
+    diagnostics.detailErrors = detailResult.errors;
     await mkdir(debugDir, { recursive: true });
     await writeFile(`${debugDir}/sovetmam-diagnostics.json`, `${JSON.stringify(diagnostics, null, 2)}\n`, 'utf8');
     if (traceEnabled) await page.screenshot({ path: `${debugDir}/sovetmam-success.png`, fullPage: true });
@@ -218,7 +276,9 @@ export async function scrapeSovetmam(options = {}) {
       loadedLinkCount,
       extractionMode,
       parseErrors,
-      measures
+      measures,
+      details: detailResult.details,
+      detailErrors: detailResult.errors
     };
   } catch (error) {
     await saveDebug(page, debugDir, error);

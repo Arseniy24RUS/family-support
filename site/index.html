@@ -18,18 +18,19 @@
   <header class="site-header" id="site-header">
     <div class="main-header">
       <div class="site-container main-header__inner">
-        <a class="institution-brand" href="https://исд-фнисц.рф/" target="_blank" rel="noopener noreferrer" aria-label="Институт социальной демографии ФНИСЦ РАН">
-          <img src="./assets/logo-isd.png" alt="Институт социальной демографии ФНИСЦ РАН" width="450" height="189">
-        </a>
+        <div class="header-organizations" aria-label="Организации проекта">
+          <a class="institution-brand" href="https://исд-фнисц.рф/" target="_blank" rel="noopener noreferrer" aria-label="Институт социальной демографии ФНИСЦ РАН">
+            <img src="./assets/logo-isd.png" alt="Институт социальной демографии ФНИСЦ РАН" width="450" height="189">
+          </a>
+          <span class="header-organizations__divider" aria-hidden="true"></span>
+          <span class="council-brand">
+            <img src="./assets/logo-sovetmam-horizontal.jpg" alt="Совет матерей" width="1280" height="658">
+          </span>
+        </div>
 
         <div class="product-brand" aria-label="Название информационного ресурса">
           <strong>Меры поддержки семей с детьми</strong>
         </div>
-
-        <a class="header-partner" href="https://app.sovetmam.ru/" target="_blank" rel="noopener noreferrer">
-          <span>При поддержке Совета матерей</span>
-          <img src="./assets/logo-sovetmam-horizontal.jpg" alt="Совет матерей" width="1280" height="658">
-        </a>
       </div>
     </div>
   </header>
@@ -39,7 +40,7 @@
       <div class="hero">
         <div class="hero__content">
           <h1 id="hero-title">Найдите меры поддержки<br>для вашей семьи</h1>
-          <p>Единый каталог федеральных и региональных мер поддержки семей с детьми. Краткая информация, понятная навигация и переход к полному описанию в источнике.</p>
+          <p>Единый каталог федеральных и региональных мер поддержки семей с детьми. Подробные условия, документы и порядок оформления собраны прямо в навигаторе.</p>
 
           <form class="hero-search" id="hero-search-form" role="search">
             <i data-lucide="search" aria-hidden="true"></i>
@@ -206,7 +207,7 @@
         <div class="catalog-heading">
           <div>
             <h2 id="catalog-title">Каталог мер поддержки</h2>
-            <p>Карточка содержит краткое описание; полные условия открываются на странице источника.</p>
+            <p>Нажмите «Подробнее», чтобы увидеть условия, документы и порядок оформления внутри портала.</p>
           </div>
           <div class="catalog-count" id="result-count" aria-live="polite">Загрузка каталога…</div>
         </div>
@@ -235,11 +236,11 @@
       </div>
 
       <div class="service-list">
-        <a href="https://app.sovetmam.ru/catalog" target="_blank" rel="noopener noreferrer">
+        <div class="service-list__item">
           <span class="service-icon service-icon--logo"><img src="./assets/logo-sovetmam-round.svg" alt="" width="215" height="215"></span>
-          <span><strong>«Шпаргалка для родителей»</strong><small>Каталог проекта «Совета матерей»</small></span>
-          <i data-lucide="arrow-up-right" aria-hidden="true"></i>
-        </a>
+          <span><strong>Совет матерей</strong><small>Информационный партнёр проекта</small></span>
+          <i data-lucide="badge-check" aria-hidden="true"></i>
+        </div>
         <a href="https://www.gosuslugi.ru/social-navigator" target="_blank" rel="noopener noreferrer">
           <span class="service-icon service-icon--logo"><img src="./assets/logo-gosuslugi.svg" alt="" width="293" height="293"></span>
           <span><strong>Социальный навигатор Госуслуг</strong><small>Персональный подбор и электронные заявления</small></span>
@@ -257,13 +258,13 @@
       <div class="site-container about-project__grid">
         <div>
           <h2>О навигаторе</h2>
-          <p>Платформа систематизирует краткие сведения о мерах поддержки и направляет пользователя к внешнему источнику. Она не заменяет официальное решение уполномоченного органа и не собирает персональные данные для определения права на выплату.</p>
+          <p>Платформа систематизирует условия, документы и порядок оформления мер поддержки. Для подачи заявления она направляет только на официальные государственные сервисы и не собирает персональные данные.</p>
         </div>
         <div class="about-note">
           <i data-lucide="shield-check" aria-hidden="true"></i>
           <div>
             <strong>Информационный характер</strong>
-            <p>Условия, сроки, размеры выплат и способы обращения необходимо проверять на странице источника перед подачей заявления.</p>
+            <p>Условия и размеры поддержки могут меняться. Перед обращением сверяйте сведения на Госуслугах, сайте СФР или другого указанного ведомства.</p>
           </div>
         </div>
       </div>
@@ -305,6 +306,24 @@
       <input id="region-search" type="search" placeholder="Начните вводить название региона" autocomplete="off">
     </div>
     <div class="region-list" id="region-list"></div>
+  </dialog>
+
+  <dialog class="measure-dialog" id="measure-dialog" aria-labelledby="measure-dialog-title">
+    <div class="measure-dialog__header">
+      <div>
+        <span class="measure-dialog__eyebrow" id="measure-dialog-scope"></span>
+        <h2 id="measure-dialog-title">Подробная информация о мере</h2>
+      </div>
+      <button class="dialog-close" type="button" data-close-measure aria-label="Закрыть подробную карточку">
+        <i data-lucide="x" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="measure-dialog__body" id="measure-dialog-body">
+      <div class="measure-dialog__loading">
+        <i data-lucide="loader-circle" aria-hidden="true"></i>
+        <p>Загружаем подробные условия…</p>
+      </div>
+    </div>
   </dialog>
 
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
