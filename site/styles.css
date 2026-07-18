@@ -2826,3 +2826,299 @@ strong {
     flex-wrap: wrap;
   }
 }
+
+/* Header redesign based on the approved visual concept. */
+html {
+  scroll-padding-top: 180px;
+}
+
+.site-header {
+  border-bottom-color: var(--blue-200);
+  box-shadow: 0 5px 18px rgb(22 67 121 / 0.035);
+}
+
+.site-header.is-scrolled {
+  box-shadow: 0 12px 34px rgb(21 48 84 / 0.1);
+}
+
+.main-header__inner {
+  min-height: 154px;
+  grid-template-columns: minmax(520px, 540px) minmax(0, 1fr);
+  gap: 0;
+}
+
+.header-organizations {
+  gap: 24px;
+}
+
+.institution-brand img {
+  width: 270px;
+}
+
+.header-organizations__divider {
+  height: 86px;
+}
+
+.council-brand img {
+  width: 205px;
+  height: 96px;
+}
+
+.product-brand {
+  position: relative;
+  align-self: center;
+  display: grid;
+  align-content: center;
+  gap: 14px;
+  min-width: 0;
+  padding-left: 44px;
+  border-top: 0;
+  border-left: 1px solid var(--line-strong);
+}
+
+.product-brand strong {
+  color: var(--blue-700);
+  font-size: 1.28rem;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.012em;
+  white-space: nowrap;
+}
+
+.platform-nav {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 12px;
+  overflow: visible;
+}
+
+.platform-nav a {
+  position: relative;
+  min-height: 46px;
+  justify-content: center;
+  padding: 0 16px;
+  border-radius: 9px;
+  color: var(--ink);
+  font-size: 0.84rem;
+  font-weight: 720;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: background 160ms ease, color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.platform-nav a:hover {
+  background: var(--blue-100);
+  color: var(--blue-900);
+  transform: translateY(-1px);
+}
+
+.platform-nav a[aria-current="page"] {
+  background: var(--blue-700);
+  color: #fff;
+  box-shadow: 0 7px 18px rgb(36 94 172 / 0.2);
+}
+
+.platform-nav a[aria-current="page"]::after {
+  position: absolute;
+  right: 0;
+  bottom: -32px;
+  left: 0;
+  height: 4px;
+  border-radius: 4px 4px 0 0;
+  background: var(--blue-700);
+  content: "";
+}
+
+@media (max-width: 1280px) {
+  html {
+    scroll-padding-top: 164px;
+  }
+
+  .main-header__inner {
+    min-height: 138px;
+    grid-template-columns: minmax(470px, 500px) minmax(0, 1fr);
+  }
+
+  .header-organizations {
+    gap: 19px;
+  }
+
+  .institution-brand img {
+    width: 244px;
+  }
+
+  .header-organizations__divider {
+    height: 76px;
+  }
+
+  .council-brand img {
+    width: 185px;
+    height: 86px;
+  }
+
+  .product-brand {
+    gap: 11px;
+    padding-left: 36px;
+  }
+
+  .product-brand strong {
+    font-size: 1.12rem;
+  }
+
+  .platform-nav {
+    gap: 7px;
+  }
+
+  .platform-nav a {
+    min-height: 42px;
+    padding-inline: 12px;
+    font-size: 0.76rem;
+  }
+
+  .platform-nav a[aria-current="page"]::after {
+    bottom: -27px;
+  }
+}
+
+@media (max-width: 1040px) {
+  html {
+    scroll-padding-top: 150px;
+  }
+
+  .main-header__inner {
+    min-height: 124px;
+    grid-template-columns: minmax(410px, 440px) minmax(0, 1fr);
+  }
+
+  .institution-brand img {
+    width: 212px;
+  }
+
+  .header-organizations {
+    gap: 16px;
+  }
+
+  .header-organizations__divider {
+    height: 62px;
+  }
+
+  .council-brand img {
+    width: 162px;
+    height: 74px;
+  }
+
+  .product-brand {
+    gap: 9px;
+    padding-left: 26px;
+  }
+
+  .product-brand strong {
+    font-size: 1rem;
+  }
+
+  .platform-nav {
+    gap: 3px;
+  }
+
+  .platform-nav a {
+    min-height: 38px;
+    padding-inline: 8px;
+    font-size: 0.68rem;
+  }
+
+  .platform-nav a[aria-current="page"]::after {
+    bottom: -23px;
+    height: 3px;
+  }
+}
+
+@media (max-width: 760px) {
+  html {
+    scroll-padding-top: 220px;
+  }
+
+  .main-header__inner {
+    min-height: 0;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding-block: 10px 12px;
+  }
+
+  .header-organizations {
+    gap: 13px;
+  }
+
+  .institution-brand img {
+    width: 182px;
+  }
+
+  .header-organizations__divider {
+    height: 46px;
+  }
+
+  .council-brand img {
+    width: 120px;
+    height: 56px;
+  }
+
+  .product-brand {
+    gap: 8px;
+    padding-top: 9px;
+    padding-left: 0;
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+
+  .product-brand strong {
+    font-size: 0.98rem;
+    white-space: normal;
+  }
+
+  .platform-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    gap: 4px;
+  }
+
+  .platform-nav a {
+    min-width: 0;
+    min-height: 36px;
+    padding-inline: 6px;
+    font-size: 0.72rem;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .platform-nav a[aria-current="page"]::after {
+    content: none;
+  }
+}
+
+@media (max-width: 440px) {
+  .institution-brand img {
+    width: 156px;
+  }
+
+  .header-organizations {
+    gap: 10px;
+  }
+
+  .header-organizations__divider {
+    height: 42px;
+  }
+
+  .council-brand img {
+    width: 108px;
+    height: 50px;
+  }
+
+  .product-brand strong {
+    font-size: 0.95rem;
+  }
+
+  .platform-nav a {
+    font-size: 0.69rem;
+  }
+}
