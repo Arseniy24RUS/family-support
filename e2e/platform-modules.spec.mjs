@@ -6,6 +6,16 @@ async function waitForCatalog(page) {
 }
 
 test.describe('комплексное расширение платформы', () => {
+  test('новые инструменты заметны на главной и доступны из общего header', async ({ page }) => {
+    await page.goto('/index.html');
+    await expect(page.locator('.platform-entrypoints')).toBeVisible();
+    await expect(page.locator('.platform-entrypoint')).toHaveCount(3);
+    await expect(page.locator('header .platform-nav a')).toHaveCount(4);
+    await page.locator('header .platform-nav a[href="./situations.html"]').click();
+    await expect(page).toHaveURL(/situations\.html$/);
+    await expect(page.locator('header .platform-nav a[aria-current="page"]')).toHaveText('Подбор по ситуации');
+  });
+
   test('существующий каталог сохраняет работу и получает локальное избранное и устойчивые ссылки', async ({ page }) => {
     await page.goto('/index.html');
     await page.evaluate(() => localStorage.clear());
@@ -80,7 +90,7 @@ test.describe('комплексное расширение платформы', 
   });
 
   test('новые страницы не создают горизонтального переполнения на мобильном экране', async ({ page }) => {
-    for (const path of ['/situations.html', '/compare.html', '/methodology.html']) {
+    for (const path of ['/index.html', '/situations.html', '/compare.html', '/methodology.html']) {
       await page.goto(path);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       expect(overflow, `${path}: горизонтальное переполнение`).toBeLessThanOrEqual(1);

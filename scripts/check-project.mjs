@@ -144,6 +144,17 @@ for (const anchor of ['data', 'matching', 'comparison', 'privacy', 'corrections'
   assert(methodologyHtml.includes(`id="${anchor}"`), `methodology.html: отсутствует раздел #${anchor}.`);
 }
 
+for (const [file, html] of htmlByFile) {
+  assert(html.includes('class="platform-nav"'), `${file}: отсутствует основная навигация платформы.`);
+  for (const href of ['./index.html', './situations.html', './compare.html', './methodology.html']) {
+    assert(html.includes(`href="${href}"`), `${file}: в header отсутствует ссылка ${href}.`);
+  }
+  assert((html.match(/aria-current="page"/g) || []).length === 1,
+    `${file}: ровно один раздел основной навигации должен быть отмечен текущим.`);
+}
+assert(indexHtml.includes('class="platform-entrypoints site-container"'),
+  'index.html: новые инструменты должны быть заметно представлены сразу после hero-блока.');
+
 const [measures, meta, regionsBase, regionsGeo, detailManifest] = await Promise.all([
   readJson(resolve(siteRoot, 'data/measures.json')),
   readJson(resolve(siteRoot, 'data/meta.json')),

@@ -2446,6 +2446,118 @@ strong {
   color: #fff;
 }
 
+.platform-entrypoints {
+  padding-top: 24px;
+}
+
+.platform-entrypoints__heading {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.38fr) minmax(300px, 0.62fr);
+  align-items: end;
+  gap: 2px 30px;
+  margin-bottom: 14px;
+}
+
+.platform-entrypoints__heading > span {
+  grid-column: 1 / -1;
+  color: var(--blue-700);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.platform-entrypoints__heading h2,
+.platform-entrypoints__heading p {
+  margin: 0;
+}
+
+.platform-entrypoints__heading h2 {
+  font-size: clamp(1.35rem, 2.1vw, 1.8rem);
+  line-height: 1.18;
+}
+
+.platform-entrypoints__heading p {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.platform-entrypoints__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.platform-entrypoint {
+  min-width: 0;
+  min-height: 116px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: #fff;
+  color: var(--ink);
+  text-decoration: none;
+  box-shadow: var(--shadow-xs);
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.platform-entrypoint:hover {
+  border-color: var(--blue-500);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.platform-entrypoint--primary {
+  border-color: var(--blue-200);
+  background: linear-gradient(145deg, var(--surface-blue), #fff 76%);
+}
+
+.platform-entrypoint__icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--blue-100);
+  color: var(--blue-700);
+}
+
+.platform-entrypoint__icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.platform-entrypoint > span:nth-child(2) {
+  min-width: 0;
+}
+
+.platform-entrypoint strong,
+.platform-entrypoint small {
+  display: block;
+}
+
+.platform-entrypoint strong {
+  font-size: 0.92rem;
+  line-height: 1.25;
+}
+
+.platform-entrypoint small {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.38;
+}
+
+.platform-entrypoint > svg {
+  width: 19px;
+  height: 19px;
+  color: var(--blue-700);
+}
+
 .catalog-heading__actions {
   display: flex;
   align-items: center;
@@ -2654,14 +2766,30 @@ strong {
 
 @media (max-width: 760px) {
   .platform-nav {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 2px;
-    scrollbar-width: thin;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    gap: 4px;
   }
 
   .platform-nav a {
-    flex: 0 0 auto;
+    justify-content: center;
+    min-width: 0;
+    padding-inline: 6px;
+    text-align: center;
+  }
+
+  .platform-entrypoints__heading {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .platform-entrypoints__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .platform-entrypoint {
+    min-height: 104px;
   }
 
   .catalog-heading__actions {

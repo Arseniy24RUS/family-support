@@ -29,15 +29,19 @@ test('приложение и обязательные локальные рес
   expect(health.failedRequests).toEqual([]);
 });
 
-test('header объединяет логотипы организаций слева и не содержит правого партнёрского блока', async ({ page }) => {
+test('header объединяет логотипы организаций и открывает основные разделы платформы', async ({ page }) => {
   await openReady(page);
   const organizations = page.locator('.header-organizations');
   await expect(organizations.locator('.institution-brand img')).toBeVisible();
   await expect(organizations.locator('.header-organizations__divider')).toBeVisible();
   await expect(organizations.locator('.council-brand img')).toBeVisible();
-  await expect(page.locator('.product-brand')).toHaveText('Меры поддержки семей с детьми');
+  await expect(page.locator('.product-brand > strong')).toHaveText('Меры поддержки семей с детьми');
   await expect(page.getByText(/Федеральный каталог/i)).toHaveCount(0);
-  await expect(page.locator('header nav, #menu-toggle')).toHaveCount(0);
+  const platformNav = page.locator('header .platform-nav');
+  await expect(platformNav).toBeVisible();
+  await expect(platformNav.locator('a')).toHaveCount(4);
+  await expect(platformNav.locator('a[aria-current="page"]')).toHaveText('Каталог');
+  await expect(page.locator('#menu-toggle')).toHaveCount(0);
   await expect(page.locator('.header-partner')).toHaveCount(0);
   await expect(page.getByText(/при поддержке/i)).toHaveCount(0);
   const councilLinks = page.locator('a[href="https://app.sovetmam.ru/"]');
