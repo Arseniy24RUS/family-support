@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-07-18T13:28:23.622Z",
+  "source": "sovetmam",
+  "source_url": "https://app.sovetmam.ru/catalog",
+  "page_reported_count": 2187,
+  "loaded_link_count": 2187,
+  "extraction_mode": "embedded-flight-payload",
+  "measure_count": 2187,
+  "region_count": 83,
+  "category_count": 10,
+  "parse_error_count": 0
+}

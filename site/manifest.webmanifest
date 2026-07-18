@@ -1,0 +1,17 @@
+{
+  "name": "Меры поддержки семей с детьми",
+  "short_name": "Меры поддержки",
+  "description": "Навигатор федеральных и региональных мер поддержки семей с детьми",
+  "lang": "ru",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "./assets/favicon.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+name: Проверка, обновление каталога и публикация
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Первое число каждого месяца, 03:17 по Москве (00:17 UTC).
+    - cron: "17 0 1 * *"
+  workflow_dispatch:
+    inputs:
+      update_data:
+        description: "Перед публикацией получить свежий каталог"
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+concurrency:
+  group: family-support-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Получить репозиторий
+        uses: actions/checkout@v6
+
+      - name: Установить Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Установить зависимости
+        run: npm ci
+
+      - name: Выполнить модульные проверки
+        run: npm test
+
+      - name: Проверить целостность статического проекта
+        run: npm run check
+
+      - name: Установить Chromium для браузерных проверок
+        shell: bash
+        run: |
+          if ! npx playwright install --with-deps chromium; then
+            echo "::warning::Установка системных пакетов недоступна; устанавливается только Chromium"
+            npx playwright install chromium
+          fi
+
+      - name: Получить и проверить свежий каталог
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.update_data)
+        run: npm run update
+        env:
+          MIN_MEASURES: "1000"
+          PARSER_TIMEOUT_MS: "20000"
+
+      - name: Повторно проверить проект после обновления
+        run: npm run check
+
+      - name: Выполнить end-to-end проверки в Chromium
+        run: npm run test:e2e
+        env:
+          CHECK_EXTERNAL_LINKS: ${{ (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.update_data)) && '1' || '0' }}
+
+      - name: Сохранить проверенный снимок в репозитории
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.update_data)
+        shell: bash
+        run: |
+          if git diff --quiet -- site/data; then
+            echo "Снимок не изменился"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/data
+          git commit -m "data: обновить каталог мер поддержки [skip ci]"
+          git push || echo "::warning::Снимок опубликован, но не записан в ветвь. Проверьте правила защиты ветки."
+
+      - name: Настроить GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Загрузить статический сайт как артефакт Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+          include-hidden-files: true
+
+      - name: Сохранить диагностику парсера при сбое
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: scraper-debug
+          path: |
+            debug
+            playwright-report
+            test-results
+            artifacts
+          if-no-files-found: ignore
+          retention-days: 14
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Опубликовать GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

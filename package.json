@@ -1,0 +1,25 @@
+{
+  "name": "isd-family-support-catalog",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Статический навигатор мер поддержки семей с детьми с автоматическим обновлением каталога.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "serve": "node scripts/serve.mjs",
+    "check": "node scripts/check-project.mjs",
+    "test": "node --test",
+    "update": "node scripts/update.mjs",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed --project=desktop-chromium",
+    "test:e2e:ui": "playwright test --ui"
+  },
+  "dependencies": {
+    "playwright": "1.61.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1"
+  }
+}
