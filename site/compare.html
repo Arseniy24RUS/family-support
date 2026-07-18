@@ -3,17 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Межрегиональное сравнение структуры каталога мер поддержки семей с детьми">
+  <meta name="description" content="Интерактивное межрегиональное сравнение мер поддержки семей и региональных программ повышения рождаемости">
   <meta name="theme-color" content="#ffffff">
-  <title>Межрегиональное сравнение — меры поддержки семей с детьми</title>
+  <title>Сравнение регионов — меры поддержки семей с детьми</title>
   <link rel="icon" type="image/png" href="./assets/favicon.png">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./modules.css">
+  <link rel="stylesheet" href="./compare-v2.css">
   <script src="./vendor/lucide.min.js" defer></script>
   <script type="module" src="./compare.js"></script>
 </head>
-<body class="module-page">
+<body class="module-page compare-page">
   <a class="skip-link" href="#main-content">Перейти к основному содержанию</a>
   <header class="site-header" id="site-header">
     <div class="main-header">
@@ -27,7 +28,7 @@
             <img src="./assets/logo-sovetmam-horizontal.jpg" alt="Совет матерей" width="1280" height="658">
           </a>
         </div>
-        <div class="product-brand">
+        <div class="product-brand" aria-label="Название информационного ресурса">
           <strong>Меры поддержки семей с детьми</strong>
           <nav class="platform-nav" aria-label="Разделы платформы">
             <a href="./index.html">Каталог</a>
@@ -41,84 +42,199 @@
   </header>
 
   <main id="main-content" tabindex="-1">
-    <section class="module-hero module-hero--compare">
-      <div class="site-container module-hero__grid">
-        <div>
-          <span class="module-eyebrow">Открытая аналитика</span>
-          <h1>Межрегиональное сравнение каталога</h1>
-          <p>Сопоставьте до четырёх субъектов по числу и тематической структуре региональных записей текущего источника. Федеральные меры показаны как общий фон.</p>
+    <section class="compare-hero">
+      <div class="site-container compare-hero__grid">
+        <div class="compare-hero__content">
+          <span class="module-eyebrow">Открытая региональная аналитика</span>
+          <h1>Сравните меры поддержки и демографические стратегии регионов</h1>
+          <p>Выберите на карте от двух до четырёх субъектов. Модуль сопоставит структуру региональных карточек, покажет различия тематических профилей и откроет полные тексты программ повышения рождаемости.</p>
+          <div class="compare-hero__actions">
+            <a class="primary-action" href="#region-selector"><i data-lucide="map" aria-hidden="true"></i> Выбрать регионы</a>
+            <a class="secondary-action" href="#strategy-library"><i data-lucide="files" aria-hidden="true"></i> Библиотека стратегий</a>
+          </div>
         </div>
-        <aside class="method-note">
+        <aside class="compare-hero__note">
           <i data-lucide="scale" aria-hidden="true"></i>
           <div>
-            <strong>Корректная интерпретация</strong>
-            <p>Модуль не измеряет объём финансирования, доступность услуг или эффективность семейной политики. Нулевая запись означает отсутствие сведений в текущем снимке, а не отсутствие поддержки.</p>
+            <strong>Что именно сравнивается</strong>
+            <p>Количество и структура записей текущего каталога, а также документальное покрытие приложенного корпуса. Это не рейтинг регионов и не оценка эффективности политики.</p>
           </div>
         </aside>
       </div>
     </section>
 
-    <section class="site-container module-status" id="data-status" aria-live="polite">
+    <section class="site-container module-status compare-data-status" id="data-status" aria-live="polite">
       <i data-lucide="database" aria-hidden="true"></i>
-      <span>Загрузка каталога и метаданных…</span>
+      <span>Загрузка каталога, карты и корпуса документов…</span>
     </section>
 
-    <section class="site-container compare-control module-panel" aria-labelledby="compare-control-title">
-      <div class="module-panel__heading">
+    <section class="site-container map-selector module-panel" id="region-selector" aria-labelledby="region-selector-title">
+      <div class="module-panel__heading map-selector__heading">
         <div>
-          <span class="step-label">Настройка</span>
-          <h2 id="compare-control-title">Выберите от двух до четырёх регионов</h2>
+          <span class="step-label">Шаг 1</span>
+          <h2 id="region-selector-title">Отметьте сравниваемые субъекты на карте</h2>
+          <p>Повторное нажатие снимает выбор. Цвет и номер субъекта сохраняются во всех диаграммах и таблицах.</p>
         </div>
         <a class="text-link" href="./methodology.html#comparison">Методика сравнения</a>
       </div>
-      <form id="compare-form" class="compare-form">
-        <label class="field-label" for="compare-region-select">
-          <span>Добавить субъект</span>
-          <select id="compare-region-select">
-            <option value="">Выберите регион</option>
-          </select>
-        </label>
-        <button class="secondary-action secondary-action--button" id="add-region" type="button">
-          <i data-lucide="plus" aria-hidden="true"></i> Добавить
-        </button>
-        <button class="primary-action primary-action--button" id="run-comparison" type="submit" disabled>
-          <i data-lucide="chart-no-axes-combined" aria-hidden="true"></i> Сравнить
-        </button>
-      </form>
-      <div class="selected-regions" id="selected-regions" aria-live="polite"></div>
+
+      <div class="map-toolbar" aria-label="Настройки карты">
+        <fieldset class="map-layer-switch" id="map-layer-switch">
+          <legend>Фоновый слой</legend>
+          <label><input type="radio" name="map-layer" value="strategies" checked> <span>Стратегии</span></label>
+          <label><input type="radio" name="map-layer" value="catalog"> <span>Каталог мер</span></label>
+          <label><input type="radio" name="map-layer" value="neutral"> <span>Нейтральный</span></label>
+        </fieldset>
+        <div class="map-toolbar__actions">
+          <button type="button" class="toolbar-button" id="open-region-search" aria-controls="region-search-panel" aria-expanded="false">
+            <i data-lucide="search" aria-hidden="true"></i> Найти субъект
+          </button>
+          <button type="button" class="toolbar-button" id="clear-regions">
+            <i data-lucide="rotate-ccw" aria-hidden="true"></i> Очистить выбор
+          </button>
+        </div>
+      </div>
+
+      <div class="map-selector__workspace">
+        <div class="comparison-map-shell" id="comparison-map-shell">
+          <svg class="comparison-map" id="comparison-map" viewBox="0 0 1120 520" role="img" aria-labelledby="comparison-map-title comparison-map-description">
+            <title id="comparison-map-title">Карта субъектов Российской Федерации для межрегионального сравнения</title>
+            <desc id="comparison-map-description">Нажмите на субъект, чтобы добавить его в сравнение. Можно выбрать от двух до четырёх субъектов.</desc>
+            <g id="comparison-map-viewport">
+              <g id="comparison-map-regions"></g>
+              <g id="comparison-map-markers" aria-hidden="true"></g>
+            </g>
+          </svg>
+          <div class="comparison-map__empty" id="comparison-map-empty" hidden>
+            <i data-lucide="map-off" aria-hidden="true"></i>
+            <p>Геометрия карты недоступна. Используйте поиск субъектов справа.</p>
+          </div>
+          <div class="map-tooltip comparison-map-tooltip" id="comparison-map-tooltip" role="status" hidden></div>
+          <div class="map-zoom-controls" aria-label="Масштаб карты">
+            <button type="button" id="map-zoom-in" aria-label="Увеличить карту"><i data-lucide="plus" aria-hidden="true"></i></button>
+            <button type="button" id="map-zoom-out" aria-label="Уменьшить карту"><i data-lucide="minus" aria-hidden="true"></i></button>
+            <button type="button" id="map-zoom-reset" aria-label="Вернуть исходный масштаб"><i data-lucide="maximize-2" aria-hidden="true"></i></button>
+          </div>
+          <p class="map-interaction-hint"><i data-lucide="mouse-pointer-click" aria-hidden="true"></i> Нажатие — выбор; колесо и перетаскивание — масштаб и перемещение</p>
+        </div>
+
+        <aside class="region-selection-panel" aria-labelledby="selected-regions-title">
+          <div class="region-selection-panel__heading">
+            <div>
+              <span class="selection-count" id="selection-count">0 / 4</span>
+              <h3 id="selected-regions-title">Выбранные регионы</h3>
+            </div>
+          </div>
+          <div class="selected-regions-v2" id="selected-regions" aria-live="polite">
+            <p class="selected-regions-v2__empty">На карте пока ничего не выбрано.</p>
+          </div>
+
+          <div class="region-search-panel" id="region-search-panel" hidden>
+            <label for="region-search-input">Поиск по названию субъекта</label>
+            <div class="region-search-input">
+              <i data-lucide="search" aria-hidden="true"></i>
+              <input id="region-search-input" type="search" autocomplete="off" placeholder="Например, Томская область" aria-controls="region-search-results">
+            </div>
+            <div class="region-search-results" id="region-search-results" role="listbox" aria-label="Результаты поиска субъектов"></div>
+          </div>
+
+          <button class="primary-action primary-action--button region-selection-panel__run" id="run-comparison" type="button" disabled>
+            <i data-lucide="chart-no-axes-combined" aria-hidden="true"></i>
+            Показать сравнение
+          </button>
+          <p class="region-selection-panel__note" id="selection-note">Для построения результата выберите ещё два субъекта.</p>
+
+          <div class="map-legend" id="map-legend" aria-label="Легенда карты"></div>
+        </aside>
+      </div>
     </section>
 
-    <section class="site-container comparison-output" id="comparison-output" aria-label="Результаты межрегионального сравнения">
-      <div class="comparison-placeholder" id="comparison-placeholder">
-        <i data-lucide="table-2" aria-hidden="true"></i>
-        <h2 id="comparison-title">Сравнение ещё не построено</h2>
-        <p>Добавьте не менее двух регионов. Выбор можно сохранить в ссылке без персональных данных.</p>
+    <section class="site-container comparison-output-v2" id="comparison-output" aria-labelledby="comparison-results-title">
+      <div class="comparison-placeholder-v2" id="comparison-placeholder">
+        <div class="comparison-placeholder-v2__icon"><i data-lucide="split-square-horizontal" aria-hidden="true"></i></div>
+        <div>
+          <h2>Результат появится после выбора регионов</h2>
+          <p>Карта, поисковый ввод и ссылка на страницу используют один и тот же набор выбранных субъектов.</p>
+        </div>
       </div>
+
       <div id="comparison-results" hidden>
-        <div class="comparison-toolbar">
+        <div class="comparison-toolbar-v2">
           <div>
-            <span class="module-eyebrow">Результат</span>
-            <h2 id="comparison-results-title">Структура региональных записей</h2>
+            <span class="module-eyebrow">Шаг 2</span>
+            <h2 id="comparison-results-title">Сравнительный профиль выбранных субъектов</h2>
+            <p id="comparison-results-subtitle"></p>
           </div>
-          <div class="results-tools">
+          <div class="results-tools results-tools-v2">
             <button type="button" id="copy-comparison-link"><i data-lucide="link" aria-hidden="true"></i> Ссылка</button>
             <button type="button" id="download-comparison"><i data-lucide="file-spreadsheet" aria-hidden="true"></i> CSV</button>
+            <button type="button" id="download-research-json"><i data-lucide="braces" aria-hidden="true"></i> JSON</button>
             <button type="button" id="print-comparison"><i data-lucide="printer" aria-hidden="true"></i> Печать</button>
           </div>
         </div>
+
         <div class="inline-warning" id="coverage-warning" hidden></div>
-        <div class="regional-metrics" id="regional-metrics"></div>
+        <div class="comparison-insights" id="comparison-insights"></div>
+        <div class="regional-metrics-v2" id="regional-metrics"></div>
 
         <section class="comparison-section module-panel" aria-labelledby="category-comparison-title">
+          <div class="module-panel__heading comparison-section__heading">
+            <div>
+              <h3 id="category-comparison-title">Тематическая структура региональных записей</h3>
+              <p id="category-comparison-description">Абсолютное число региональных карточек по категориям текущего каталога.</p>
+            </div>
+            <fieldset class="chart-mode-switch" id="chart-mode-switch">
+              <legend class="visually-hidden">Единица отображения</legend>
+              <label><input type="radio" name="chart-mode" value="count" checked><span>Число</span></label>
+              <label><input type="radio" name="chart-mode" value="share"><span>Доля</span></label>
+            </fieldset>
+          </div>
+          <div class="category-differences" id="category-differences"></div>
+          <div class="comparison-bars-v2" id="comparison-bars"></div>
+          <div class="table-scroll">
+            <table class="comparison-table comparison-table-v2" id="category-table"></table>
+          </div>
+        </section>
+
+        <section class="comparison-section module-panel" aria-labelledby="strategy-passports-title">
           <div class="module-panel__heading">
             <div>
-              <h3 id="category-comparison-title">Тематическая структура</h3>
-              <p>Абсолютное число региональных записей по категориям текущего каталога.</p>
+              <h3 id="strategy-passports-title">Документальные паспорта регионов</h3>
+              <p>Наличие файла, горизонт программы, объём документа и муниципальные приложения из переданного корпуса.</p>
             </div>
+            <a class="text-link" href="#strategy-library">Открыть библиотеку</a>
           </div>
-          <div class="comparison-bars" id="comparison-bars"></div>
-          <div class="table-scroll">
-            <table class="comparison-table" id="category-table"></table>
+          <div class="strategy-passports" id="strategy-passports"></div>
+        </section>
+
+        <section class="comparison-section module-panel strategy-analysis-section" aria-labelledby="strategy-analysis-title">
+          <div class="module-panel__heading">
+            <div>
+              <span class="section-kicker">Анализ документов</span>
+              <h3 id="strategy-analysis-title">Периоды и лексические акценты стратегий</h3>
+              <p>Временная шкала строится по метаданным документов, а тематические профили — по нормированной частоте заранее определённых слов и словосочетаний.</p>
+            </div>
+            <span class="analysis-method-badge"><i data-lucide="scan-text" aria-hidden="true"></i> ru-lexical-themes-v1</span>
+          </div>
+          <div class="strategy-timeline-panel">
+            <div class="strategy-analysis-subheading">
+              <h4>Периоды действия документов</h4>
+              <p>Вертикальная отметка показывает 2026 год; пунктир означает, что период в метаданных установить не удалось.</p>
+            </div>
+            <div class="strategy-timeline" id="strategy-timeline"></div>
+          </div>
+          <div class="strategy-lexical-panel">
+            <div class="strategy-analysis-subheading">
+              <h4>Наиболее различающиеся тематические поля</h4>
+              <p>Показано число совпадений словарных маркеров на 10 000 извлечённых слов документа.</p>
+            </div>
+            <div class="strategy-lexical-summary" id="strategy-lexical-summary"></div>
+            <div class="strategy-theme-matrix" id="strategy-theme-matrix"></div>
+            <div class="strategy-lexical-similarity" id="strategy-lexical-similarity"></div>
+          </div>
+          <div class="inline-warning strategy-analysis-warning">
+            <i data-lucide="triangle-alert" aria-hidden="true"></i>
+            <div><strong>Ограничение метода.</strong> Частота упоминаний характеризует текст и его структуру, но не доказывает наличие меры, объём финансирования, охват семей, юридический приоритет или результативность политики.</div>
           </div>
         </section>
 
@@ -126,12 +242,126 @@
           <div class="module-panel__heading">
             <div>
               <h3 id="overlap-title">Сходство названий и отличительные записи</h3>
-              <p>Описательная проверка совпадения нормализованных названий; она не устанавливает юридическую эквивалентность мер.</p>
+              <p>Совпадение нормализованных названий — только поисковый индикатор. Оно не устанавливает правовую эквивалентность мер.</p>
             </div>
           </div>
           <div class="overlap-grid" id="overlap-grid"></div>
           <div class="distinctive-grid" id="distinctive-grid"></div>
         </section>
+      </div>
+    </section>
+
+    <section class="strategy-library-section" id="strategy-library" aria-labelledby="strategy-library-title">
+      <div class="site-container">
+        <div class="strategy-library-heading">
+          <div>
+            <span class="module-eyebrow">Документальная база</span>
+            <h2 id="strategy-library-title">Полные тексты стратегий и программ повышения рождаемости</h2>
+            <p>Документы открываются внутри страницы только по запросу. PDF можно скачать, а для преобразованных Word/RTF-файлов доступен и исходный формат.</p>
+          </div>
+          <div class="strategy-library-heading__actions">
+            <a class="secondary-action" href="./data/strategies-manifest.csv" download>
+              <i data-lucide="sheet" aria-hidden="true"></i> Реестр документов CSV
+            </a>
+            <a class="secondary-action" href="./data/strategies-lexical-profile.csv" download>
+              <i data-lucide="scan-text" aria-hidden="true"></i> Лексический профиль CSV
+            </a>
+          </div>
+        </div>
+
+        <div class="strategy-corpus-stats" id="strategy-corpus-stats" aria-live="polite"></div>
+        <div class="strategy-provenance-note" id="strategy-provenance-note">
+          <i data-lucide="shield-alert" aria-hidden="true"></i>
+          <div>
+            <strong>Происхождение и актуальность</strong>
+            <p>Корпус передан владельцем проекта и технически проверен на читаемость. Перед аналитическим или правовым использованием необходимо сверить редакцию с официальным источником.</p>
+          </div>
+        </div>
+
+        <div class="strategy-library-controls">
+          <div class="strategy-tabs" role="tablist" aria-label="Разделы библиотеки">
+            <button type="button" role="tab" aria-selected="true" data-strategy-scope="selected">Выбранные регионы <span id="selected-strategy-count">0</span></button>
+            <button type="button" role="tab" aria-selected="false" data-strategy-scope="regional">Все субъекты <span id="regional-strategy-count">89</span></button>
+            <button type="button" role="tab" aria-selected="false" data-strategy-scope="federal">Федеральные документы <span id="federal-strategy-count">15</span></button>
+          </div>
+          <div class="strategy-filters">
+            <label class="strategy-search" for="strategy-search-input">
+              <span class="visually-hidden">Поиск документа</span>
+              <i data-lucide="search" aria-hidden="true"></i>
+              <input id="strategy-search-input" type="search" autocomplete="off" placeholder="Регион, название, акт или период">
+            </label>
+            <label>
+              <span class="visually-hidden">Полнота документа</span>
+              <select id="strategy-quality-filter">
+                <option value="all">Любая полнота</option>
+                <option value="full">Полный текст</option>
+                <option value="partial">Частичный материал</option>
+                <option value="unavailable">Файл не передан</option>
+                <option value="missing">Нет в корпусе</option>
+              </select>
+            </label>
+            <label>
+              <span class="visually-hidden">Период документа</span>
+              <select id="strategy-temporal-filter">
+                <option value="all">Любой период</option>
+                <option value="active">Включает 2026 год</option>
+                <option value="historical">Завершённый период</option>
+                <option value="undated">Период не установлен</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="strategy-workspace">
+          <div class="strategy-document-column">
+            <div class="strategy-list-summary" id="strategy-list-summary" aria-live="polite"></div>
+            <div class="strategy-document-list" id="strategy-document-list"></div>
+            <button type="button" class="strategy-load-more" id="strategy-load-more" hidden>
+              <i data-lucide="list-plus" aria-hidden="true"></i> Показать ещё
+            </button>
+          </div>
+
+          <aside class="strategy-viewer" id="strategy-viewer" aria-labelledby="strategy-viewer-title">
+            <div class="strategy-viewer__placeholder" id="strategy-viewer-placeholder">
+              <i data-lucide="file-search-2" aria-hidden="true"></i>
+              <h3 id="strategy-viewer-title">Выберите документ слева</h3>
+              <p>Полный текст не загружается до нажатия «Просмотреть», поэтому библиотека остаётся быстрой даже при большом корпусе.</p>
+            </div>
+            <div class="strategy-viewer__content" id="strategy-viewer-content" hidden>
+              <div class="strategy-viewer__header">
+                <div>
+                  <span class="strategy-viewer__eyebrow" id="strategy-viewer-eyebrow"></span>
+                  <h3 id="strategy-viewer-document-title"></h3>
+                  <p id="strategy-viewer-document-meta"></p>
+                </div>
+                <button type="button" class="icon-button" id="close-strategy-viewer" aria-label="Закрыть просмотр документа"><i data-lucide="x" aria-hidden="true"></i></button>
+              </div>
+              <div class="strategy-viewer__actions" id="strategy-viewer-actions"></div>
+              <dl class="strategy-viewer__details" id="strategy-viewer-details"></dl>
+              <div class="strategy-pdf-stage" id="strategy-pdf-stage">
+                <div class="strategy-pdf-consent" id="strategy-pdf-consent">
+                  <i data-lucide="file-text" aria-hidden="true"></i>
+                  <strong>PDF пока не загружен</strong>
+                  <p id="strategy-pdf-consent-text"></p>
+                  <button type="button" class="primary-action primary-action--button" id="load-strategy-pdf"><i data-lucide="eye" aria-hidden="true"></i> Просмотреть на странице</button>
+                </div>
+                <iframe id="strategy-pdf-frame" title="Просмотр полного текста документа" loading="lazy" hidden></iframe>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="site-container comparison-method-note" aria-labelledby="interpretation-title">
+      <div>
+        <span class="module-eyebrow">Правила интерпретации</span>
+        <h2 id="interpretation-title">Как не превратить описательное сравнение в ложный рейтинг</h2>
+      </div>
+      <div class="comparison-method-note__grid">
+        <article><i data-lucide="database-zap" aria-hidden="true"></i><h3>Каталог — не реестр расходов</h3><p>Количество карточек не отражает бюджет, охват семей, размер выплат или качество предоставления услуг. Нулевое значение означает отсутствие записи в текущем источнике, а не отсутствие поддержки.</p></article>
+        <article><i data-lucide="file-clock" aria-hidden="true"></i><h3>Документы имеют версии</h3><p>Завершённый период не означает прекращение всех мер, а наличие файла не гарантирует, что это последняя редакция.</p></article>
+        <article><i data-lucide="equal-not" aria-hidden="true"></i><h3>Одинаковые названия не равны</h3><p>Для правового сопоставления необходимы критерии получателей, суммы, сроки, нормативные основания и фактическая практика.</p></article>
       </div>
     </section>
   </main>
@@ -140,7 +370,7 @@
     <div class="site-container footer-grid">
       <div class="footer-brand">
         <img src="./assets/logo-isd.png" alt="Институт социальной демографии ФНИСЦ РАН" width="450" height="189">
-        <p>Информационный навигатор мер поддержки семей с детьми.</p>
+        <p>Информационная платформа мер поддержки семей с детьми.</p>
       </div>
       <div class="footer-links">
         <a href="./index.html">Каталог мер</a>

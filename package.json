@@ -9,12 +9,14 @@
   },
   "scripts": {
     "serve": "node scripts/serve.mjs",
-    "check": "node scripts/check-project.mjs",
+    "check": "node scripts/check-project.mjs && node scripts/check-comparison-v2.mjs",
     "test": "node --test",
     "update": "node scripts/update.mjs",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed --project=desktop-chromium",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "check:comparison": "node scripts/check-comparison-v2.mjs",
+    "test:comparison": "node --test tests/comparison-v2.test.mjs"
   },
   "dependencies": {
     "playwright": "1.61.1"

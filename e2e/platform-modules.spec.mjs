@@ -67,17 +67,20 @@ test.describe('комплексное расширение платформы', 
     await page.goto('/compare.html');
     await expect(page.locator('#data-status')).not.toContainText('Загрузка', { timeout: 20_000 });
 
-    await page.locator('#compare-region-select').selectOption({ index: 1 });
-    await page.locator('#compare-region-select').selectOption({ index: 2 });
-    await expect(page.locator('#selected-regions .selected-region-chip')).toHaveCount(2);
+    const regions = page.locator('#comparison-map-regions [data-region]');
+    await expect(regions).toHaveCount(89, { timeout: 20_000 });
+    await regions.nth(0).click({ force: true });
+    await regions.nth(1).click({ force: true });
+    await expect(page.locator('#selection-count')).toHaveText('2 / 4');
     await page.locator('#run-comparison').click();
 
     await expect(page.locator('#comparison-results')).toBeVisible();
-    await expect(page.locator('#regional-metrics .region-metric-card')).toHaveCount(2);
+    await expect(page.locator('#regional-metrics .region-metric-card-v2')).toHaveCount(2);
     await expect(page.locator('#category-table thead th')).toHaveCount(3);
-    await expect(page.locator('#overlap-grid .overlap-card')).toHaveCount(1);
-    const regions = await page.evaluate(() => new URL(location.href).searchParams.getAll('region'));
-    expect(regions).toHaveLength(2);
+    await expect(page.locator('#overlap-grid .overlap-card-v2')).toHaveCount(1);
+    await expect(page.locator('#comparison-results-subtitle')).toContainText(/Федеральные карточки.*общий фон/i);
+    const selectedRegions = await page.evaluate(() => new URL(location.href).searchParams.getAll('region'));
+    expect(selectedRegions).toHaveLength(2);
   });
 
   test('методология раскрывает ограничения, приватность и канал исправлений', async ({ page }) => {

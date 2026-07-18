@@ -131,13 +131,19 @@ assert(/ответы[^<]*(?:устройств|браузер)|не переда
   'Страница подбора должна объяснять локальную обработку ответов.');
 
 const compareHtml = htmlByFile.get('compare.html');
-for (const id of ['compare-form', 'compare-region-select', 'selected-regions', 'comparison-results', 'category-table']) {
+const comparisonV2 = compareHtml.includes('id="comparison-map"');
+const comparisonIds = comparisonV2
+  ? ['comparison-map', 'comparison-map-regions', 'selected-regions', 'run-comparison', 'comparison-results', 'category-table', 'strategy-library']
+  : ['compare-form', 'compare-region-select', 'selected-regions', 'comparison-results', 'category-table'];
+for (const id of comparisonIds) {
   assert(compareHtml.includes(`id="${id}"`), `compare.html: отсутствует #${id}.`);
 }
 assert(/нулев[^<]*(?:источник|снимок|сведен)/i.test(compareHtml),
   'Страница сравнения должна объяснять нулевые значения как пробел источника.');
-assert(/не измеряет[^<]*(?:финанс|эффектив)/i.test(compareHtml),
-  'Страница сравнения должна ограничивать интерпретацию показателей.');
+assert(comparisonV2
+  ? /не рейтинг[^<]*(?:не оценка эффективности)/i.test(compareHtml)
+  : /не измеряет[^<]*(?:финанс|эффектив)/i.test(compareHtml),
+'Страница сравнения должна ограничивать интерпретацию показателей.');
 
 const methodologyHtml = htmlByFile.get('methodology.html');
 for (const anchor of ['data', 'matching', 'comparison', 'privacy', 'corrections']) {
