@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Методология, ограничения и политика качества платформы мер поддержки семей с детьми">
+  <meta name="theme-color" content="#ffffff">
+  <title>Методология платформы — меры поддержки семей с детьми</title>
+  <link rel="icon" type="image/png" href="./assets/favicon.png">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./modules.css">
+  <script src="./vendor/lucide.min.js" defer></script>
+  <script type="module" src="./methodology.js"></script>
+</head>
+<body class="module-page">
+  <a class="skip-link" href="#main-content">Перейти к основному содержанию</a>
+  <header class="site-header" id="site-header">
+    <div class="main-header">
+      <div class="site-container main-header__inner">
+        <div class="header-organizations" aria-label="Организации проекта">
+          <a class="institution-brand" href="https://исд-фнисц.рф/" target="_blank" rel="noopener noreferrer" aria-label="Институт социальной демографии ФНИСЦ РАН">
+            <img src="./assets/logo-isd.png" alt="Институт социальной демографии ФНИСЦ РАН" width="450" height="189">
+          </a>
+          <span class="header-organizations__divider" aria-hidden="true"></span>
+          <a class="council-brand" href="https://app.sovetmam.ru/" target="_blank" rel="noopener noreferrer" aria-label="Совет матерей — Шпаргалка для родителей">
+            <img src="./assets/logo-sovetmam-horizontal.jpg" alt="Совет матерей" width="1280" height="658">
+          </a>
+        </div>
+        <div class="product-brand">
+          <strong>Меры поддержки семей с детьми</strong>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" tabindex="-1">
+    <section class="module-hero module-hero--methodology">
+      <div class="site-container module-hero__grid">
+        <div>
+          <span class="module-eyebrow">Открытая методология</span>
+          <h1>Как устроена платформа и где проходят границы её выводов</h1>
+          <p>Раздел фиксирует происхождение данных, правила предварительного подбора, корректную интерпретацию межрегионального сравнения, политику приватности и процедуру исправлений.</p>
+        </div>
+        <nav class="method-toc" aria-label="Содержание методологии">
+          <a href="#data">Данные и обновление</a>
+          <a href="#quality">Качество и ограничения</a>
+          <a href="#matching">Подбор по ситуации</a>
+          <a href="#comparison">Сравнение регионов</a>
+          <a href="#privacy">Приватность</a>
+          <a href="#corrections">Исправления</a>
+        </nav>
+      </div>
+    </section>
+
+    <section class="site-container module-status" id="methodology-status" aria-live="polite">
+      <i data-lucide="database" aria-hidden="true"></i>
+      <span>Загрузка метаданных текущего снимка…</span>
+    </section>
+
+    <div class="site-container methodology-layout">
+      <article class="methodology-article">
+        <section class="method-section" id="data">
+          <span class="section-number">01</span>
+          <h2>Данные и обновление</h2>
+          <p>Платформа публикует локальный снимок информационного каталога: краткие карточки загружаются при открытии страницы, а подробные условия распределены по отдельным файлам и загружаются по запросу. Автоматическое обновление не заменяет действующий снимок, если проверка целостности не пройдена.</p>
+          <div class="method-grid">
+            <div><strong>Единица наблюдения</strong><span>Информационная карточка меры или программы в источнике.</span></div>
+            <div><strong>Территориальная привязка</strong><span>Федеральный уровень либо субъект, указанный в карточке.</span></div>
+            <div><strong>Дата снимка</strong><span>Показывается в интерфейсе из файла метаданных.</span></div>
+            <div><strong>Первичный источник права</strong><span>Нормативный акт или официальная страница ведомства; они пока доступны не для каждой карточки.</span></div>
+          </div>
+        </section>
+
+        <section class="method-section" id="quality">
+          <span class="section-number">02</span>
+          <h2>Качество и ограничения</h2>
+          <p>Успешное извлечение карточки означает техническую целостность снимка, но само по себе не доказывает юридическую актуальность суммы, критерия или срока. Поэтому интерфейс различает наличие точной официальной ссылки и информационную карточку, требующую дополнительной проверки.</p>
+          <div class="method-note method-note--full">
+            <i data-lucide="triangle-alert" aria-hidden="true"></i>
+            <div>
+              <strong>Отсутствие записи не равно отсутствию меры</strong>
+              <p>Если по региону нет карточек, платформа сообщает, что сведения в текущем источнике не представлены. Такой результат нельзя использовать для вывода об отсутствии поддержки в субъекте.</p>
+            </div>
+          </div>
+          <h3>Что платформа может и чего не может</h3>
+          <div class="capability-table" role="table" aria-label="Границы возможностей платформы">
+            <div role="row"><strong role="cell">Может</strong><span role="cell">Находить, группировать, объяснять текстовые совпадения, показывать структуру каталога и направлять к подтверждённому официальному сервису.</span></div>
+            <div role="row"><strong role="cell">Не может</strong><span role="cell">Гарантировать право на выплату, рассчитать итоговую сумму без полного набора официальных данных или заменить решение уполномоченного органа.</span></div>
+          </div>
+        </section>
+
+        <section class="method-section" id="matching">
+          <span class="section-number">03</span>
+          <h2>Предварительный подбор по жизненной ситуации</h2>
+          <p>Подбор выполняется детерминированными правилами в браузере. Сначала исключаются региональные карточки других субъектов; затем название, аннотация, характер поддержки и категория сопоставляются со словарём выбранной жизненной ситуации, отмеченными обстоятельствами и дополнительными словами пользователя.</p>
+          <ol class="method-steps">
+            <li><strong>Территориальный фильтр.</strong> В выборку входят федеральные записи и записи выбранного субъекта.</li>
+            <li><strong>Тематическое сопоставление.</strong> Более высокий вес получают совпадения в названии; совпадения в описании и категории имеют меньший вес.</li>
+            <li><strong>Уточняющие признаки.</strong> Отмеченные обстоятельства повышают релевантность только тогда, когда соответствующие понятия присутствуют в тексте карточки.</li>
+            <li><strong>Объяснение.</strong> Для каждого результата показываются причины включения и типы условий, которые следует проверить.</li>
+          </ol>
+          <p>Группы результатов называются «наиболее релевантные», «требуется проверить условия» и «связанные меры». Они отражают тематическую близость текста, а не вероятность положительного решения ведомства.</p>
+        </section>
+
+        <section class="method-section" id="comparison">
+          <span class="section-number">04</span>
+          <h2>Межрегиональное сравнение</h2>
+          <p>Для сопоставления используются только региональные записи выбранных субъектов. Федеральные карточки не прибавляются к региональным показателям, поскольку одинаково доступны в каталоге для всех субъектов и не различают территориальные модели.</p>
+          <div class="method-grid">
+            <div><strong>Число записей</strong><span>Количество региональных карточек в текущем снимке.</span></div>
+            <div><strong>Тематическая широта</strong><span>Число категорий, в которых представлен хотя бы один региональный объект.</span></div>
+            <div><strong>Крупнейшая категория</strong><span>Категория с максимальным числом записей и её доля в региональном массиве.</span></div>
+            <div><strong>Сходство названий</strong><span>Доля совпадающих нормализованных названий; не означает правовой эквивалентности.</span></div>
+          </div>
+          <p>Сравнение не нормируется на численность населения, число детей, бюджетные расходы или прожиточный минимум, поскольку таких данных в карточках нет. Соответственно, оно описывает информационную структуру источника, а не щедрость или результативность политики.</p>
+        </section>
+
+        <section class="method-section" id="privacy">
+          <span class="section-number">05</span>
+          <h2>Приватность</h2>
+          <p>Платформа не требует регистрации. Ответы анкеты подбора обрабатываются локальным JavaScript-кодом и не отправляются на сервер. В адрес страницы могут записываться только регион и тип жизненной ситуации; уточняющие обстоятельства и свободный текст в ссылку не включаются.</p>
+          <p>Список избранного в каталоге хранится в локальном хранилище браузера. Он не синхронизируется между устройствами и может быть удалён очисткой данных сайта.</p>
+        </section>
+
+        <section class="method-section" id="corrections">
+          <span class="section-number">06</span>
+          <h2>Исправления и редакционная работа</h2>
+          <p>В подробной карточке доступна команда сообщения о неточности. Обращение формируется в публичном репозитории проекта; пользователю предлагается не указывать персональные данные и, по возможности, приложить официальный источник.</p>
+          <p>Для следующего этапа рекомендуется вести журнал редакционных решений и дополнить данные полями нормативного основания, периода действия, даты ручной проверки, поставщика, канала обращения и уровня доказательности.</p>
+          <a class="primary-action" href="https://github.com/Arseniy24RUS/family-support/issues/new" target="_blank" rel="noopener noreferrer">Сообщить о проблеме <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer module-footer">
+    <div class="site-container footer-grid">
+      <div class="footer-brand">
+        <img src="./assets/logo-isd.png" alt="Институт социальной демографии ФНИСЦ РАН" width="450" height="189">
+        <p>Информационный навигатор мер поддержки семей с детьми.</p>
+      </div>
+      <div class="footer-links">
+        <a href="./index.html">Каталог мер</a>
+        <a href="./situations.html">Подбор по ситуации</a>
+        <a href="./compare.html">Сравнение регионов</a>
+        <a href="./methodology.html">Методология</a>
+      </div>
+      <div class="footer-meta">
+        <p>© <span id="current-year"></span> Институт социальной демографии ФНИСЦ РАН</p>
+        <p>Сведения носят справочный характер.</p>
+      </div>
+    </div>
+  </footer>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

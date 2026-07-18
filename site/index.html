@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Навигатор федеральных и региональных мер поддержки семей с детьми">
+  <meta name="description" content="Каталог федеральных и региональных мер поддержки семей с детьми">
   <meta name="theme-color" content="#ffffff">
   <title>Меры поддержки семей с детьми — Институт социальной демографии ФНИСЦ РАН</title>
   <link rel="icon" type="image/png" href="./assets/favicon.png">
@@ -27,7 +27,6 @@
             <img src="./assets/logo-sovetmam-horizontal.jpg" alt="Совет матерей" width="1280" height="658">
           </a>
         </div>
-
         <div class="product-brand" aria-label="Название информационного ресурса">
           <strong>Меры поддержки семей с детьми</strong>
         </div>
@@ -40,21 +39,18 @@
       <div class="hero">
         <div class="hero__content">
           <h1 id="hero-title">Найдите меры поддержки<br>для вашей семьи</h1>
-          <p>Единый каталог федеральных и региональных мер поддержки семей с детьми. Подробные условия, документы и порядок оформления собраны прямо в навигаторе.</p>
-
+          <p>Полный каталог сохранён как самостоятельный раздел платформы. Здесь доступны федеральные и региональные карточки, поиск, фильтры и подробные условия.</p>
           <form class="hero-search" id="hero-search-form" role="search">
             <i data-lucide="search" aria-hidden="true"></i>
             <label class="visually-hidden" for="hero-search">Поиск по каталогу мер поддержки</label>
             <input id="hero-search" type="search" placeholder="Например: материнский капитал, детский сад, многодетная семья" autocomplete="off">
             <button type="submit">Найти</button>
           </form>
-
           <div class="snapshot-line" id="snapshot" aria-live="polite">
             <i data-lucide="database" aria-hidden="true"></i>
             <span>Загрузка сведений о каталоге…</span>
           </div>
         </div>
-
         <div class="hero__media" aria-hidden="true">
           <picture>
             <source srcset="./assets/hero-family.webp" type="image/webp">
@@ -72,24 +68,18 @@
           <i data-lucide="map-pin" aria-hidden="true"></i>
           <label for="region-filter">
             <span>Регион</span>
-            <select id="region-filter">
-              <option value="">Вся Россия</option>
-            </select>
+            <select id="region-filter"><option value="">Вся Россия</option></select>
           </label>
           <i class="filter-control__chevron" data-lucide="chevron-down" aria-hidden="true"></i>
         </div>
-
         <div class="filter-control">
           <i data-lucide="layout-grid" aria-hidden="true"></i>
           <label for="category-filter">
             <span>Категория</span>
-            <select id="category-filter">
-              <option value="">Все категории</option>
-            </select>
+            <select id="category-filter"><option value="">Все категории</option></select>
           </label>
           <i class="filter-control__chevron" data-lucide="chevron-down" aria-hidden="true"></i>
         </div>
-
         <div class="filter-control">
           <i data-lucide="layers-3" aria-hidden="true"></i>
           <label for="level-filter">
@@ -102,7 +92,6 @@
           </label>
           <i class="filter-control__chevron" data-lucide="chevron-down" aria-hidden="true"></i>
         </div>
-
         <div class="filter-control filter-control--search">
           <i data-lucide="sliders-horizontal" aria-hidden="true"></i>
           <label for="search-filter">
@@ -110,7 +99,6 @@
             <input id="search-filter" type="search" placeholder="Ключевые слова" autocomplete="off">
           </label>
         </div>
-
         <button class="reset-filters" id="reset-filters" type="button">
           <i data-lucide="rotate-ccw" aria-hidden="true"></i>
           <span>Сбросить</span>
@@ -126,25 +114,17 @@
               <h2>Выберите регион на карте</h2>
               <p id="map-selection-label">Сейчас показаны меры по всей России</p>
             </div>
-            <button class="text-action" type="button" data-open-regions>
-              Список регионов
-              <i data-lucide="arrow-right" aria-hidden="true"></i>
-            </button>
+            <button class="text-action" type="button" data-open-regions>Список регионов <i data-lucide="arrow-right" aria-hidden="true"></i></button>
           </div>
-
           <div class="map-canvas" id="region-map-container" aria-label="Интерактивная карта субъектов Российской Федерации">
             <svg class="region-map" id="region-map" viewBox="0 0 1100 430" role="img" aria-labelledby="region-map-title region-map-description">
               <title id="region-map-title">Интерактивная карта регионов России</title>
-              <desc id="region-map-description">Выберите субъект, чтобы показать федеральные и региональные меры поддержки.</desc>
+              <desc id="region-map-description">Выберите субъект, чтобы показать федеральные карточки и региональные записи, представленные в источнике.</desc>
               <g id="region-map-layer"></g>
             </svg>
             <div class="map-tooltip" id="map-tooltip" role="status" hidden></div>
-            <span class="map-canvas__cta">
-              <i data-lucide="mouse-pointer-2" aria-hidden="true"></i>
-              Нажмите на регион, чтобы выбрать его
-            </span>
+            <span class="map-canvas__cta"><i data-lucide="mouse-pointer-2" aria-hidden="true"></i>Нажмите на регион, чтобы выбрать его</span>
           </div>
-
           <div class="map-region-summary" id="map-region-summary" aria-live="polite">
             <span class="map-region-summary__icon"><i data-lucide="map-pinned" aria-hidden="true"></i></span>
             <div>
@@ -152,19 +132,18 @@
               <span id="map-summary-details">Загрузка статистики по мерам поддержки…</span>
             </div>
           </div>
-
           <div class="map-legend" aria-label="Условные обозначения карты">
             <span><i class="legend-dot legend-dot--selected"></i>Выбранный регион</span>
-            <span><i class="legend-dot legend-dot--available"></i>Есть региональные меры</span>
-            <span><i class="legend-dot legend-dot--federal"></i>Федеральные меры доступны везде</span>
+            <span><i class="legend-dot legend-dot--available"></i>Региональные записи представлены</span>
+            <span><i class="legend-dot legend-dot--federal"></i>Нет заливки — региональные сведения в источнике не представлены</span>
           </div>
         </article>
 
         <aside class="panel popular-panel" aria-labelledby="popular-title">
           <div class="panel-heading">
             <div>
-              <h2 id="popular-title">Популярные меры поддержки</h2>
-              <p>Быстрый переход к востребованным направлениям</p>
+              <h2 id="popular-title">Ключевые федеральные меры</h2>
+              <p>Редакционный быстрый доступ к базовым направлениям; это не рейтинг пользовательской популярности.</p>
             </div>
             <a class="text-action" href="#catalog-section">Смотреть все</a>
           </div>
@@ -173,32 +152,15 @@
       </div>
 
       <div class="stats-band" aria-label="Сводные показатели каталога">
-        <div class="stat-item">
-          <i data-lucide="library-big" aria-hidden="true"></i>
-          <div><strong id="stat-total">—</strong><span>мер в каталоге</span></div>
-        </div>
-        <div class="stat-item">
-          <i data-lucide="map" aria-hidden="true"></i>
-          <div><strong id="stat-regions">—</strong><span>регионов представлены</span></div>
-        </div>
-        <div class="stat-item">
-          <i data-lucide="landmark" aria-hidden="true"></i>
-          <div><strong id="stat-federal">—</strong><span>федеральных мер</span></div>
-        </div>
-        <div class="stat-item">
-          <i data-lucide="building-2" aria-hidden="true"></i>
-          <div><strong id="stat-regional">—</strong><span>региональных мер</span></div>
-        </div>
+        <div class="stat-item"><i data-lucide="library-big" aria-hidden="true"></i><div><strong id="stat-total">—</strong><span>мер в каталоге</span></div></div>
+        <div class="stat-item"><i data-lucide="map" aria-hidden="true"></i><div><strong id="stat-regions">—</strong><span>регионов представлены</span></div></div>
+        <div class="stat-item"><i data-lucide="landmark" aria-hidden="true"></i><div><strong id="stat-federal">—</strong><span>федеральных мер</span></div></div>
+        <div class="stat-item"><i data-lucide="building-2" aria-hidden="true"></i><div><strong id="stat-regional">—</strong><span>региональных мер</span></div></div>
       </div>
     </section>
 
     <section class="category-section site-container" aria-labelledby="category-title">
-      <div class="section-heading">
-        <div>
-          <h2 id="category-title">Категории мер поддержки</h2>
-          <p>Выберите направление, чтобы сразу перейти к соответствующим мерам.</p>
-        </div>
-      </div>
+      <div class="section-heading"><div><h2 id="category-title">Категории мер поддержки</h2><p>Выберите направление, чтобы сразу перейти к соответствующим мерам.</p></div></div>
       <div class="category-grid" id="category-grid"></div>
     </section>
 
@@ -209,47 +171,43 @@
             <h2 id="catalog-title">Каталог мер поддержки</h2>
             <p>Нажмите «Подробнее», чтобы увидеть условия, документы и порядок оформления внутри портала.</p>
           </div>
-          <div class="catalog-count" id="result-count" aria-live="polite">Загрузка каталога…</div>
+          <div class="catalog-heading__actions">
+            <button class="catalog-tool" id="favorites-filter" type="button" aria-pressed="false">
+              <i data-lucide="heart" aria-hidden="true"></i><span>Избранное</span><strong id="favorites-count">0</strong>
+            </button>
+            <div class="catalog-count" id="result-count" aria-live="polite">Загрузка каталога…</div>
+          </div>
         </div>
-
+        <div class="catalog-quality-note">
+          <i data-lucide="info" aria-hidden="true"></i>
+          <p>Карточки носят справочный характер. Отсутствие региональной записи означает отсутствие сведений в текущем источнике, а не отсутствие самой поддержки. Методика, ограничения и правила проверки описаны на странице <a href="./methodology.html">«Методология»</a>.</p>
+        </div>
         <div class="active-filters" id="active-filters" aria-live="polite"></div>
         <div class="catalog" id="catalog"></div>
-        <button class="load-more" id="load-more" type="button" hidden>
-          <span>Показать ещё</span>
-          <i data-lucide="chevron-down" aria-hidden="true"></i>
-        </button>
+        <button class="load-more" id="load-more" type="button" hidden><span>Показать ещё</span><i data-lucide="chevron-down" aria-hidden="true"></i></button>
         <div class="empty-state" id="empty-state" hidden>
           <i data-lucide="search-x" aria-hidden="true"></i>
           <h3>По выбранным условиям меры не найдены</h3>
-          <p>Измените регион, категорию или поисковый запрос.</p>
+          <p>Измените регион, категорию, режим избранного или поисковый запрос.</p>
           <button type="button" data-reset-filters>Сбросить фильтры</button>
         </div>
       </div>
     </section>
 
     <section class="official-services site-container" id="official-services" aria-labelledby="official-title">
-      <div class="section-heading">
-        <div>
-          <h2 id="official-title">Официальные сервисы и источники</h2>
-          <p>Для проверки права, подачи заявления и изучения полного порядка предоставления меры.</p>
-        </div>
-      </div>
-
+      <div class="section-heading"><div><h2 id="official-title">Официальные сервисы и источники</h2><p>Для проверки права, подачи заявления и изучения полного порядка предоставления меры.</p></div></div>
       <div class="service-list">
         <a class="service-list__item" href="https://app.sovetmam.ru/" target="_blank" rel="noopener noreferrer">
           <span class="service-icon service-icon--logo"><img src="./assets/logo-sovetmam-round.svg" alt="" width="215" height="215"></span>
-          <span><strong>Совет матерей</strong><small>Информационный партнёр проекта</small></span>
-          <i data-lucide="arrow-up-right" aria-hidden="true"></i>
+          <span><strong>Совет матерей</strong><small>Информационный партнёр проекта</small></span><i data-lucide="arrow-up-right" aria-hidden="true"></i>
         </a>
         <a href="https://www.gosuslugi.ru/social-navigator" target="_blank" rel="noopener noreferrer">
           <span class="service-icon service-icon--logo"><img src="./assets/logo-gosuslugi.svg" alt="" width="293" height="293"></span>
-          <span><strong>Социальный навигатор Госуслуг</strong><small>Персональный подбор и электронные заявления</small></span>
-          <i data-lucide="arrow-up-right" aria-hidden="true"></i>
+          <span><strong>Социальный навигатор Госуслуг</strong><small>Персональный подбор и электронные заявления</small></span><i data-lucide="arrow-up-right" aria-hidden="true"></i>
         </a>
         <a href="https://sfr.gov.ru/grazhdanam/semyam_s_detmi/" target="_blank" rel="noopener noreferrer">
           <span class="service-icon service-icon--logo"><img src="./assets/logo-sfr.png" alt="" width="1200" height="1000"></span>
-          <span><strong>Социальный фонд России</strong><small>Федеральные выплаты и пособия семьям с детьми</small></span>
-          <i data-lucide="arrow-up-right" aria-hidden="true"></i>
+          <span><strong>Социальный фонд России</strong><small>Федеральные выплаты и пособия семьям с детьми</small></span><i data-lucide="arrow-up-right" aria-hidden="true"></i>
         </a>
       </div>
     </section>
@@ -257,15 +215,12 @@
     <section class="about-project" id="about-project">
       <div class="site-container about-project__grid">
         <div>
-          <h2>О навигаторе</h2>
-          <p>Платформа систематизирует условия, документы и порядок оформления мер поддержки. Для подачи заявления она направляет только на официальные государственные сервисы и не собирает персональные данные.</p>
+          <h2>О платформе</h2>
+          <p>Каталог сохранён в полном объёме, а новые пользовательские задачи вынесены в самостоятельные страницы. Подбор по жизненной ситуации даёт предварительную объяснимую навигацию, сравнение регионов описывает структуру записей источника.</p>
         </div>
         <div class="about-note">
           <i data-lucide="shield-check" aria-hidden="true"></i>
-          <div>
-            <strong>Информационный характер</strong>
-            <p>Условия и размеры поддержки могут меняться. Перед обращением сверяйте сведения на Госуслугах, сайте СФР или другого указанного ведомства.</p>
-          </div>
+          <div><strong>Информационный характер</strong><p>Условия и размеры поддержки могут меняться. Перед обращением сверяйте сведения на точной официальной странице услуги или у уполномоченного ведомства.</p></div>
         </div>
       </div>
     </section>
@@ -275,54 +230,35 @@
     <div class="site-container footer-grid">
       <div class="footer-brand">
         <img src="./assets/logo-isd.png" alt="Институт социальной демографии ФНИСЦ РАН" width="450" height="189">
-        <p>Информационный навигатор мер поддержки семей с детьми.</p>
+        <p>Информационная платформа мер поддержки семей с детьми.</p>
       </div>
       <div class="footer-links">
-        <a href="#catalog-section">Каталог мер</a>
-        <button type="button" data-open-regions>Регионы</button>
+        <a href="./index.html#catalog-section">Каталог мер</a>
+        <a href="./situations.html">Подбор по ситуации</a>
+        <a href="./compare.html">Сравнение регионов</a>
+        <a href="./methodology.html">Методология</a>
         <a href="#official-services">Источники информации</a>
-        <a href="#about-project">О проекте</a>
       </div>
-      <div class="footer-meta">
-        <p>© <span id="current-year"></span> Институт социальной демографии ФНИСЦ РАН</p>
-        <p>Сведения носят справочный характер.</p>
-      </div>
+      <div class="footer-meta"><p>© <span id="current-year"></span> Институт социальной демографии ФНИСЦ РАН</p><p>Сведения носят справочный характер.</p></div>
     </div>
   </footer>
 
   <dialog class="region-dialog" id="region-dialog" aria-labelledby="region-dialog-title">
     <div class="region-dialog__header">
-      <div>
-        <h2 id="region-dialog-title">Выберите регион</h2>
-        <p>Федеральные меры будут показаны вместе с мерами выбранного субъекта.</p>
-      </div>
-      <button class="dialog-close" type="button" data-close-dialog aria-label="Закрыть окно">
-        <i data-lucide="x" aria-hidden="true"></i>
-      </button>
+      <div><h2 id="region-dialog-title">Выберите регион</h2><p>Федеральные меры будут показаны вместе с региональными записями, представленными в источнике.</p></div>
+      <button class="dialog-close" type="button" data-close-dialog aria-label="Закрыть окно"><i data-lucide="x" aria-hidden="true"></i></button>
     </div>
-    <div class="region-dialog__search">
-      <i data-lucide="search" aria-hidden="true"></i>
-      <label class="visually-hidden" for="region-search">Поиск региона</label>
-      <input id="region-search" type="search" placeholder="Начните вводить название региона" autocomplete="off">
-    </div>
+    <div class="region-dialog__search"><i data-lucide="search" aria-hidden="true"></i><label class="visually-hidden" for="region-search">Поиск региона</label><input id="region-search" type="search" placeholder="Начните вводить название региона" autocomplete="off"></div>
     <div class="region-list" id="region-list"></div>
   </dialog>
 
   <dialog class="measure-dialog" id="measure-dialog" aria-labelledby="measure-dialog-title">
     <div class="measure-dialog__header">
-      <div>
-        <span class="measure-dialog__eyebrow" id="measure-dialog-scope"></span>
-        <h2 id="measure-dialog-title">Подробная информация о мере</h2>
-      </div>
-      <button class="dialog-close" type="button" data-close-measure aria-label="Закрыть подробную карточку">
-        <i data-lucide="x" aria-hidden="true"></i>
-      </button>
+      <div><span class="measure-dialog__eyebrow" id="measure-dialog-scope"></span><h2 id="measure-dialog-title">Подробная информация о мере</h2></div>
+      <button class="dialog-close" type="button" data-close-measure aria-label="Закрыть подробную карточку"><i data-lucide="x" aria-hidden="true"></i></button>
     </div>
     <div class="measure-dialog__body" id="measure-dialog-body">
-      <div class="measure-dialog__loading">
-        <i data-lucide="loader-circle" aria-hidden="true"></i>
-        <p>Загружаем подробные условия…</p>
-      </div>
+      <div class="measure-dialog__loading"><i data-lucide="loader-circle" aria-hidden="true"></i><p>Загружаем подробные условия…</p></div>
     </div>
   </dialog>
 

@@ -1,11 +1,24 @@
-import { access, readFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { access, readdir, readFile } from 'node:fs/promises';
+import { dirname, relative, resolve, sep } from 'node:path';
 
-const root = resolve('site');
-const required = [
+const repositoryRoot = process.cwd();
+const siteRoot = resolve(repositoryRoot, 'site');
+
+const requiredFiles = [
   'index.html',
   'styles.css',
   'app.js',
+  'situations.html',
+  'situations.js',
+  'compare.html',
+  'compare.js',
+  'methodology.html',
+  'methodology.js',
+  'modules.css',
+  'lib/platform-core.js',
+  'lib/life-situation-engine.js',
+  'lib/region-comparison-engine.js',
+  'lib/module-shell.js',
   '.nojekyll',
   'manifest.webmanifest',
   'assets/favicon.png',
@@ -24,58 +37,130 @@ const required = [
   'data/regions.json',
   'data/regions-base.json',
   'data/ru-regions.geojson',
-  'data/details/manifest.json',
-  ...Array.from({ length: 32 }, (_, index) => `data/details/${String(index).padStart(2, '0')}.json`)
+  'data/details/manifest.json'
 ];
 
-for (const relative of required) {
-  await access(resolve(root, relative));
+for (const file of requiredFiles) await access(resolve(siteRoot, file));
+
+async function readJson(path) {
+  return JSON.parse(await readFile(path, 'utf8'));
 }
 
-const [html, css, js, measuresText, metaText, regionsBaseText, geoText, detailManifestText, ...detailShardTexts] = await Promise.all([
-  readFile(resolve(root, 'index.html'), 'utf8'),
-  readFile(resolve(root, 'styles.css'), 'utf8'),
-  readFile(resolve(root, 'app.js'), 'utf8'),
-  readFile(resolve(root, 'data/measures.json'), 'utf8'),
-  readFile(resolve(root, 'data/meta.json'), 'utf8'),
-  readFile(resolve(root, 'data/regions-base.json'), 'utf8'),
-  readFile(resolve(root, 'data/ru-regions.geojson'), 'utf8'),
-  readFile(resolve(root, 'data/details/manifest.json'), 'utf8'),
-  ...Array.from({ length: 32 }, (_, index) => readFile(
-    resolve(root, `data/details/${String(index).padStart(2, '0')}.json`),
-    'utf8'
-  ))
+function assert(condition, message) {
+  if (!condition) throw new Error(message);
+}
+
+function insideSite(path) {
+  const rel = relative(siteRoot, path);
+  return rel && !rel.startsWith(`..${sep}`) && rel !== '..' && !rel.includes(`${sep}..${sep}`);
+}
+
+function localReferences(html) {
+  return [...html.matchAll(/(?:src|href)=["']([^"']+)["']/g)]
+    .map((match) => match[1])
+    .filter((value) => value.startsWith('./') || value.startsWith('../'))
+    .map((value) => value.split(/[?#]/, 1)[0])
+    .filter(Boolean);
+}
+
+function idsIn(html) {
+  return [...html.matchAll(/\bid=["']([^"']+)["']/g)].map((match) => match[1]);
+}
+
+async function validateHtml(file) {
+  const path = resolve(siteRoot, file);
+  const html = await readFile(path, 'utf8');
+  assert(/<!doctype html>/i.test(html), `${file}: отсутствует doctype.`);
+  assert(/<html[^>]+lang=["']ru["']/i.test(html), `${file}: не указан русский язык документа.`);
+  assert(/name=["']viewport["']/i.test(html), `${file}: отсутствует viewport.`);
+  assert(/class=["'][^"']*skip-link/.test(html), `${file}: отсутствует ссылка пропуска навигации.`);
+  assert(/<h1\b/i.test(html), `${file}: отсутствует заголовок первого уровня.`);
+  assert(/\.\/index\.html/.test(html), `${file}: нет ссылки на каталог.`);
+  assert(/\.\/situations\.html/.test(html), `${file}: нет ссылки на подбор.`);
+  assert(/\.\/compare\.html/.test(html), `${file}: нет ссылки на сравнение.`);
+  assert(/\.\/methodology\.html/.test(html), `${file}: нет ссылки на методологию.`);
+
+  const ids = idsIn(html);
+  assert(ids.length === new Set(ids).size, `${file}: обнаружены повторяющиеся id.`);
+
+  for (const reference of new Set(localReferences(html))) {
+    const target = resolve(dirname(path), reference);
+    assert(insideSite(target) || target === siteRoot, `${file}: ссылка выходит за пределы site/: ${reference}`);
+    await access(target);
+  }
+  return html;
+}
+
+const htmlFiles = ['index.html', 'situations.html', 'compare.html', 'methodology.html'];
+const htmlByFile = new Map();
+for (const file of htmlFiles) htmlByFile.set(file, await validateHtml(file));
+
+const indexHtml = htmlByFile.get('index.html');
+const catalogCss = await readFile(resolve(siteRoot, 'styles.css'), 'utf8');
+const catalogJs = await readFile(resolve(siteRoot, 'app.js'), 'utf8');
+const forbiddenLegacyFeatures = [
+  ['index.html', indexHtml, /Версия для слабовидящих|>Войти<|login-link|a11y-toggle/i],
+  ['styles.css', catalogCss, /a11y-mode|login-link|a11y-toggle/i],
+  ['app.js', catalogJs, /family-support-a11y|a11yToggle|setA11yMode/i],
+  ['app.js', catalogJs, /safeUrl\(measure\.source_url\)|href\s*=\s*measure\.source_url/i]
+];
+for (const [name, content, pattern] of forbiddenLegacyFeatures) {
+  assert(!pattern.test(content), `${name}: найдена удалённая или небезопасная функция интерфейса (${pattern}).`);
+}
+assert((indexHtml.match(/href=["']https:\/\/app\.sovetmam\.ru\/["']/g) || []).length === 2,
+  'index.html должен содержать ровно две атрибутированные ссылки на информационного партнёра.');
+for (const id of [
+  'hero-search-form', 'region-filter', 'category-filter', 'level-filter', 'search-filter',
+  'region-map-layer', 'popular-list', 'category-grid', 'catalog', 'favorites-filter',
+  'region-dialog', 'measure-dialog'
+]) {
+  assert(indexHtml.includes(`id="${id}"`), `index.html: отсутствует обязательный элемент #${id}.`);
+}
+assert(indexHtml.includes('Ключевые федеральные меры'), 'Блок фиксированного редакционного выбора не переименован.');
+assert(!indexHtml.includes('Популярные меры поддержки'), 'Не следует обозначать редакционный выбор как измеренную популярность.');
+assert(indexHtml.includes('Отсутствие региональной записи означает отсутствие сведений'),
+  'Каталог должен объяснять смысл отсутствующей региональной записи.');
+
+const situationsHtml = htmlByFile.get('situations.html');
+for (const id of ['profile-form', 'situation-region', 'situation-grid', 'fact-grid', 'matching-results']) {
+  assert(situationsHtml.includes(`id="${id}"`), `situations.html: отсутствует #${id}.`);
+}
+assert(/не (?:является|подтверждает|решение)[^<]*(?:прав|назнач)/i.test(situationsHtml),
+  'Страница подбора должна явно отрицать юридически значимое определение права.');
+assert(/ответы[^<]*(?:устройств|браузер)|не передаются/i.test(situationsHtml),
+  'Страница подбора должна объяснять локальную обработку ответов.');
+
+const compareHtml = htmlByFile.get('compare.html');
+for (const id of ['compare-form', 'compare-region-select', 'selected-regions', 'comparison-results', 'category-table']) {
+  assert(compareHtml.includes(`id="${id}"`), `compare.html: отсутствует #${id}.`);
+}
+assert(/нулев[^<]*(?:источник|снимок|сведен)/i.test(compareHtml),
+  'Страница сравнения должна объяснять нулевые значения как пробел источника.');
+assert(/не измеряет[^<]*(?:финанс|эффектив)/i.test(compareHtml),
+  'Страница сравнения должна ограничивать интерпретацию показателей.');
+
+const methodologyHtml = htmlByFile.get('methodology.html');
+for (const anchor of ['data', 'matching', 'comparison', 'privacy', 'corrections']) {
+  assert(methodologyHtml.includes(`id="${anchor}"`), `methodology.html: отсутствует раздел #${anchor}.`);
+}
+
+const [measures, meta, regionsBase, regionsGeo, detailManifest] = await Promise.all([
+  readJson(resolve(siteRoot, 'data/measures.json')),
+  readJson(resolve(siteRoot, 'data/meta.json')),
+  readJson(resolve(siteRoot, 'data/regions-base.json')),
+  readJson(resolve(siteRoot, 'data/ru-regions.geojson')),
+  readJson(resolve(siteRoot, 'data/details/manifest.json'))
 ]);
 
-const forbidden = [
-  ['index.html', html, /Версия для слабовидящих|>Войти<|login-link|a11y-toggle/i],
-  ['styles.css', css, /a11y-mode|login-link|a11y-toggle/i],
-  ['app.js', js, /family-support-a11y|a11yToggle|setA11yMode/i],
-  ['app.js', js, /safeUrl\(measure\.source_url\)|href\s*=\s*measure\.source_url/i]
-];
-for (const [name, content, pattern] of forbidden) {
-  if (pattern.test(content)) throw new Error(`${name}: найдена удалённая функция интерфейса (${pattern}).`);
-}
-const councilLinkCount = (html.match(/href=["']https:\/\/app\.sovetmam\.ru\/["']/gi) ?? []).length;
-if (councilLinkCount !== 2) throw new Error(`В header и разделе источников должно быть ровно две ссылки на Совет матерей; получено ${councilLinkCount}.`);
+assert(Array.isArray(measures), 'measures.json должен содержать массив.');
+assert(Array.isArray(regionsBase), 'regions-base.json должен содержать массив.');
+assert(regionsBase.length === 89, `Базовый справочник должен содержать 89 регионов; получено ${regionsBase.length}.`);
+assert(new Set(regionsBase).size === regionsBase.length, 'В базовом справочнике есть повторяющиеся регионы.');
+assert(regionsGeo?.type === 'FeatureCollection' && regionsGeo.features?.length === 89,
+  `GeoJSON должен содержать 89 регионов; получено ${regionsGeo?.features?.length ?? 'неизвестно'}.`);
+assert(new Set(regionsGeo.features.map((feature) => feature.properties?.name)).size === 89,
+  'В GeoJSON отсутствуют названия регионов или есть повторы.');
 
-const measures = JSON.parse(measuresText);
-const meta = JSON.parse(metaText);
-const regionsBase = JSON.parse(regionsBaseText);
-const regionsGeo = JSON.parse(geoText);
-const detailManifest = JSON.parse(detailManifestText);
-const detailShards = detailShardTexts.map((text) => JSON.parse(text));
-if (!Array.isArray(measures) || measures.length === 0) throw new Error('Каталог мер пуст.');
-if (!Array.isArray(regionsBase) || regionsBase.length !== 89) {
-  throw new Error(`В базовом списке должно быть 89 регионов; получено ${regionsBase?.length ?? 'неизвестно'}.`);
-}
-if (new Set(regionsBase).size !== regionsBase.length) throw new Error('В базовом списке регионов есть повторы.');
-if (regionsGeo?.type !== 'FeatureCollection' || regionsGeo.features?.length !== 89) {
-  throw new Error(`GeoJSON должен содержать 89 регионов; получено ${regionsGeo?.features?.length ?? 'неизвестно'}.`);
-}
-if (new Set(regionsGeo.features.map((feature) => feature.properties?.name)).size !== 89) {
-  throw new Error('В GeoJSON отсутствуют названия регионов или есть повторы.');
-}
 const geoNameAliases = new Map([
   ['Город Москва', 'Москва'],
   ['Город Санкт-Петербург', 'Санкт-Петербург'],
@@ -91,44 +176,60 @@ const mappedGeoNames = new Set(regionsGeo.features.map((feature) => {
 }));
 const missingGeometry = regionsBase.filter((region) => !mappedGeoNames.has(region));
 const unknownGeometry = [...mappedGeoNames].filter((region) => !regionsBase.includes(region));
-if (missingGeometry.length || unknownGeometry.length) {
-  throw new Error(`GeoJSON не совпадает со справочником: без геометрии [${missingGeometry.join(', ')}], неизвестные [${unknownGeometry.join(', ')}].`);
-}
-if (Number(meta.measure_count) !== measures.length) {
-  throw new Error(`meta.measure_count (${meta.measure_count}) не совпадает с числом карточек (${measures.length}).`);
-}
-if (Number(meta.detail_shard_count) !== detailShards.length || Number(detailManifest.shard_count) !== detailShards.length) {
-  throw new Error('Количество файлов подробных карточек не совпадает с метаданными.');
-}
-if (Number(meta.detail_count) !== measures.length || Number(detailManifest.detail_count) !== measures.length) {
-  throw new Error('Подробные карточки есть не для всех мер.');
-}
-if (meta.source !== 'demo') {
-  if (meta.source !== 'sovetmam' || meta.demo === true) throw new Error('Рабочий снимок имеет неверный источник или demo-флаг.');
-  if (measures.length < 1000) throw new Error(`Рабочий снимок содержит только ${measures.length} мер.`);
-  if (Number(meta.loaded_link_count) !== measures.length) throw new Error('loaded_link_count не совпадает с числом мер.');
-  if (Number(meta.parse_error_count) !== 0) throw new Error('Рабочий снимок содержит ошибки разбора.');
-  if (Number(meta.page_reported_count) && measures.length < Number(meta.page_reported_count) * 0.97) {
-    throw new Error('Извлечено менее 97% сообщённого страницей числа мер.');
+assert(!missingGeometry.length && !unknownGeometry.length,
+  `GeoJSON не совпадает со справочником: без геометрии [${missingGeometry.join(', ')}], неизвестные [${unknownGeometry.join(', ')}].`);
+
+if (process.env.ALLOW_DEMO !== '1') {
+  assert(meta.source === 'sovetmam' && meta.demo !== true,
+    'Рабочий снимок имеет неверный источник или demo-флаг.');
+  assert(measures.length >= 1000, `Рабочий снимок содержит только ${measures.length} мер.`);
+  assert(Number(meta.loaded_link_count) === measures.length,
+    'loaded_link_count не совпадает с числом мер.');
+  assert(Number(meta.parse_error_count) === 0, 'Рабочий снимок содержит ошибки разбора.');
+  if (Number(meta.page_reported_count)) {
+    assert(measures.length >= Number(meta.page_reported_count) * 0.97,
+      'Извлечено менее 97% сообщённого страницей числа мер.');
   }
 }
 
+assert(Number(meta.measure_count) === measures.length, 'measure_count не совпадает с числом мер.');
+assert(Number(meta.detail_count) === measures.length, 'detail_count не совпадает с числом мер.');
+assert(Number(detailManifest.measure_count) === measures.length, 'Манифест подробностей не совпадает с каталогом.');
+assert(Number(detailManifest.detail_count) === measures.length, 'detail_count манифеста не совпадает с каталогом.');
+assert(Number(detailManifest.shard_count) === Number(meta.detail_shard_count),
+  'Число шардов подробностей расходится в метаданных.');
+
 const ids = new Set();
+const representedRegions = new Set();
 for (const measure of measures) {
   for (const key of ['id', 'title', 'level', 'category', 'source_url']) {
-    if (!measure?.[key]) throw new Error(`Карточка без обязательного поля ${key}: ${JSON.stringify(measure)}`);
+    assert(measure?.[key], `Карточка без обязательного поля ${key}: ${JSON.stringify(measure)}`);
   }
-  if (ids.has(measure.id)) throw new Error(`Повтор идентификатора ${measure.id}.`);
+  assert(!ids.has(measure.id), `Повтор идентификатора ${measure.id}.`);
   ids.add(measure.id);
+  assert(['federal', 'regional'].includes(measure.level), `Недопустимый уровень у ${measure.id}.`);
+
   const sourceUrl = new URL(measure.source_url);
-  if (sourceUrl.protocol !== 'https:' || sourceUrl.hostname !== 'app.sovetmam.ru') {
-    throw new Error(`Недопустимый URL ${measure.source_url}.`);
+  assert(sourceUrl.protocol === 'https:' && sourceUrl.hostname === 'app.sovetmam.ru',
+    `Недопустимый URL источника ${measure.source_url}.`);
+
+  if (measure.level === 'regional') {
+    assert(measure.region && regionsBase.includes(measure.region),
+      `Регион отсутствует в базовом справочнике: ${measure.region}.`);
+    representedRegions.add(measure.region);
   }
-  if (measure.level === 'regional' && !regionsBase.includes(measure.region)) {
-    throw new Error(`Регион отсутствует в базовом справочнике: ${measure.region}.`);
-  }
-  if (!measure.content_hash || !measure.fetched_at) throw new Error(`Нет метаданных целостности у ${measure.id}.`);
+  assert(measure.content_hash && measure.fetched_at, `Нет метаданных целостности у ${measure.id}.`);
 }
+
+assert(Number(meta.region_count) === representedRegions.size,
+  'region_count не совпадает с числом субъектов, представленных региональными карточками.');
+
+const detailDirectory = resolve(siteRoot, 'data/details');
+const shardFiles = (await readdir(detailDirectory))
+  .filter((file) => /^\d{2}\.json$/.test(file))
+  .sort();
+assert(shardFiles.length === Number(detailManifest.shard_count),
+  `Найдено ${shardFiles.length} шардов вместо ${detailManifest.shard_count}.`);
 
 const officialHosts = new Set([
   'gosuslugi.ru', 'www.gosuslugi.ru', 'sfr.gov.ru', 'nalog.gov.ru',
@@ -141,42 +242,40 @@ const forbiddenGenericUrls = new Set([
   'https://www.nalog.gov.ru/rn77/fl/',
   'https://trudvsem.ru/'
 ]);
+
 const detailsById = new Map();
 let officialLinkCount = 0;
-for (const shard of detailShards) {
-  if (!shard || Array.isArray(shard) || typeof shard !== 'object') throw new Error('Некорректный файл подробных карточек.');
+for (const file of shardFiles) {
+  const shard = await readJson(resolve(detailDirectory, file));
+  assert(shard && !Array.isArray(shard) && typeof shard === 'object', `Некорректный файл ${file}.`);
   for (const [id, detail] of Object.entries(shard)) {
-    if (detailsById.has(id)) throw new Error(`Подробная карточка ${id} встречается дважды.`);
+    assert(!detailsById.has(id), `Подробная карточка ${id} встречается дважды.`);
     for (const key of ['steps', 'documents', 'notes', 'official_links']) {
-      if (!Array.isArray(detail?.[key])) throw new Error(`В подробной карточке ${id} поле ${key} должно быть массивом.`);
+      assert(Array.isArray(detail?.[key]), `В подробной карточке ${id} поле ${key} должно быть массивом.`);
     }
-    if (!detail.steps.length) throw new Error(`В подробной карточке ${id} не указан порядок оформления.`);
+    assert(detail.steps.length > 0, `В подробной карточке ${id} не указан порядок оформления.`);
     for (const link of detail.official_links) {
       const url = new URL(link.url);
-      if (url.protocol !== 'https:' || !officialHosts.has(url.hostname)) {
-        throw new Error(`В карточке ${id} недопустимая внешняя ссылка: ${link.url}`);
-      }
-      if (forbiddenGenericUrls.has(link.url)) {
-        throw new Error(`В карточке ${id} указана общая ссылка вместо страницы конкретной услуги: ${link.url}`);
-      }
+      assert(url.protocol === 'https:' && officialHosts.has(url.hostname),
+        `В карточке ${id} недопустимая внешняя ссылка: ${link.url}`);
+      assert(!forbiddenGenericUrls.has(link.url),
+        `В карточке ${id} указана общая ссылка вместо страницы конкретной услуги: ${link.url}`);
       officialLinkCount += 1;
     }
     detailsById.set(id, detail);
   }
 }
-for (const id of ids) {
-  if (!detailsById.has(id)) throw new Error(`Нет подробной карточки для ${id}.`);
-}
-if (detailsById.size !== measures.length) throw new Error('Количество подробных карточек не совпадает с каталогом.');
-if (officialLinkCount !== meta.official_link_count || officialLinkCount !== detailManifest.official_link_count) {
-  throw new Error('Количество проверенных официальных ссылок не совпадает с метаданными.');
-}
 
-const localReferences = [...html.matchAll(/(?:src|href)="(\.\/[^"?#]+)(?:[?#][^"]*)?"/g)]
-  .map((match) => match[1])
-  .filter((value) => !value.startsWith('./#'));
-for (const reference of new Set(localReferences)) {
-  await access(resolve(root, reference.slice(2)));
-}
+for (const id of ids) assert(detailsById.has(id), `Нет подробной карточки для ${id}.`);
+assert(detailsById.size === measures.length, 'Количество подробных карточек не совпадает с каталогом.');
+assert(officialLinkCount === Number(meta.official_link_count)
+  && officialLinkCount === Number(detailManifest.official_link_count),
+'Количество проверенных официальных ссылок не совпадает с метаданными.');
 
-console.log(`Проверка завершена: ${measures.length} мер и подробных карточек, ${regionsBase.length} регионов, ${officialLinkCount} точных официальных ссылок.`);
+console.log([
+  `Проверка завершена: ${measures.length} мер и подробных карточек;`,
+  `${regionsBase.length} позиций регионального справочника;`,
+  `${representedRegions.size} субъектов представлены в источнике;`,
+  `${officialLinkCount} точных официальных ссылок;`,
+  '4 пользовательские страницы и взаимные ссылки проверены.'
+].join(' '));

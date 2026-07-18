@@ -1,5 +1,8 @@
+import { buildIssueUrl, inferProviderType, safeLocalStorage } from './lib/platform-core.js';
+
 const PAGE_SIZE = 12;
 const SEARCH_DELAY = 180;
+const FAVORITES_KEY = 'family-support:favorites:v1';
 
 const state = {
   measures: [],
@@ -14,7 +17,10 @@ const state = {
   searchTimer: null,
   detailShards: new Map(),
   detailShardCount: 32,
-  selectedMeasure: null
+  selectedMeasure: null,
+  requestedMeasureId: null,
+  favoriteIds: new Set(),
+  favoritesOnly: false
 };
 
 const elements = {
@@ -28,6 +34,8 @@ const elements = {
   reset: document.querySelector('#reset-filters'),
   catalog: document.querySelector('#catalog'),
   count: document.querySelector('#result-count'),
+  favoritesFilter: document.querySelector('#favorites-filter'),
+  favoritesCount: document.querySelector('#favorites-count'),
   loadMore: document.querySelector('#load-more'),
   empty: document.querySelector('#empty-state'),
   snapshot: document.querySelector('#snapshot'),
@@ -71,6 +79,7 @@ function normalizeMapRegion(value) {
 }
 
 const numberFormatter = new Intl.NumberFormat('ru-RU');
+const storage = safeLocalStorage();
 
 function normalize(value) {
   return String(value ?? '')
@@ -205,12 +214,122 @@ function ensureSelectOption(select, value) {
   select.append(option);
 }
 
+
+function restoreFavorites() {
+  try {
+    const parsed = JSON.parse(storage.get(FAVORITES_KEY, '[]'));
+    state.favoriteIds = new Set(Array.isArray(parsed) ? parsed.filter((id) => typeof id === 'string' && id) : []);
+  } catch {
+    state.favoriteIds = new Set();
+  }
+}
+
+function persistFavorites() {
+  storage.set(FAVORITES_KEY, JSON.stringify([...state.favoriteIds]));
+}
+
+function isFavorite(measure) {
+  return Boolean(measure?.id && state.favoriteIds.has(measure.id));
+}
+
+function setFavoriteButtonState(button, measure, { labeled = false } = {}) {
+  const active = isFavorite(measure);
+  button.classList.toggle('is-active', active);
+  button.setAttribute('aria-pressed', String(active));
+  button.setAttribute('aria-label', active ? `Удалить «${measure.title}» из избранного` : `Добавить «${measure.title}» в избранное`);
+  const text = button.querySelector('[data-favorite-label]');
+  if (labeled && text) text.textContent = active ? 'В избранном' : 'В избранное';
+}
+
+function updateFavoriteControls() {
+  const count = state.favoriteIds.size;
+  if (elements.favoritesCount) elements.favoritesCount.textContent = numberFormatter.format(count);
+  if (elements.favoritesFilter) {
+    elements.favoritesFilter.classList.toggle('is-active', state.favoritesOnly);
+    elements.favoritesFilter.setAttribute('aria-pressed', String(state.favoritesOnly));
+    elements.favoritesFilter.title = count
+      ? `Сохранено карточек: ${numberFormatter.format(count)}`
+      : 'Избранное хранится только в этом браузере';
+  }
+}
+
+function toggleFavorite(measure, button = null, options = {}) {
+  if (!measure?.id) return;
+  if (isFavorite(measure)) state.favoriteIds.delete(measure.id);
+  else state.favoriteIds.add(measure.id);
+  persistFavorites();
+  if (button) setFavoriteButtonState(button, measure, options);
+  updateFavoriteControls();
+
+  if (state.favoritesOnly) applyFilters();
+  else renderCatalog();
+
+  showToast(isFavorite(measure) ? 'Карточка сохранена в избранное' : 'Карточка удалена из избранного');
+}
+
+function createFavoriteButton(measure, { labeled = false, className = '' } = {}) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = className || 'measure-card__favorite';
+  button.append(icon('heart'));
+  if (labeled) {
+    const label = document.createElement('span');
+    label.dataset.favoriteLabel = '';
+    button.append(label);
+  }
+  setFavoriteButtonState(button, measure, { labeled });
+  button.addEventListener('click', (event) => {
+    event.stopPropagation();
+    toggleFavorite(measure, button, { labeled });
+  });
+  return button;
+}
+
+function measurePermalink(measure) {
+  const url = new URL(location.href);
+  url.searchParams.set('measure', measure.id);
+  return url.href;
+}
+
+async function copyText(value) {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(value);
+    return;
+  }
+  const textarea = document.createElement('textarea');
+  textarea.value = value;
+  textarea.setAttribute('readonly', '');
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.append(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  textarea.remove();
+}
+
+async function shareMeasure(measure) {
+  const url = measurePermalink(measure);
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: measure.title, text: 'Карточка меры поддержки семьи с детьми', url });
+      return;
+    }
+    await copyText(url);
+    showToast('Ссылка на карточку скопирована');
+  } catch (error) {
+    if (error?.name !== 'AbortError') showToast('Не удалось скопировать ссылку');
+  }
+}
+
 function syncQuery() {
   const params = new URLSearchParams();
   if (elements.region.value) params.set('region', elements.region.value);
   if (elements.category.value) params.set('category', elements.category.value);
   if (elements.level.value) params.set('level', elements.level.value);
   if (elements.search.value.trim()) params.set('q', elements.search.value.trim());
+  if (state.favoritesOnly) params.set('favorites', '1');
+  const measureId = state.selectedMeasure?.id || state.requestedMeasureId;
+  if (measureId) params.set('measure', measureId);
   const query = params.toString();
   history.replaceState(null, '', `${location.pathname}${query ? `?${query}` : ''}${location.hash || ''}`);
 }
@@ -223,9 +342,12 @@ function restoreQuery() {
   ensureSelectOption(elements.category, category);
   elements.region.value = region;
   elements.category.value = category;
-  elements.level.value = params.get('level') ?? '';
+  elements.level.value = ['federal', 'regional'].includes(params.get('level')) ? params.get('level') : '';
   elements.search.value = params.get('q') ?? '';
   elements.heroSearch.value = elements.search.value;
+  state.favoritesOnly = params.get('favorites') === '1';
+  state.requestedMeasureId = params.get('measure') || null;
+  updateFavoriteControls();
 }
 
 function updateSnapshot() {
@@ -383,7 +505,9 @@ function mapMeasureText(region) {
   return {
     regional,
     available,
-    description: `${numberFormatter.format(regional)} ${pluralMeasures(regional)} региона · ${numberFormatter.format(state.federalCount)} федеральная мера · ${numberFormatter.format(available)} доступно семье`
+    description: regional
+      ? `${numberFormatter.format(regional)} ${pluralMeasures(regional)} регионального уровня представлены в источнике · ${numberFormatter.format(state.federalCount)} ${pluralMeasures(state.federalCount)} федерального уровня · всего в выборке ${numberFormatter.format(available)}`
+      : `Региональные сведения в текущем источнике не представлены · ${numberFormatter.format(state.federalCount)} ${pluralMeasures(state.federalCount)} федерального уровня остаются в каталоге`
   };
 }
 
@@ -425,7 +549,7 @@ function updateMapSelection() {
     elements.mapSummaryDetails.textContent = counts.description;
   } else {
     elements.mapSummaryRegion.textContent = 'Вся Россия';
-    elements.mapSummaryDetails.textContent = `${numberFormatter.format(state.measures.length)} ${pluralMeasures(state.measures.length)} в каталоге · ${numberFormatter.format(state.federalCount)} федеральная мера · ${numberFormatter.format(state.regionalCounts.size)} региона с собственными мерами`;
+    elements.mapSummaryDetails.textContent = `${numberFormatter.format(state.measures.length)} ${pluralMeasures(state.measures.length)} в каталоге · ${numberFormatter.format(state.federalCount)} федеральных карточек · региональные записи представлены для ${numberFormatter.format(state.regionalCounts.size)} из ${numberFormatter.format(state.allRegions.length)} субъектов`;
   }
 }
 
@@ -451,14 +575,16 @@ function renderRegionMap() {
     path.setAttribute('d', geometryPath(feature.geometry, project));
     path.setAttribute('role', 'button');
     path.setAttribute('tabindex', '0');
-    path.setAttribute('aria-label', `${region}: ${regionalCount} региональных мер, ${state.federalCount} федеральная мера, всего доступно ${availableCount}`);
+    path.setAttribute('aria-label', regionalCount
+      ? `${region}: в источнике представлено ${regionalCount} региональных карточек; федеральных карточек ${state.federalCount}; всего в выборке ${availableCount}`
+      : `${region}: региональные сведения в текущем источнике не представлены; федеральных карточек ${state.federalCount}`);
     path.setAttribute('aria-pressed', 'false');
     path.setAttribute('fill-rule', 'evenodd');
     path.classList.add('region-map__region', mapCountClass(regionalCount, maximum));
     path.dataset.region = region;
 
     const title = document.createElementNS(svgNamespace, 'title');
-    title.textContent = `${region}: ${availableCount} доступных мер`;
+    title.textContent = mapMeasureText(region).description;
     path.append(title);
 
     const selectFromMap = () => selectRegion(elements.region.value === region ? '' : region);
@@ -540,7 +666,10 @@ function createMeasureCard(measure) {
   tags.className = 'measure-card__tags';
   tags.append(createStatusTag(levelLabel(measure)));
   if (measure.level === 'regional' && measure.region) tags.append(createStatusTag(measure.region, true));
-  top.append(iconBox, tags);
+  const headActions = document.createElement('div');
+  headActions.className = 'measure-card__head-actions';
+  headActions.append(tags, createFavoriteButton(measure));
+  top.append(iconBox, headActions);
 
   const title = document.createElement('h3');
   title.textContent = measure.title;
@@ -586,6 +715,7 @@ function renderActiveFilters() {
   if (elements.category.value) filters.push(['category', `Категория: ${elements.category.value}`]);
   if (elements.level.value) filters.push(['level', elements.level.value === 'federal' ? 'Только федеральные' : 'Только региональные']);
   if (elements.search.value.trim()) filters.push(['search', `Поиск: ${elements.search.value.trim()}`]);
+  if (state.favoritesOnly) filters.push(['favorites', 'Только избранное']);
 
   for (const [key, label] of filters) {
     const chip = document.createElement('span');
@@ -604,6 +734,7 @@ function renderActiveFilters() {
         elements.search.value = '';
         elements.heroSearch.value = '';
       }
+      if (key === 'favorites') state.favoritesOnly = false;
       applyFilters();
     });
     chip.append(text, remove);
@@ -658,7 +789,8 @@ function applyFilters({ preservePage = false } = {}) {
       measure.category,
       sourceName(measure)
     ].join(' '));
-    return regionMatches && categoryMatches && levelMatches && (!query || haystack.includes(query));
+    const favoriteMatches = !state.favoritesOnly || state.favoriteIds.has(measure.id);
+    return regionMatches && categoryMatches && levelMatches && favoriteMatches && (!query || haystack.includes(query));
   });
 
   state.filtered.sort((a, b) => {
@@ -674,6 +806,7 @@ function applyFilters({ preservePage = false } = {}) {
   updateActiveCategory();
   renderCatalog();
   renderRegionList(elements.regionSearch.value);
+  updateFavoriteControls();
 }
 
 function resetFilters({ scroll = false } = {}) {
@@ -682,6 +815,7 @@ function resetFilters({ scroll = false } = {}) {
   elements.level.value = '';
   elements.search.value = '';
   elements.heroSearch.value = '';
+  state.favoritesOnly = false;
   applyFilters();
   if (scroll) document.querySelector('#catalog-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -782,6 +916,44 @@ function createDetailSection(title, items, { ordered = false, iconName = 'list-c
 
 function renderMeasureDetail(measure, detail) {
   const fragment = document.createDocumentFragment();
+  const links = (detail.official_links ?? [])
+    .map((link) => ({ ...link, safeUrl: officialUrl(link.url) }))
+    .filter((link) => link.safeUrl);
+
+  const toolbar = document.createElement('div');
+  toolbar.className = 'measure-detail-toolbar';
+  const favorite = createFavoriteButton(measure, { labeled: true, className: 'measure-detail-favorite' });
+  const share = document.createElement('button');
+  share.type = 'button';
+  share.append(icon('share-2'));
+  const shareText = document.createElement('span');
+  shareText.textContent = 'Поделиться';
+  share.append(shareText);
+  share.addEventListener('click', () => shareMeasure(measure));
+  const report = document.createElement('a');
+  report.href = buildIssueUrl(measure);
+  report.target = '_blank';
+  report.rel = 'noopener noreferrer';
+  report.append(icon('message-square-warning'));
+  const reportText = document.createElement('span');
+  reportText.textContent = 'Сообщить о неточности';
+  report.append(reportText);
+  toolbar.append(favorite, share, report);
+  fragment.append(toolbar);
+
+  const quality = document.createElement('div');
+  quality.className = `measure-detail-quality ${links.length ? 'is-verified' : 'is-caution'}`;
+  quality.append(icon(links.length ? 'badge-check' : 'triangle-alert'));
+  const qualityText = document.createElement('div');
+  const qualityTitle = document.createElement('strong');
+  qualityTitle.textContent = links.length ? 'Есть точный официальный маршрут' : 'Официальная ссылка ещё не подтверждена';
+  const qualityDescription = document.createElement('p');
+  qualityDescription.textContent = links.length
+    ? 'Перед подачей заявления сопоставьте условия карточки с актуальной официальной страницей услуги.'
+    : 'Карточка основана на информационном источнике. Не считайте её подтверждением права и уточните условия у уполномоченного органа.';
+  qualityText.append(qualityTitle, qualityDescription);
+  quality.append(qualityText);
+  fragment.append(quality);
 
   const overview = document.createElement('div');
   overview.className = 'measure-detail-overview';
@@ -808,9 +980,6 @@ function renderMeasureDetail(measure, detail) {
   ].filter(Boolean);
   fragment.append(...sections);
 
-  const links = (detail.official_links ?? [])
-    .map((link) => ({ ...link, safeUrl: officialUrl(link.url) }))
-    .filter((link) => link.safeUrl);
   if (links.length) {
     const actionSection = document.createElement('section');
     actionSection.className = 'measure-detail-actions';
@@ -839,9 +1008,29 @@ function renderMeasureDetail(measure, detail) {
     fragment.append(actionSection);
   }
 
+  const provider = inferProviderType(measure);
+  const metadata = document.createElement('dl');
+  metadata.className = 'measure-detail-meta';
+  const metadataRows = [
+    ['Поставщик / уровень', `${provider.label}${provider.inferred ? ' (определено автоматически, требует проверки)' : ''}`],
+    ['Территория', measure.level === 'regional' ? (measure.region || 'Регион не указан') : 'Российская Федерация'],
+    ['Источник описания', sourceName(measure)],
+    ['Дата получения карточки', formatDate(measure.fetched_at)],
+    ['Официальный маршрут', links.length ? `Подтверждено ссылок: ${links.length}` : 'В карточке отсутствует'],
+    ['Статус сведений', measure.level === 'regional' ? 'Региональная запись представлена в текущем источнике' : 'Федеральная запись']
+  ];
+  for (const [term, value] of metadataRows) {
+    const dt = document.createElement('dt');
+    dt.textContent = term;
+    const dd = document.createElement('dd');
+    dd.textContent = value;
+    metadata.append(dt, dd);
+  }
+  fragment.append(metadata);
+
   const attribution = document.createElement('p');
   attribution.className = 'measure-detail-attribution';
-  attribution.textContent = 'Описание систематизировано по материалам информационного каталога «Шпаргалка для родителей». Перед обращением проверьте актуальные условия на официальном сервисе.';
+  attribution.textContent = 'Описание систематизировано по материалам информационного каталога «Шпаргалка для родителей». Оно носит справочный характер и не является решением о назначении поддержки.';
   fragment.append(attribution);
 
   elements.measureDialogBody.replaceChildren(fragment);
@@ -872,6 +1061,8 @@ function syncDialogState() {
 async function openMeasureDialog(measure, { reuse = false } = {}) {
   if (!measure || !elements.measureDialog?.showModal) return;
   state.selectedMeasure = measure;
+  state.requestedMeasureId = measure.id;
+  syncQuery();
   elements.measureDialogTitle.textContent = measure.title;
   elements.measureDialogScope.textContent = [levelLabel(measure), measure.region, measure.category].filter(Boolean).join(' · ');
 
@@ -899,6 +1090,8 @@ async function openMeasureDialog(measure, { reuse = false } = {}) {
 function closeMeasureDialog() {
   if (elements.measureDialog?.open) elements.measureDialog.close();
   state.selectedMeasure = null;
+  state.requestedMeasureId = null;
+  syncQuery();
   syncDialogState();
 }
 
@@ -939,6 +1132,12 @@ function bindEvents() {
     button.addEventListener('click', () => resetFilters());
   });
 
+  elements.favoritesFilter?.addEventListener('click', () => {
+    state.favoritesOnly = !state.favoritesOnly;
+    applyFilters();
+    document.querySelector('#catalog-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
   elements.loadMore.addEventListener('click', () => {
     state.shown += PAGE_SIZE;
     renderCatalog();
@@ -967,6 +1166,8 @@ function bindEvents() {
   });
   elements.measureDialog.addEventListener('close', () => {
     state.selectedMeasure = null;
+    state.requestedMeasureId = null;
+    syncQuery();
     syncDialogState();
   });
   elements.measureDialog.addEventListener('click', (event) => {
@@ -998,12 +1199,18 @@ async function loadData() {
 
 async function init() {
   elements.currentYear.textContent = String(new Date().getFullYear());
+  restoreFavorites();
+  updateFavoriteControls();
   bindEvents();
   refreshIcons();
 
   try {
     const { measures, meta, baseRegions, geoData } = await loadData();
     state.measures = Array.isArray(measures) ? measures : [];
+    const currentIds = new Set(state.measures.map((measure) => measure.id));
+    state.favoriteIds = new Set([...state.favoriteIds].filter((id) => currentIds.has(id)));
+    persistFavorites();
+    updateFavoriteControls();
     state.meta = meta;
     state.detailShardCount = Math.max(1, Number(meta.detail_shard_count) || 32);
     state.geoData = geoData;
@@ -1025,6 +1232,16 @@ async function init() {
     renderCategories();
     renderRegionList('');
     applyFilters();
+
+    if (state.requestedMeasureId) {
+      const requested = state.measures.find((measure) => measure.id === state.requestedMeasureId);
+      if (requested) openMeasureDialog(requested);
+      else {
+        state.requestedMeasureId = null;
+        syncQuery();
+        showToast('Карточка по ссылке не найдена в текущем снимке данных');
+      }
+    }
   } catch (error) {
     const message = String(error?.message ?? error);
     elements.snapshot.querySelector('span').textContent = 'Каталог временно недоступен.';

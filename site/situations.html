@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Предварительный подбор мер поддержки семьи по жизненной ситуации без регистрации и передачи ответов на сервер">
+  <meta name="theme-color" content="#ffffff">
+  <title>Подбор по жизненной ситуации — меры поддержки семей с детьми</title>
+  <link rel="icon" type="image/png" href="./assets/favicon.png">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./modules.css">
+  <script src="./vendor/lucide.min.js" defer></script>
+  <script type="module" src="./situations.js"></script>
+</head>
+<body class="module-page">
+  <a class="skip-link" href="#main-content">Перейти к основному содержанию</a>
+  <header class="site-header" id="site-header">
+    <div class="main-header">
+      <div class="site-container main-header__inner">
+        <div class="header-organizations" aria-label="Организации проекта">
+          <a class="institution-brand" href="https://исд-фнисц.рф/" target="_blank" rel="noopener noreferrer" aria-label="Институт социальной демографии ФНИСЦ РАН">
+            <img src="./assets/logo-isd.png" alt="Институт социальной демографии ФНИСЦ РАН" width="450" height="189">
+          </a>
+          <span class="header-organizations__divider" aria-hidden="true"></span>
+          <a class="council-brand" href="https://app.sovetmam.ru/" target="_blank" rel="noopener noreferrer" aria-label="Совет матерей — Шпаргалка для родителей">
+            <img src="./assets/logo-sovetmam-horizontal.jpg" alt="Совет матерей" width="1280" height="658">
+          </a>
+        </div>
+        <div class="product-brand">
+          <strong>Меры поддержки семей с детьми</strong>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" tabindex="-1">
+    <section class="module-hero">
+      <div class="site-container module-hero__grid">
+        <div>
+          <span class="module-eyebrow">Предварительная навигация</span>
+          <h1>Подбор мер по жизненной ситуации</h1>
+          <p>Укажите регион и обстоятельства семьи. Все ответы обрабатываются только в вашем браузере; регистрация и передача анкеты на сервер не требуются.</p>
+          <div class="module-hero__actions">
+            <a class="primary-action" href="#profile-form">Начать подбор <i data-lucide="arrow-down" aria-hidden="true"></i></a>
+            <a class="secondary-action" href="./methodology.html#matching">Как работает подбор</a>
+          </div>
+        </div>
+        <aside class="method-note method-note--privacy">
+          <i data-lucide="shield-check" aria-hidden="true"></i>
+          <div>
+            <strong>Это не решение о назначении</strong>
+            <p>Алгоритм ищет тематически релевантные карточки и объясняет совпадения. Окончательное право определяется уполномоченным органом по официальным сведениям.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="site-container module-status" id="data-status" aria-live="polite">
+      <i data-lucide="database" aria-hidden="true"></i>
+      <span>Загрузка каталога и метаданных…</span>
+    </section>
+
+    <section class="site-container module-workspace" aria-label="Анкета и результаты подбора">
+      <form class="module-panel profile-form" id="profile-form">
+        <div class="module-panel__heading">
+          <div>
+            <span class="step-label">Шаг 1</span>
+            <h2>Регион и жизненная ситуация</h2>
+          </div>
+          <button class="text-button" type="reset"><i data-lucide="rotate-ccw" aria-hidden="true"></i> Очистить</button>
+        </div>
+
+        <label class="field-label" for="situation-region">
+          <span>Регион проживания</span>
+          <select id="situation-region" required>
+            <option value="">Выберите субъект Российской Федерации</option>
+          </select>
+          <small>В результат войдут федеральные записи и записи выбранного региона.</small>
+        </label>
+
+        <fieldset class="form-fieldset">
+          <legend>Что произошло или изменилось в семье?</legend>
+          <div class="situation-grid" id="situation-grid"></div>
+        </fieldset>
+
+        <fieldset class="form-fieldset form-fieldset--facts">
+          <legend><span class="step-label">Шаг 2</span> Уточняющие обстоятельства</legend>
+          <p class="fieldset-hint">Отмечайте только те пункты, которые имеют отношение к семье. Эти ответы не сохраняются в адресе страницы.</p>
+          <div class="fact-grid" id="fact-grid"></div>
+        </fieldset>
+
+        <label class="field-label" for="profile-query">
+          <span>Дополнительные слова <small>необязательно</small></span>
+          <textarea id="profile-query" rows="3" maxlength="240" placeholder="Например: самозанятый родитель, ребёнку два года, нет места в детском саду"></textarea>
+          <small>Поле используется только для поиска совпадений в текущем сеансе.</small>
+        </label>
+
+        <button class="primary-action primary-action--wide" type="submit">
+          <i data-lucide="sparkles" aria-hidden="true"></i>
+          Подобрать меры
+        </button>
+      </form>
+
+      <section class="module-panel results-panel" id="results-panel" aria-labelledby="results-title">
+        <div class="module-panel__heading results-heading">
+          <div>
+            <span class="step-label">Результат</span>
+            <h2 id="results-title">Предварительный подбор</h2>
+          </div>
+          <div class="results-tools" id="results-tools" hidden>
+            <button type="button" id="copy-profile-link"><i data-lucide="link" aria-hidden="true"></i> Ссылка</button>
+            <button type="button" id="download-plan"><i data-lucide="download" aria-hidden="true"></i> План</button>
+            <button type="button" id="print-results"><i data-lucide="printer" aria-hidden="true"></i> Печать</button>
+          </div>
+        </div>
+        <div class="results-placeholder" id="results-placeholder">
+          <i data-lucide="route" aria-hidden="true"></i>
+          <h3>Заполните короткую анкету</h3>
+          <p>Система покажет релевантные карточки, основания их включения и условия, которые необходимо проверить.</p>
+        </div>
+        <div id="profile-summary" class="profile-summary" hidden></div>
+        <div id="matching-warning" class="inline-warning" hidden></div>
+        <div id="matching-results" class="matching-results" aria-live="polite"></div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer module-footer">
+    <div class="site-container footer-grid">
+      <div class="footer-brand">
+        <img src="./assets/logo-isd.png" alt="Институт социальной демографии ФНИСЦ РАН" width="450" height="189">
+        <p>Информационный навигатор мер поддержки семей с детьми.</p>
+      </div>
+      <div class="footer-links">
+        <a href="./index.html">Каталог мер</a>
+        <a href="./situations.html">Подбор по ситуации</a>
+        <a href="./compare.html">Сравнение регионов</a>
+        <a href="./methodology.html">Методология</a>
+      </div>
+      <div class="footer-meta">
+        <p>© <span id="current-year"></span> Институт социальной демографии ФНИСЦ РАН</p>
+        <p>Сведения носят справочный характер.</p>
+      </div>
+    </div>
+  </footer>
+
+  <dialog class="measure-dialog module-measure-dialog" id="module-measure-dialog" aria-labelledby="module-measure-title">
+    <div class="measure-dialog__header">
+      <div>
+        <span class="measure-dialog__eyebrow" id="module-measure-scope"></span>
+        <h2 id="module-measure-title">Подробная информация о мере</h2>
+      </div>
+      <button class="dialog-close" type="button" data-close-module-measure aria-label="Закрыть подробную карточку">
+        <i data-lucide="x" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="measure-dialog__body" id="module-measure-body"></div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

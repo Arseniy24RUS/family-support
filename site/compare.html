@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Межрегиональное сравнение структуры каталога мер поддержки семей с детьми">
+  <meta name="theme-color" content="#ffffff">
+  <title>Межрегиональное сравнение — меры поддержки семей с детьми</title>
+  <link rel="icon" type="image/png" href="./assets/favicon.png">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./modules.css">
+  <script src="./vendor/lucide.min.js" defer></script>
+  <script type="module" src="./compare.js"></script>
+</head>
+<body class="module-page">
+  <a class="skip-link" href="#main-content">Перейти к основному содержанию</a>
+  <header class="site-header" id="site-header">
+    <div class="main-header">
+      <div class="site-container main-header__inner">
+        <div class="header-organizations" aria-label="Организации проекта">
+          <a class="institution-brand" href="https://исд-фнисц.рф/" target="_blank" rel="noopener noreferrer" aria-label="Институт социальной демографии ФНИСЦ РАН">
+            <img src="./assets/logo-isd.png" alt="Институт социальной демографии ФНИСЦ РАН" width="450" height="189">
+          </a>
+          <span class="header-organizations__divider" aria-hidden="true"></span>
+          <a class="council-brand" href="https://app.sovetmam.ru/" target="_blank" rel="noopener noreferrer" aria-label="Совет матерей — Шпаргалка для родителей">
+            <img src="./assets/logo-sovetmam-horizontal.jpg" alt="Совет матерей" width="1280" height="658">
+          </a>
+        </div>
+        <div class="product-brand">
+          <strong>Меры поддержки семей с детьми</strong>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" tabindex="-1">
+    <section class="module-hero module-hero--compare">
+      <div class="site-container module-hero__grid">
+        <div>
+          <span class="module-eyebrow">Открытая аналитика</span>
+          <h1>Межрегиональное сравнение каталога</h1>
+          <p>Сопоставьте до четырёх субъектов по числу и тематической структуре региональных записей текущего источника. Федеральные меры показаны как общий фон.</p>
+        </div>
+        <aside class="method-note">
+          <i data-lucide="scale" aria-hidden="true"></i>
+          <div>
+            <strong>Корректная интерпретация</strong>
+            <p>Модуль не измеряет объём финансирования, доступность услуг или эффективность семейной политики. Нулевая запись означает отсутствие сведений в текущем снимке, а не отсутствие поддержки.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="site-container module-status" id="data-status" aria-live="polite">
+      <i data-lucide="database" aria-hidden="true"></i>
+      <span>Загрузка каталога и метаданных…</span>
+    </section>
+
+    <section class="site-container compare-control module-panel" aria-labelledby="compare-control-title">
+      <div class="module-panel__heading">
+        <div>
+          <span class="step-label">Настройка</span>
+          <h2 id="compare-control-title">Выберите от двух до четырёх регионов</h2>
+        </div>
+        <a class="text-link" href="./methodology.html#comparison">Методика сравнения</a>
+      </div>
+      <form id="compare-form" class="compare-form">
+        <label class="field-label" for="compare-region-select">
+          <span>Добавить субъект</span>
+          <select id="compare-region-select">
+            <option value="">Выберите регион</option>
+          </select>
+        </label>
+        <button class="secondary-action secondary-action--button" id="add-region" type="button">
+          <i data-lucide="plus" aria-hidden="true"></i> Добавить
+        </button>
+        <button class="primary-action primary-action--button" id="run-comparison" type="submit" disabled>
+          <i data-lucide="chart-no-axes-combined" aria-hidden="true"></i> Сравнить
+        </button>
+      </form>
+      <div class="selected-regions" id="selected-regions" aria-live="polite"></div>
+    </section>
+
+    <section class="site-container comparison-output" id="comparison-output" aria-label="Результаты межрегионального сравнения">
+      <div class="comparison-placeholder" id="comparison-placeholder">
+        <i data-lucide="table-2" aria-hidden="true"></i>
+        <h2 id="comparison-title">Сравнение ещё не построено</h2>
+        <p>Добавьте не менее двух регионов. Выбор можно сохранить в ссылке без персональных данных.</p>
+      </div>
+      <div id="comparison-results" hidden>
+        <div class="comparison-toolbar">
+          <div>
+            <span class="module-eyebrow">Результат</span>
+            <h2 id="comparison-results-title">Структура региональных записей</h2>
+          </div>
+          <div class="results-tools">
+            <button type="button" id="copy-comparison-link"><i data-lucide="link" aria-hidden="true"></i> Ссылка</button>
+            <button type="button" id="download-comparison"><i data-lucide="file-spreadsheet" aria-hidden="true"></i> CSV</button>
+            <button type="button" id="print-comparison"><i data-lucide="printer" aria-hidden="true"></i> Печать</button>
+          </div>
+        </div>
+        <div class="inline-warning" id="coverage-warning" hidden></div>
+        <div class="regional-metrics" id="regional-metrics"></div>
+
+        <section class="comparison-section module-panel" aria-labelledby="category-comparison-title">
+          <div class="module-panel__heading">
+            <div>
+              <h3 id="category-comparison-title">Тематическая структура</h3>
+              <p>Абсолютное число региональных записей по категориям текущего каталога.</p>
+            </div>
+          </div>
+          <div class="comparison-bars" id="comparison-bars"></div>
+          <div class="table-scroll">
+            <table class="comparison-table" id="category-table"></table>
+          </div>
+        </section>
+
+        <section class="comparison-section module-panel" aria-labelledby="overlap-title">
+          <div class="module-panel__heading">
+            <div>
+              <h3 id="overlap-title">Сходство названий и отличительные записи</h3>
+              <p>Описательная проверка совпадения нормализованных названий; она не устанавливает юридическую эквивалентность мер.</p>
+            </div>
+          </div>
+          <div class="overlap-grid" id="overlap-grid"></div>
+          <div class="distinctive-grid" id="distinctive-grid"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer module-footer">
+    <div class="site-container footer-grid">
+      <div class="footer-brand">
+        <img src="./assets/logo-isd.png" alt="Институт социальной демографии ФНИСЦ РАН" width="450" height="189">
+        <p>Информационный навигатор мер поддержки семей с детьми.</p>
+      </div>
+      <div class="footer-links">
+        <a href="./index.html">Каталог мер</a>
+        <a href="./situations.html">Подбор по ситуации</a>
+        <a href="./compare.html">Сравнение регионов</a>
+        <a href="./methodology.html">Методология</a>
+      </div>
+      <div class="footer-meta">
+        <p>© <span id="current-year"></span> Институт социальной демографии ФНИСЦ РАН</p>
+        <p>Сведения носят справочный характер.</p>
+      </div>
+    </div>
+  </footer>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
