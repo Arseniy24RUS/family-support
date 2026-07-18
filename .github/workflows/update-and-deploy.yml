@@ -87,6 +87,8 @@ jobs:
 
       - name: Настроить GitHub Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - name: Загрузить статический сайт как артефакт Pages
         uses: actions/upload-pages-artifact@v3
