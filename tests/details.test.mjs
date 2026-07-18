@@ -4,7 +4,7 @@ import { detailShardKey, parseMeasureDetailsHtml, resolveOfficialLinks } from '.
 
 const measure = {
   id: 'sovetmam:test-measure',
-  title: 'Единое пособие на детей',
+  title: 'Единое пособие на детей и беременных женщин',
   level: 'federal',
   category: 'Выплаты и пособия',
   summary: 'Заявление рассматривает СФР.',
@@ -24,19 +24,31 @@ test('извлекает шаги, документы и примечания и
   assert.deepEqual(parsed.steps, ['Подайте заявление на Госуслугах', 'Дождитесь решения СФР']);
   assert.deepEqual(parsed.documents, ['Паспорт', 'Свидетельство о рождении']);
   assert.deepEqual(parsed.notes, ['Доход оценивают за расчётный период']);
-  assert.equal(parsed.official_links[0].url, 'https://www.gosuslugi.ru/universal_benefits');
-  assert.ok(parsed.official_links.some((link) => link.url.startsWith('https://sfr.gov.ru/')));
+  assert.equal(parsed.official_links[0].url, 'https://www.gosuslugi.ru/10630/1/form');
+  assert.equal(parsed.official_links[1].url, 'https://sfr.gov.ru/grazhdanam/semyam_s_detmi/edinoe_posobie/');
 });
 
 test('внешние ссылки ограничены официальными доменами', () => {
   const links = resolveOfficialLinks({
     ...measure,
-    title: 'Налоговый вычет и помощь в трудоустройстве',
+    title: 'Статус и удостоверение многодетной семьи'
+  });
+  assert.deepEqual(links.map((link) => link.url), ['https://www.gosuslugi.ru/600164/1/form']);
+  assert.ok(links.every((link) => !new URL(link.url).hostname.includes('sovetmam')));
+});
+
+test('не подставляет общую ссылку, если конкретная услуга не проверена', () => {
+  const links = resolveOfficialLinks({
+    ...measure,
+    title: 'Региональная компенсация расходов на школьную форму',
     level: 'regional'
   });
-  assert.ok(links.some((link) => new URL(link.url).hostname === 'www.nalog.gov.ru'));
-  assert.ok(links.some((link) => new URL(link.url).hostname === 'trudvsem.ru'));
-  assert.ok(links.every((link) => !new URL(link.url).hostname.includes('sovetmam')));
+  assert.deepEqual(links, []);
+});
+
+test('социальный контракт ведёт сразу к форме заявления', () => {
+  const links = resolveOfficialLinks({ ...measure, title: 'Социальный контракт (Тульская область)', level: 'regional' });
+  assert.deepEqual(links.map((link) => link.url), ['https://www.gosuslugi.ru/600238/1/form']);
 });
 
 test('распределение подробностей по шардам детерминировано', () => {

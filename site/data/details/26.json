@@ -9,13 +9,7 @@
     "notes": [
       "В отдельных регионах (Санкт-Петербург, ХМАО, Челябинская область) есть социальная аренда квартир и для тех, кто зарабатывает чуть выше прожиточного минимума."
     ],
-    "official_links": [
-      {
-        "title": "Подобрать услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:kompensaciya-zhku-deti-invalidy": {
     "id": "sovetmam:kompensaciya-zhku-deti-invalidy",
@@ -24,13 +18,7 @@
     ],
     "documents": [],
     "notes": [],
-    "official_links": [
-      {
-        "title": "Подобрать услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:standartnyy-vychet-na-detey": {
     "id": "sovetmam:standartnyy-vychet-na-detey",
@@ -46,18 +34,7 @@
       "На ребёнка-инвалида вычет 12 000 ₽ суммируется с обычным вычетом по очерёдности рождения.",
       "Вычет действует, пока совокупный годовой доход родителя не превысит 450 000 ₽ (с 2025 года порог повышен)."
     ],
-    "official_links": [
-      {
-        "title": "Сервисы Федеральной налоговой службы",
-        "url": "https://www.nalog.gov.ru/rn77/fl/",
-        "service": "ФНС России"
-      },
-      {
-        "title": "Подобрать услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:besplatnoe-pitanie-shkolniki": {
     "id": "sovetmam:besplatnoe-pitanie-shkolniki",
@@ -68,13 +45,7 @@
     "notes": [
       "Для учеников 5–11 классов из льготных категорий (многодетные, малоимущие, дети с инвалидностью) бесплатное питание устанавливают регионы."
     ],
-    "official_links": [
-      {
-        "title": "Подобрать услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:reg-altayskiy-kray-019": {
     "id": "sovetmam:reg-altayskiy-kray-019",
@@ -90,13 +61,7 @@
       "Медалью «Родительская слава» награждают родителей, воспитывающих четверых и более детей.",
       "ВНИМАНИЕ: размер 30 000 ₽ указан по Закону края № 88-ЗС от 29.11.2024 (вторичный источник) — требует сверки с актуальной страницей."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:amur-003": {
     "id": "sovetmam:amur-003",
@@ -111,13 +76,7 @@
     "notes": [
       "Оба родителя (или одинокий родитель) — студенты очной формы."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:amur-029": {
     "id": "sovetmam:amur-029",
@@ -131,13 +90,7 @@
     "notes": [
       "Помощь юриста, психолога и специалиста по соцподдержке."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:arh-005": {
     "id": "sovetmam:arh-005",
@@ -152,13 +105,7 @@
     "notes": [
       "Право — если на дату рождения ребёнка матери от 18 до 25 лет включительно."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:blg-010": {
     "id": "sovetmam:blg-010",
@@ -173,13 +120,7 @@
     "notes": [
       "Помогает покрыть расходы на специализированное лечебное питание."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:voronezh-016": {
     "id": "sovetmam:voronezh-016",
@@ -194,13 +135,7 @@
       "Свидетельство о рождении ребёнка"
     ],
     "notes": [],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:dnr-002": {
     "id": "sovetmam:dnr-002",
@@ -215,13 +150,7 @@
     "notes": [
       "Выплачивается по договору о приёмной семье."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:ivn-021": {
     "id": "sovetmam:ivn-021",
@@ -236,18 +165,7 @@
     "notes": [
       "Для регистрации ИП, юрлица, КФХ или самозанятости."
     ],
-    "official_links": [
-      {
-        "title": "Сервисы для многодетной семьи",
-        "url": "https://www.gosuslugi.ru/large_family",
-        "service": "Госуслуги"
-      },
-      {
-        "title": "Общероссийская база вакансий и услуг занятости",
-        "url": "https://trudvsem.ru/",
-        "service": "Работа России"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:irkutsk-003": {
     "id": "sovetmam:irkutsk-003",
@@ -262,13 +180,7 @@
       "Реквизиты счёта"
     ],
     "notes": [],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:reg-kaliningradskaya-oblast-006": {
     "id": "sovetmam:reg-kaliningradskaya-oblast-006",
@@ -284,13 +196,7 @@
     "notes": [
       "Семьям с тремя и более детьми до 18 лет (или до 23 при очном обучении). Предоставляется в беззаявительном порядке при наличии удостоверения многодетной семьи."
     ],
-    "official_links": [
-      {
-        "title": "Сервисы для многодетной семьи",
-        "url": "https://www.gosuslugi.ru/large_family",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:reg-kaliningradskaya-oblast-020": {
     "id": "sovetmam:reg-kaliningradskaya-oblast-020",
@@ -306,13 +212,7 @@
     "notes": [
       "Оздоровление ребёнка вместе с сопровождающим родителем; условия — в Департаменте семейной политики."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:kemerovo-002": {
     "id": "sovetmam:kemerovo-002",
@@ -327,13 +227,7 @@
       "Справки об обучении супругов на очной/очно-заочной форме"
     ],
     "notes": [],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:kirov-018": {
     "id": "sovetmam:kirov-018",
@@ -351,8 +245,8 @@
     "notes": [],
     "official_links": [
       {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
+        "title": "Подать заявление на социальный контракт",
+        "url": "https://www.gosuslugi.ru/600238/1/form",
         "service": "Госуслуги"
       }
     ]
@@ -370,13 +264,7 @@
       "Реквизиты банковского счёта"
     ],
     "notes": [],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:lenobl-011": {
     "id": "sovetmam:lenobl-011",
@@ -392,13 +280,7 @@
     "notes": [
       "Региональный капитал дополняет федеральный материнский капитал."
     ],
-    "official_links": [
-      {
-        "title": "Материнский капитал на Госуслугах",
-        "url": "https://www.gosuslugi.ru/maternity-capital",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:lpc-005": {
     "id": "sovetmam:lpc-005",
@@ -412,13 +294,7 @@
     "notes": [
       "Право — при одновременном рождении троих и более детей."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:lnr-019": {
     "id": "sovetmam:lnr-019",
@@ -433,13 +309,7 @@
     "notes": [
       "Приоритет при поступлении в колледжи (СПО)."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:mgd-011": {
     "id": "sovetmam:mgd-011",
@@ -453,13 +323,7 @@
     "notes": [
       "Отдельный капитал на третьего и последующих детей."
     ],
-    "official_links": [
-      {
-        "title": "Материнский капитал на Госуслугах",
-        "url": "https://www.gosuslugi.ru/maternity-capital",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:moadd-003": {
     "id": "sovetmam:moadd-003",
@@ -474,13 +338,7 @@
       "Сведения о доходах семьи"
     ],
     "notes": [],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:mo-status-mnogodetnoy-semyi": {
     "id": "sovetmam:mo-status-mnogodetnoy-semyi",
@@ -496,13 +354,7 @@
       "Статус многодетной семьи — основание для удостоверения, льгот по ЖКУ, проезду, питанию, выплат и компенсаций.",
       "Многодетной считается семья с тремя и более детьми (до 18 лет, либо до 23 при очном обучении)."
     ],
-    "official_links": [
-      {
-        "title": "Сервисы для многодетной семьи",
-        "url": "https://www.gosuslugi.ru/large_family",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:mrm-017": {
     "id": "sovetmam:mrm-017",
@@ -517,13 +369,7 @@
     "notes": [
       "Повышенная выплата на детей до 6 месяцев."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:nnov-010": {
     "id": "sovetmam:nnov-010",
@@ -537,13 +383,7 @@
       "Документы, подтверждающие трудную жизненную ситуацию"
     ],
     "notes": [],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:reg-novosibirskaya-oblast-005": {
     "id": "sovetmam:reg-novosibirskaya-oblast-005",
@@ -558,13 +398,7 @@
     "notes": [
       "Выплачивается ежегодно на весь период обучения ребёнка в общеобразовательной организации."
     ],
-    "official_links": [
-      {
-        "title": "Сервисы для многодетной семьи",
-        "url": "https://www.gosuslugi.ru/large_family",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:omsk-002": {
     "id": "sovetmam:omsk-002",
@@ -578,13 +412,7 @@
     "notes": [
       "Назначается при одновременном рождении двух и более детей."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:oren-024": {
     "id": "sovetmam:oren-024",
@@ -600,18 +428,7 @@
       "Курс социальной реабилитации в стационарной форме — детям-инвалидам с 2 лет.",
       "Дополняет федеральный перечень ТСР, выдаваемых через СФР."
     ],
-    "official_links": [
-      {
-        "title": "Официальная информация Социального фонда",
-        "url": "https://sfr.gov.ru/grazhdanam/semyam_s_detmi/",
-        "service": "СФР"
-      },
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:orl-014": {
     "id": "sovetmam:orl-014",
@@ -626,13 +443,7 @@
     "notes": [
       "Включая проезд к месту учёбы дважды в год."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:prim-008": {
     "id": "sovetmam:prim-008",
@@ -648,13 +459,7 @@
       "Выплаты ежегодные, на каждого ребёнка.",
       "5 000 ₽ — на обучающихся в школе."
     ],
-    "official_links": [
-      {
-        "title": "Сервисы для многодетной семьи",
-        "url": "https://www.gosuslugi.ru/large_family",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:psk-017": {
     "id": "sovetmam:psk-017",
@@ -669,13 +474,7 @@
     "notes": [
       "Оздоровление детей участников СВО в каникулы."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:adg-013": {
     "id": "sovetmam:adg-013",
@@ -692,13 +491,8 @@
     ],
     "official_links": [
       {
-        "title": "Общероссийская база вакансий и услуг занятости",
-        "url": "https://trudvsem.ru/",
-        "service": "Работа России"
-      },
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
+        "title": "Подать заявление на социальный контракт",
+        "url": "https://www.gosuslugi.ru/600238/1/form",
         "service": "Госуслуги"
       }
     ]
@@ -721,13 +515,7 @@
       "Учитывается доход семьи — он не должен превышать среднедушевой денежный доход населения республики.",
       "Это отдельная региональная выплата, не заменяет федеральное единое пособие."
     ],
-    "official_links": [
-      {
-        "title": "Подать заявление на единое пособие",
-        "url": "https://www.gosuslugi.ru/universal_benefits",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:dagestan-001": {
     "id": "sovetmam:dagestan-001",
@@ -744,13 +532,7 @@
       "Обратиться за выплатой нужно в течение 12 месяцев со дня рождения ребёнка.",
       "Требуется постоянное проживание в Республике Дагестан."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:ingushetia-001": {
     "id": "sovetmam:ingushetia-001",
@@ -768,13 +550,7 @@
       "Размер зависит от того, каким по счёту родился ребёнок.",
       "Выплата рассчитана на очень большие семьи — начиная с восьмого ребёнка."
     ],
-    "official_links": [
-      {
-        "title": "Сервисы для многодетной семьи",
-        "url": "https://www.gosuslugi.ru/large_family",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:klm-004": {
     "id": "sovetmam:klm-004",
@@ -789,13 +565,7 @@
     "notes": [
       "На каждого учащегося из многодетной семьи."
     ],
-    "official_links": [
-      {
-        "title": "Сервисы для многодетной семьи",
-        "url": "https://www.gosuslugi.ru/large_family",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:kar-022": {
     "id": "sovetmam:kar-022",
@@ -810,13 +580,7 @@
     "notes": [
       "Часть первоначального взноса по ипотеке."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:komi-013": {
     "id": "sovetmam:komi-013",
@@ -832,13 +596,7 @@
     "notes": [
       "Для студентов ССУЗ до 23 лет."
     ],
-    "official_links": [
-      {
-        "title": "Сервисы для многодетной семьи",
-        "url": "https://www.gosuslugi.ru/large_family",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:komi-039": {
     "id": "sovetmam:komi-039",
@@ -852,13 +610,7 @@
     "notes": [
       "Набор вещей первой необходимости для малыша."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:mari-001": {
     "id": "sovetmam:mari-001",
@@ -872,13 +624,7 @@
     "notes": [
       "Коляски, кроватки и другие вещи для малыша."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:mord-011": {
     "id": "sovetmam:mord-011",
@@ -893,13 +639,7 @@
     "notes": [
       "На специализированное лечебное питание."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:saha-001": {
     "id": "sovetmam:saha-001",
@@ -914,13 +654,7 @@
     "notes": [
       "Дополняет федеральное питание для 1–4 классов."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:osetia-003": {
     "id": "sovetmam:osetia-003",
@@ -934,13 +668,7 @@
     "notes": [
       "Для студентов государственных колледжей республики."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:tuva-002": {
     "id": "sovetmam:tuva-002",
@@ -955,13 +683,7 @@
     "notes": [
       "Дополняет федеральный материнский капитал."
     ],
-    "official_links": [
-      {
-        "title": "Материнский капитал на Госуслугах",
-        "url": "https://www.gosuslugi.ru/maternity-capital",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:hak-019": {
     "id": "sovetmam:hak-019",
@@ -976,13 +698,7 @@
     "notes": [
       "Крупная единовременная выплата многодетным семьям."
     ],
-    "official_links": [
-      {
-        "title": "Сервисы для многодетной семьи",
-        "url": "https://www.gosuslugi.ru/large_family",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:rst-016": {
     "id": "sovetmam:rst-016",
@@ -997,13 +713,7 @@
       "Можно взять во временное пользование коляски, кроватки и другие предметы ухода.",
       "Помогает сэкономить на дорогих, но недолго используемых вещах."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:ryaz-006": {
     "id": "sovetmam:ryaz-006",
@@ -1018,13 +728,7 @@
     "notes": [
       "Для жителей сельских территорий."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:ryaz-020": {
     "id": "sovetmam:ryaz-020",
@@ -1039,13 +743,7 @@
     "notes": [
       "Для многодетных семей с низким доходом."
     ],
-    "official_links": [
-      {
-        "title": "Сервисы для многодетной семьи",
-        "url": "https://www.gosuslugi.ru/large_family",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:samara-009": {
     "id": "sovetmam:samara-009",
@@ -1059,13 +757,7 @@
       "Документы о доходах семьи"
     ],
     "notes": [],
-    "official_links": [
-      {
-        "title": "Сервисы для многодетной семьи",
-        "url": "https://www.gosuslugi.ru/large_family",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:spb-007": {
     "id": "sovetmam:spb-007",
@@ -1080,13 +772,7 @@
     "notes": [
       "Обращение — в течение 1,5 лет со дня рождения. Средства зачисляются на карту «Детская»."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:sah-024": {
     "id": "sovetmam:sah-024",
@@ -1101,13 +787,7 @@
     "notes": [
       "На погашение ипотечного кредита."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:sve-015": {
     "id": "sovetmam:sve-015",
@@ -1124,13 +804,7 @@
       "Выплата взамен участка очень востребована — позволяет быстрее улучшить жилищные условия.",
       "Действует с 2018 года; на 2026 год в бюджетах заложены средства на сотни выплат."
     ],
-    "official_links": [
-      {
-        "title": "Сервисы для многодетной семьи",
-        "url": "https://www.gosuslugi.ru/large_family",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:smol-005": {
     "id": "sovetmam:smol-005",
@@ -1145,13 +819,7 @@
     "notes": [
       "Для 2026–2028 годов."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:stavropol-008": {
     "id": "sovetmam:stavropol-008",
@@ -1165,13 +833,7 @@
       "Удостоверение многодетной семьи"
     ],
     "notes": [],
-    "official_links": [
-      {
-        "title": "Сервисы для многодетной семьи",
-        "url": "https://www.gosuslugi.ru/large_family",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:tamb-013": {
     "id": "sovetmam:tamb-013",
@@ -1186,13 +848,7 @@
     "notes": [
       "На ремонт жилья, где не проживают другие члены семьи."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:tomsk-008": {
     "id": "sovetmam:tomsk-008",
@@ -1207,13 +863,7 @@
     "notes": [
       "В размере фактических расходов на реабилитацию."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:tula-017": {
     "id": "sovetmam:tula-017",
@@ -1226,13 +876,7 @@
     "notes": [
       "Семейный культурный досуг без затрат."
     ],
-    "official_links": [
-      {
-        "title": "Сервисы для многодетной семьи",
-        "url": "https://www.gosuslugi.ru/large_family",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:tyumen-011": {
     "id": "sovetmam:tyumen-011",
@@ -1246,13 +890,7 @@
       "Реквизиты счёта (при выборе компенсации)"
     ],
     "notes": [],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:ulyan-021": {
     "id": "sovetmam:ulyan-021",
@@ -1267,13 +905,7 @@
     "notes": [
       "Для всех детей до 6 лет."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:khab-013": {
     "id": "sovetmam:khab-013",
@@ -1288,13 +920,7 @@
     "notes": [
       "Для льготных категорий студентов СПО."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:hmao-012": {
     "id": "sovetmam:hmao-012",
@@ -1309,13 +935,7 @@
       "Сведения об отсутствии задолженности по ЖКУ"
     ],
     "notes": [],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:khers-005": {
     "id": "sovetmam:khers-005",
@@ -1330,13 +950,7 @@
     "notes": [
       "Помощь к учебному году."
     ],
-    "official_links": [
-      {
-        "title": "Сервисы для многодетной семьи",
-        "url": "https://www.gosuslugi.ru/large_family",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:chel-024": {
     "id": "sovetmam:chel-024",
@@ -1350,13 +964,7 @@
       "Паспорт заявителя"
     ],
     "notes": [],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:chuv-013": {
     "id": "sovetmam:chuv-013",
@@ -1371,13 +979,7 @@
     "notes": [
       "Помогает подключить дом к газу."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:yamal-028": {
     "id": "sovetmam:yamal-028",
@@ -1392,13 +994,7 @@
     "notes": [
       "СПО, вузы и профобучение."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:yamal-042": {
     "id": "sovetmam:yamal-042",
@@ -1413,13 +1009,7 @@
     "notes": [
       "Комплекс транспортных мер."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   },
   "sovetmam:yarosl-011": {
     "id": "sovetmam:yarosl-011",
@@ -1434,12 +1024,6 @@
     "notes": [
       "Поддержка будущих мам-студенток."
     ],
-    "official_links": [
-      {
-        "title": "Найти региональную услугу на Госуслугах",
-        "url": "https://www.gosuslugi.ru/social-navigator",
-        "service": "Госуслуги"
-      }
-    ]
+    "official_links": []
   }
 }

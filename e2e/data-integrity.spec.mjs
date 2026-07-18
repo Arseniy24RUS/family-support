@@ -34,13 +34,27 @@ test('снимок данных полон, уникален и согласов
   const details = Object.assign({}, ...shards);
   expect(Object.keys(details)).toHaveLength(measures.length);
   const allowedHosts = new Set(['gosuslugi.ru', 'www.gosuslugi.ru', 'sfr.gov.ru', 'nalog.gov.ru', 'www.nalog.gov.ru', 'trudvsem.ru', 'www.trudvsem.ru']);
+  const forbiddenGenericUrls = new Set([
+    'https://www.gosuslugi.ru/social-navigator',
+    'https://www.gosuslugi.ru/large_family',
+    'https://sfr.gov.ru/grazhdanam/semyam_s_detmi/',
+    'https://www.nalog.gov.ru/rn77/fl/',
+    'https://trudvsem.ru/'
+  ]);
+  let officialLinkCount = 0;
   for (const measure of measures) {
     const detail = details[measure.id];
     expect(detail, measure.id).toBeTruthy();
     expect(detail.steps.length, measure.id).toBeGreaterThan(0);
-    expect(detail.official_links.length, measure.id).toBeGreaterThan(0);
-    for (const link of detail.official_links) expect(allowedHosts.has(new URL(link.url).hostname), link.url).toBeTruthy();
+    officialLinkCount += detail.official_links.length;
+    for (const link of detail.official_links) {
+      expect(allowedHosts.has(new URL(link.url).hostname), link.url).toBeTruthy();
+      expect(forbiddenGenericUrls.has(link.url), link.url).toBeFalsy();
+    }
   }
+  expect(officialLinkCount).toBe(meta.official_link_count);
+  expect(officialLinkCount).toBe(detailManifest.official_link_count);
+  expect(officialLinkCount).toBeGreaterThan(20);
 });
 
 test('все фактические категории доступны в фильтре и имеют SVG-иконки', async ({ page }) => {

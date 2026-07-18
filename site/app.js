@@ -138,6 +138,18 @@ function officialUrl(value) {
   }
 }
 
+function officialServiceLogo(url) {
+  const hostname = new URL(url).hostname;
+  const logo = document.createElement('span');
+  logo.className = 'official-service-logo';
+  const image = document.createElement('img');
+  image.alt = '';
+  image.loading = 'lazy';
+  image.src = hostname === 'sfr.gov.ru' ? './assets/logo-sfr.png' : './assets/logo-gosuslugi.svg';
+  logo.append(image);
+  return logo;
+}
+
 function categoryIcon(category) {
   const value = normalize(category);
   if (/деньг|выплат|пособ|капитал|финанс/.test(value)) return 'russian-ruble';
@@ -799,31 +811,33 @@ function renderMeasureDetail(measure, detail) {
   const links = (detail.official_links ?? [])
     .map((link) => ({ ...link, safeUrl: officialUrl(link.url) }))
     .filter((link) => link.safeUrl);
-  const actionSection = document.createElement('section');
-  actionSection.className = 'measure-detail-actions';
-  const actionTitle = document.createElement('h3');
-  actionTitle.textContent = 'Официальные сервисы';
-  const actionHint = document.createElement('p');
-  actionHint.textContent = 'Проверить право и подать заявление можно только на сайте соответствующего государственного сервиса.';
-  actionSection.append(actionTitle, actionHint);
-  const actionList = document.createElement('div');
-  actionList.className = 'measure-detail-actions__list';
-  for (const link of links) {
-    const anchor = document.createElement('a');
-    anchor.href = link.safeUrl;
-    anchor.target = '_blank';
-    anchor.rel = 'noopener noreferrer';
-    const label = document.createElement('span');
-    const service = document.createElement('small');
-    service.textContent = link.service;
-    const title = document.createElement('strong');
-    title.textContent = link.title;
-    label.append(service, title);
-    anchor.append(label, icon('arrow-up-right'));
-    actionList.append(anchor);
+  if (links.length) {
+    const actionSection = document.createElement('section');
+    actionSection.className = 'measure-detail-actions';
+    const actionTitle = document.createElement('h3');
+    actionTitle.textContent = 'Официальные сервисы';
+    const actionHint = document.createElement('p');
+    actionHint.textContent = 'Ссылки ведут прямо к странице услуги или форме заявления на официальном портале.';
+    actionSection.append(actionTitle, actionHint);
+    const actionList = document.createElement('div');
+    actionList.className = 'measure-detail-actions__list';
+    for (const link of links) {
+      const anchor = document.createElement('a');
+      anchor.href = link.safeUrl;
+      anchor.target = '_blank';
+      anchor.rel = 'noopener noreferrer';
+      const label = document.createElement('span');
+      const service = document.createElement('small');
+      service.textContent = link.service;
+      const title = document.createElement('strong');
+      title.textContent = link.title;
+      label.append(service, title);
+      anchor.append(officialServiceLogo(link.safeUrl), label, icon('arrow-up-right'));
+      actionList.append(anchor);
+    }
+    actionSection.append(actionList);
+    fragment.append(actionSection);
   }
-  actionSection.append(actionList);
-  fragment.append(actionSection);
 
   const attribution = document.createElement('p');
   attribution.className = 'measure-detail-attribution';

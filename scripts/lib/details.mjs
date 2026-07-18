@@ -10,46 +10,182 @@ const OFFICIAL_HOSTS = new Set([
 
 const OFFICIAL_LINK_RULES = [
   {
-    pattern: /единое пособие/i,
-    title: 'Подать заявление на единое пособие',
-    url: 'https://www.gosuslugi.ru/universal_benefits',
-    service: 'Госуслуги'
+    pattern: /^Единое пособие на детей и беременных женщин$/i,
+    level: 'federal',
+    links: [
+      {
+        title: 'Подать заявление на единое пособие',
+        url: 'https://www.gosuslugi.ru/10630/1/form',
+        service: 'Госуслуги'
+      },
+      {
+        title: 'Условия назначения единого пособия',
+        url: 'https://sfr.gov.ru/grazhdanam/semyam_s_detmi/edinoe_posobie/',
+        service: 'СФР'
+      }
+    ]
   },
   {
-    pattern: /материнск(?:ий|ого|ому|им)?.*капитал|маткапитал/i,
-    title: 'Материнский капитал на Госуслугах',
-    url: 'https://www.gosuslugi.ru/maternity-capital',
-    service: 'Госуслуги'
+    pattern: /^Материнский \(семейный\) капитал$/i,
+    level: 'federal',
+    links: [
+      {
+        title: 'Распорядиться средствами материнского капитала',
+        url: 'https://www.gosuslugi.ru/600121/1/form',
+        service: 'Госуслуги'
+      },
+      {
+        title: 'Материнский капитал: условия и направления',
+        url: 'https://sfr.gov.ru/grazhdanam/msk/',
+        service: 'СФР'
+      }
+    ]
   },
   {
-    pattern: /семейн(?:ая|ой|ую).*ипотек/i,
-    title: 'Условия программы «Семейная ипотека»',
-    url: 'https://www.gosuslugi.ru/newsearch/semejnaya-ipoteka',
-    service: 'Госуслуги'
+    pattern: /^Ежемесячная выплата из материнского капитала$/i,
+    level: 'federal',
+    links: [{
+      title: 'Оформить ежемесячную выплату из маткапитала',
+      url: 'https://www.gosuslugi.ru/maternity_capital_payment',
+      service: 'Госуслуги'
+    }]
   },
   {
-    pattern: /статус.*многодетн|многодетн.*семь/i,
-    title: 'Сервисы для многодетной семьи',
-    url: 'https://www.gosuslugi.ru/large_family',
-    service: 'Госуслуги'
+    pattern: /^Единовременное пособие при рождении ребёнка$/i,
+    level: 'federal',
+    links: [
+      {
+        title: 'Подать заявление на пособие при рождении ребёнка',
+        url: 'https://www.gosuslugi.ru/600686/1/form',
+        service: 'Госуслуги'
+      },
+      {
+        title: 'Порядок выплаты пособия при рождении ребёнка',
+        url: 'https://sfr.gov.ru/grazhdanam/families_with_children/birth',
+        service: 'СФР'
+      }
+    ]
   },
   {
-    pattern: /беременности и родам|декретн/i,
-    title: 'Пособие по беременности и родам',
-    url: 'https://www.gosuslugi.ru/life/details/maternity_benefits',
-    service: 'Госуслуги'
+    pattern: /^Ежемесячное пособие по уходу за ребёнком до 1[,.]5 лет$/i,
+    level: 'federal',
+    links: [
+      {
+        title: 'Оформить пособие по уходу за ребёнком до 1,5 лет',
+        url: 'https://www.gosuslugi.ru/life/details/infant_monthly_allowance',
+        service: 'Госуслуги'
+      },
+      {
+        title: 'Размер и порядок выплаты пособия',
+        url: 'https://sfr.gov.ru/grazhdanam/families_with_children/care',
+        service: 'СФР'
+      }
+    ]
   },
   {
-    pattern: /уход[а-яё\s]*до 1[,.]?5|уход[а-яё\s]*полутора/i,
-    title: 'Пособие по уходу за ребёнком',
-    url: 'https://www.gosuslugi.ru/life/details/infant_monthly_allowance',
-    service: 'Госуслуги'
+    pattern: /^Выплата по уходу за ребёнком-инвалидом$/i,
+    level: 'federal',
+    links: [{
+      title: 'Подать заявление на выплату по уходу',
+      url: 'https://www.gosuslugi.ru/613202/1/form',
+      service: 'Госуслуги'
+    }]
   },
   {
-    pattern: /ежегодн(?:ая|ой).*семейн(?:ая|ой).*выплат/i,
-    title: 'Ежегодная семейная выплата',
-    url: 'https://www.gosuslugi.ru/newsearch/ezhegodnaya-semejnaya-vyplata',
-    service: 'Госуслуги'
+    pattern: /^Технические средства реабилитации \(ТСР\)$/i,
+    level: 'federal',
+    links: [{
+      title: 'Подать заявление на обеспечение ТСР',
+      url: 'https://www.gosuslugi.ru/help/faq/rehabilitation/100675',
+      service: 'Госуслуги'
+    }]
+  },
+  {
+    pattern: /^Санаторно-курортное лечение ребёнка-инвалида$/i,
+    level: 'federal',
+    links: [{
+      title: 'Подать заявление на санаторно-курортное лечение',
+      url: 'https://www.gosuslugi.ru/611287/1/form',
+      service: 'Госуслуги'
+    }]
+  },
+  {
+    pattern: /^Статус и удостоверение многодетной семьи$/i,
+    level: 'federal',
+    links: [{
+      title: 'Оформить статус многодетной семьи',
+      url: 'https://www.gosuslugi.ru/600164/1/form',
+      service: 'Госуслуги'
+    }]
+  },
+  {
+    pattern: /^(?:Государственная социальная помощь на основании социального контракта|Социальный контракт)(?: \(.+\))?$/i,
+    links: [{
+      title: 'Подать заявление на социальный контракт',
+      url: 'https://www.gosuslugi.ru/600238/1/form',
+      service: 'Госуслуги'
+    }]
+  },
+  {
+    pattern: /^Постановка на учёт нуждающихся в жилье$/i,
+    level: 'federal',
+    links: [{
+      title: 'Подать заявление о постановке на жилищный учёт',
+      url: 'https://www.gosuslugi.ru/600246/1/form',
+      service: 'Госуслуги'
+    }]
+  },
+  {
+    pattern: /^Семейная ипотека под 6%$/i,
+    level: 'federal',
+    links: [{
+      title: 'Условия программы «Семейная ипотека»',
+      url: 'https://www.gosuslugi.ru/newsearch/semejnaya-ipoteka',
+      service: 'Госуслуги'
+    }]
+  },
+  {
+    pattern: /^Семейная налоговая выплата за 2025 год$/i,
+    level: 'federal',
+    links: [
+      {
+        title: 'Подать заявление на ежегодную семейную выплату',
+        url: 'https://www.gosuslugi.ru/newsearch/ezhegodnaya-semejnaya-vyplata',
+        service: 'Госуслуги'
+      },
+      {
+        title: 'Условия ежегодной семейной выплаты',
+        url: 'https://sfr.gov.ru/grazhdanam/semyam_s_detmi/ezhegodnaya_semejnaya_vyplata/',
+        service: 'СФР'
+      }
+    ]
+  },
+  {
+    pattern: /^Пособие по безработице$/i,
+    level: 'federal',
+    links: [{
+      title: 'Подать заявление на поиск работы и пособие',
+      url: 'https://www.gosuslugi.ru/600366/1',
+      service: 'Госуслуги'
+    }]
+  },
+  {
+    pattern: /^Льготы при приёме и оплате детского сада$/i,
+    level: 'federal',
+    links: [{
+      title: 'Записать ребёнка в детский сад',
+      url: 'https://www.gosuslugi.ru/newsearch/zayavlenie-v-detskij-sad',
+      service: 'Госуслуги'
+    }]
+  },
+  {
+    pattern: /^Сертификат дополнительного образования \(кружки и секции\)$/i,
+    level: 'federal',
+    links: [{
+      title: 'Оформить сертификат дополнительного образования',
+      url: 'https://www.gosuslugi.ru/newsearch/sertifikat-dopolnitelnogo-obrazovaniya-pfdo',
+      service: 'Госуслуги'
+    }]
   }
 ];
 
@@ -94,49 +230,11 @@ function checkedOfficialLink(link) {
 }
 
 export function resolveOfficialLinks(measure, details = {}) {
-  const searchable = [
-    measure.title,
-    measure.summary,
-    measure.benefit,
-    ...(details.steps ?? []),
-    ...(details.documents ?? []),
-    ...(details.notes ?? [])
-  ].filter(Boolean).join(' ');
-
   const links = [];
-  const specific = OFFICIAL_LINK_RULES.find((rule) => rule.pattern.test(searchable));
-  if (specific) links.push(specific);
-
-  if (/СФР|социальн(?:ый|ого|ому) фонд|пенсионн(?:ый|ого) фонд/i.test(searchable)) {
-    links.push({
-      title: 'Официальная информация Социального фонда',
-      url: 'https://sfr.gov.ru/grazhdanam/semyam_s_detmi/',
-      service: 'СФР'
-    });
-  }
-
-  if (/налог|НДФЛ|ФНС|вычет/i.test(searchable)) {
-    links.push({
-      title: 'Сервисы Федеральной налоговой службы',
-      url: 'https://www.nalog.gov.ru/rn77/fl/',
-      service: 'ФНС России'
-    });
-  }
-
-  if (/занятост|безработ|ваканси|трудоустрой/i.test(searchable)) {
-    links.push({
-      title: 'Общероссийская база вакансий и услуг занятости',
-      url: 'https://trudvsem.ru/',
-      service: 'Работа России'
-    });
-  }
-
-  if (!specific) {
-    links.push({
-      title: measure.level === 'regional' ? 'Найти региональную услугу на Госуслугах' : 'Подобрать услугу на Госуслугах',
-      url: 'https://www.gosuslugi.ru/social-navigator',
-      service: 'Госуслуги'
-    });
+  for (const rule of OFFICIAL_LINK_RULES) {
+    if ((!rule.level || rule.level === measure.level) && rule.pattern.test(measure.title ?? '')) {
+      links.push(...rule.links);
+    }
   }
 
   const unique = new Map();

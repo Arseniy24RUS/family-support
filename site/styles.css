@@ -203,19 +203,23 @@ strong {
   min-width: 0;
   display: inline-flex;
   align-items: center;
+  overflow: hidden;
+  text-decoration: none;
 }
 
 .council-brand img {
-  width: 142px;
-  height: 70px;
+  width: 200px;
+  height: 90px;
   display: block;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .product-brand {
   min-width: 0;
+  justify-self: start;
   padding-left: 28px;
   border-left: 1px solid var(--line);
+  text-align: left;
 }
 
 .product-brand strong,
@@ -224,9 +228,10 @@ strong {
 }
 
 .product-brand strong {
-  color: var(--ink);
-  font-size: 1.16rem;
+  color: var(--blue-700);
+  font-size: 1rem;
   line-height: 1.25;
+  font-weight: 800;
 }
 
 .product-brand span {
@@ -1413,8 +1418,8 @@ strong {
 }
 
 .service-icon {
-  width: 52px;
-  height: 52px;
+  width: 70px;
+  height: 70px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1429,14 +1434,15 @@ strong {
 }
 
 .service-icon--logo {
-  overflow: hidden;
-  border: 1px solid var(--line);
-  background: #fff;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
 .service-icon--logo img {
-  width: 82%;
-  height: 82%;
+  width: 100%;
+  height: 100%;
   display: block;
   object-fit: contain;
 }
@@ -1862,6 +1868,19 @@ strong {
   transform: translateY(-1px);
 }
 
+.official-service-logo {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+}
+
+.official-service-logo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
 .measure-detail-actions__list span,
 .measure-detail-actions__list strong,
 .measure-detail-actions__list small {
@@ -1949,8 +1968,8 @@ strong {
   }
 
   .council-brand img {
-    width: 126px;
-    height: 64px;
+    width: 180px;
+    height: 82px;
   }
 
   .hero__content {
@@ -1995,8 +2014,8 @@ strong {
   }
 
   .council-brand img {
-    width: 108px;
-    height: 56px;
+    width: 148px;
+    height: 68px;
   }
 
   .product-brand strong {
@@ -2100,8 +2119,8 @@ strong {
   }
 
   .council-brand img {
-    width: 94px;
-    height: 48px;
+    width: 120px;
+    height: 56px;
   }
 
   .product-brand {
@@ -2251,8 +2270,8 @@ strong {
   }
 
   .service-icon {
-    width: 44px;
-    height: 44px;
+    width: 58px;
+    height: 58px;
   }
 
   .service-icon svg {
@@ -2323,8 +2342,8 @@ strong {
   }
 
   .council-brand img {
-    width: 82px;
-    height: 43px;
+    width: 108px;
+    height: 50px;
   }
 
   .hero h1 {

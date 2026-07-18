@@ -40,7 +40,30 @@ test('header объединяет логотипы организаций сле
   await expect(page.locator('header nav, #menu-toggle')).toHaveCount(0);
   await expect(page.locator('.header-partner')).toHaveCount(0);
   await expect(page.getByText(/при поддержке/i)).toHaveCount(0);
-  await expect(page.locator('a[href*="app.sovetmam.ru"]')).toHaveCount(0);
+  const councilLinks = page.locator('a[href="https://app.sovetmam.ru/"]');
+  await expect(councilLinks).toHaveCount(2);
+  await expect(organizations.locator('a.council-brand')).toHaveAttribute('target', '_blank');
+  await expect(page.locator('.service-list a.service-list__item')).toHaveAttribute('target', '_blank');
+
+  const councilLogo = organizations.locator('.council-brand img');
+  const institutionLogo = organizations.locator('.institution-brand img');
+  expect((await councilLogo.boundingBox()).height).toBeGreaterThan((await institutionLogo.boundingBox()).height * 0.45);
+  const productStyle = await page.locator('.product-brand strong').evaluate((node) => ({
+    textAlign: getComputedStyle(node).textAlign,
+    color: getComputedStyle(node).color
+  }));
+  expect(productStyle.textAlign).toBe('left');
+  expect(productStyle.color).not.toBe('rgb(27, 35, 48)');
+
+  const sourceLogo = page.locator('.service-icon--logo').first();
+  const sourceStyle = await sourceLogo.evaluate((node) => ({
+    width: getComputedStyle(node).width,
+    borderTopWidth: getComputedStyle(node).borderTopWidth,
+    backgroundColor: getComputedStyle(node).backgroundColor
+  }));
+  expect(Number.parseFloat(sourceStyle.width)).toBeGreaterThanOrEqual(56);
+  expect(sourceStyle.borderTopWidth).toBe('0px');
+  expect(sourceStyle.backgroundColor).toBe('rgba(0, 0, 0, 0)');
 });
 
 test('интерфейс показывает полный рабочий снимок и фактическую статистику', async ({ page }) => {

@@ -49,7 +49,6 @@ const [html, css, js, measuresText, metaText, regionsBaseText, geoText, detailMa
 
 const forbidden = [
   ['index.html', html, /Версия для слабовидящих|>Войти<|login-link|a11y-toggle/i],
-  ['index.html', html, /href=["']https:\/\/app\.sovetmam\.ru/i],
   ['styles.css', css, /a11y-mode|login-link|a11y-toggle/i],
   ['app.js', js, /family-support-a11y|a11yToggle|setA11yMode/i],
   ['app.js', js, /safeUrl\(measure\.source_url\)|href\s*=\s*measure\.source_url/i]
@@ -57,6 +56,8 @@ const forbidden = [
 for (const [name, content, pattern] of forbidden) {
   if (pattern.test(content)) throw new Error(`${name}: найдена удалённая функция интерфейса (${pattern}).`);
 }
+const councilLinkCount = (html.match(/href=["']https:\/\/app\.sovetmam\.ru\/["']/gi) ?? []).length;
+if (councilLinkCount !== 2) throw new Error(`В header и разделе источников должно быть ровно две ссылки на Совет матерей; получено ${councilLinkCount}.`);
 
 const measures = JSON.parse(measuresText);
 const meta = JSON.parse(metaText);
@@ -133,7 +134,15 @@ const officialHosts = new Set([
   'gosuslugi.ru', 'www.gosuslugi.ru', 'sfr.gov.ru', 'nalog.gov.ru',
   'www.nalog.gov.ru', 'trudvsem.ru', 'www.trudvsem.ru'
 ]);
+const forbiddenGenericUrls = new Set([
+  'https://www.gosuslugi.ru/social-navigator',
+  'https://www.gosuslugi.ru/large_family',
+  'https://sfr.gov.ru/grazhdanam/semyam_s_detmi/',
+  'https://www.nalog.gov.ru/rn77/fl/',
+  'https://trudvsem.ru/'
+]);
 const detailsById = new Map();
+let officialLinkCount = 0;
 for (const shard of detailShards) {
   if (!shard || Array.isArray(shard) || typeof shard !== 'object') throw new Error('Некорректный файл подробных карточек.');
   for (const [id, detail] of Object.entries(shard)) {
@@ -142,12 +151,15 @@ for (const shard of detailShards) {
       if (!Array.isArray(detail?.[key])) throw new Error(`В подробной карточке ${id} поле ${key} должно быть массивом.`);
     }
     if (!detail.steps.length) throw new Error(`В подробной карточке ${id} не указан порядок оформления.`);
-    if (!detail.official_links.length) throw new Error(`В подробной карточке ${id} нет ссылки на официальный сервис.`);
     for (const link of detail.official_links) {
       const url = new URL(link.url);
       if (url.protocol !== 'https:' || !officialHosts.has(url.hostname)) {
         throw new Error(`В карточке ${id} недопустимая внешняя ссылка: ${link.url}`);
       }
+      if (forbiddenGenericUrls.has(link.url)) {
+        throw new Error(`В карточке ${id} указана общая ссылка вместо страницы конкретной услуги: ${link.url}`);
+      }
+      officialLinkCount += 1;
     }
     detailsById.set(id, detail);
   }
@@ -156,6 +168,9 @@ for (const id of ids) {
   if (!detailsById.has(id)) throw new Error(`Нет подробной карточки для ${id}.`);
 }
 if (detailsById.size !== measures.length) throw new Error('Количество подробных карточек не совпадает с каталогом.');
+if (officialLinkCount !== meta.official_link_count || officialLinkCount !== detailManifest.official_link_count) {
+  throw new Error('Количество проверенных официальных ссылок не совпадает с метаданными.');
+}
 
 const localReferences = [...html.matchAll(/(?:src|href)="(\.\/[^"?#]+)(?:[?#][^"]*)?"/g)]
   .map((match) => match[1])
@@ -164,4 +179,4 @@ for (const reference of new Set(localReferences)) {
   await access(resolve(root, reference.slice(2)));
 }
 
-console.log(`Проверка завершена: ${measures.length} мер и подробных карточек, ${regionsBase.length} регионов, внешние ссылки ведут только на официальные сервисы.`);
+console.log(`Проверка завершена: ${measures.length} мер и подробных карточек, ${regionsBase.length} регионов, ${officialLinkCount} точных официальных ссылок.`);
