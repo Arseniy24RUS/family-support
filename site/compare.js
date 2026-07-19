@@ -53,6 +53,11 @@ const MAP_HEIGHT = 520;
 const MAX_SELECTED_REGIONS = 4;
 const REGION_SEARCH_LIMIT = 24;
 const SLOT_COLORS = ['#0072b2', '#d55e00', '#008a68', '#8f4db8'];
+const DOCX_RUNTIME_SCRIPTS = ['./vendor/jszip.min.js', './vendor/docx-preview.min.js'];
+
+let docxRuntimePromise = null;
+let documentLoadController = null;
+let lastDocumentFormat = 'pdf';
 
 const state = {
   measures: [],
@@ -66,7 +71,7 @@ const state = {
   strategyIndex: null,
   selected: [],
   comparison: null,
-  mapLayer: 'strategies',
+  mapLayer: 'neutral',
   chartMode: 'count',
   strategyScope: 'selected',
   strategyQuery: '',
@@ -150,11 +155,20 @@ const elements = Object.fromEntries([
   'strategy-viewer-document-meta',
   'strategy-viewer-actions',
   'strategy-viewer-details',
-  'strategy-pdf-stage',
-  'strategy-pdf-consent',
-  'strategy-pdf-consent-text',
+  'strategy-document-stage',
+  'strategy-document-consent',
+  'strategy-document-consent-title',
+  'strategy-document-consent-text',
+  'strategy-document-load-actions',
+  'strategy-document-loading',
+  'strategy-document-loading-text',
   'load-strategy-pdf',
+  'load-strategy-docx',
   'strategy-pdf-frame',
+  'strategy-docx-viewer',
+  'strategy-document-error',
+  'strategy-document-error-text',
+  'retry-strategy-document',
   'close-strategy-viewer'
 ].map((id) => [camelCase(id), document.querySelector(`#${id}`)]));
 
@@ -208,7 +222,7 @@ function currentUrl({ includeDocument = true } = {}) {
   const url = new URL(location.href);
   url.search = '';
   for (const region of state.selected) url.searchParams.append('region', region);
-  if (state.mapLayer !== 'strategies') url.searchParams.set('layer', state.mapLayer);
+  if (state.mapLayer !== 'neutral') url.searchParams.set('layer', state.mapLayer);
   if (state.chartMode !== 'count') url.searchParams.set('mode', state.chartMode);
   if (includeDocument && state.currentDocument?.id) url.searchParams.set('doc', state.currentDocument.id);
   return url;
@@ -227,7 +241,7 @@ function restoreQuery() {
     .slice(0, MAX_SELECTED_REGIONS);
   state.mapLayer = ['strategies', 'catalog', 'neutral'].includes(params.get('layer'))
     ? params.get('layer')
-    : 'strategies';
+    : 'neutral';
   state.chartMode = ['count', 'share'].includes(params.get('mode'))
     ? params.get('mode')
     : 'count';
@@ -1256,7 +1270,7 @@ function openStrategyDocument(strategyDocument, { updateUrl = true } = {}) {
     ['Исходное имя', strategyDocument.source_filename || 'не указано'],
     ['Примечание', strategyDocument.quality_note || 'Техническая читаемость проверена; официальная актуальность требует отдельной верификации.']
   ]);
-  preparePdfStage(strategyDocument);
+  prepareDocumentStage(strategyDocument);
   renderStrategyList();
   if (updateUrl) syncQuery();
   if (matchMedia('(max-width: 980px)').matches) {
@@ -1268,22 +1282,17 @@ function openStrategyDocument(strategyDocument, { updateUrl = true } = {}) {
 function renderStrategyViewerActions(strategyDocument) {
   elements.strategyViewerActions.replaceChildren();
   if (strategyDocument.download_url) {
-    const open = document.createElement('a');
-    open.href = strategyDocument.pdf_url || strategyDocument.download_url;
-    open.target = '_blank';
-    open.rel = 'noopener';
-    open.append(icon('external-link'), document.createTextNode('Открыть PDF'));
     const download = document.createElement('a');
     download.href = strategyDocument.download_url;
     download.download = '';
     download.append(icon('download'), document.createTextNode('Скачать PDF'));
-    elements.strategyViewerActions.append(open, download);
+    elements.strategyViewerActions.append(download);
   }
   if (strategyDocument.original_url) {
     const original = document.createElement('a');
     original.href = strategyDocument.original_url;
     original.download = '';
-    original.append(icon('file-down'), document.createTextNode('Исходный Word/RTF'));
+    original.append(icon('file-down'), document.createTextNode(`Скачать ${originalDocumentFormat(strategyDocument)}`));
     elements.strategyViewerActions.append(original);
   }
   if (strategyDocument.official_url) {
@@ -1304,46 +1313,193 @@ function renderStrategyViewerActions(strategyDocument) {
   elements.strategyViewerActions.append(copy);
 }
 
-function preparePdfStage(strategyDocument) {
+function originalDocumentFormat(strategyDocument) {
+  const match = String(strategyDocument.original_url || strategyDocument.source_filename || '').match(/\.([a-z0-9]+)(?:[?#].*)?$/iu);
+  return match?.[1]?.toUpperCase() || 'исходник';
+}
+
+function canRenderDocx(strategyDocument) {
+  return originalDocumentFormat(strategyDocument) === 'DOCX' && Boolean(strategyDocument.original_url);
+}
+
+function abortDocumentLoad() {
+  documentLoadController?.abort();
+  documentLoadController = null;
+}
+
+function resetDocumentStage() {
+  abortDocumentLoad();
   elements.strategyPdfFrame.src = 'about:blank';
   elements.strategyPdfFrame.hidden = true;
-  elements.strategyPdfConsent.hidden = false;
+  elements.strategyDocxViewer.replaceChildren();
+  elements.strategyDocxViewer.hidden = true;
+  elements.strategyDocumentLoading.hidden = true;
+  elements.strategyDocumentError.hidden = true;
+  elements.strategyDocumentErrorText.textContent = '';
+  elements.strategyDocumentConsent.hidden = false;
+}
+
+function prepareDocumentStage(strategyDocument) {
+  resetDocumentStage();
   elements.loadStrategyPdf.hidden = false;
-  elements.strategyPdfStage.querySelector('.strategy-unavailable-stage')?.remove();
+  elements.loadStrategyDocx.hidden = !canRenderDocx(strategyDocument);
+  elements.strategyDocumentStage.querySelector('.strategy-unavailable-stage')?.remove();
 
   if (strategyDocument.availability !== 'available' || !strategyDocument.pdf_url) {
-    elements.strategyPdfConsent.hidden = true;
+    elements.strategyDocumentConsent.hidden = true;
     const unavailable = document.createElement('div');
     unavailable.className = 'strategy-unavailable-stage';
     unavailable.append(
       icon(strategyDocument.availability === 'missing' ? 'file-question' : 'file-warning'),
       createText('p', strategyDocument.quality_note || 'Полный текст отсутствует в переданном корпусе. Запись сохранена, чтобы отсутствие документа не интерпретировалось как отсутствие региональной политики.')
     );
-    elements.strategyPdfStage.append(unavailable);
+    elements.strategyDocumentStage.append(unavailable);
     refreshIcons();
     return;
   }
 
-  elements.strategyPdfConsentText.textContent = `${formatNumber(strategyDocument.pages || 0)} стр., ${formatFileSize(strategyDocument.size_bytes)}. Встроенный просмотр может потребовать заметного трафика; скачивание доступно выше без открытия iframe.`;
+  const formats = canRenderDocx(strategyDocument) ? 'PDF или исходный DOCX' : 'PDF';
+  elements.strategyDocumentConsentTitle.textContent = `${formats} пока не загружен${canRenderDocx(strategyDocument) ? 'ы' : ''}`;
+  elements.strategyDocumentConsentText.textContent = `${formatNumber(strategyDocument.pages || 0)} стр., PDF — ${formatFileSize(strategyDocument.size_bytes)}. Выберите формат для просмотра внутри страницы; остальные файлы останутся незагруженными.`;
 }
 
 function loadCurrentPdf() {
   const strategyDocument = state.currentDocument;
   if (!strategyDocument?.pdf_url) return;
+  lastDocumentFormat = 'pdf';
+  abortDocumentLoad();
+  elements.strategyDocxViewer.replaceChildren();
+  elements.strategyDocxViewer.hidden = true;
+  elements.strategyDocumentLoading.hidden = true;
+  elements.strategyDocumentError.hidden = true;
   elements.strategyPdfFrame.src = `${strategyDocument.pdf_url}#toolbar=1&navpanes=0&view=FitH`;
-  elements.strategyPdfConsent.hidden = true;
+  elements.strategyDocumentConsent.hidden = true;
   elements.strategyPdfFrame.hidden = false;
   elements.strategyPdfFrame.focus({ preventScroll: true });
+}
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[data-document-runtime="${src}"]`);
+    if (existing?.dataset.loaded === 'true') {
+      resolve();
+      return;
+    }
+
+    const script = existing || document.createElement('script');
+    const handleLoad = () => {
+      script.dataset.loaded = 'true';
+      resolve();
+    };
+    const handleError = () => {
+      script.remove();
+      reject(new Error(`Не удалось загрузить компонент ${src}.`));
+    };
+    script.addEventListener('load', handleLoad, { once: true });
+    script.addEventListener('error', handleError, { once: true });
+    if (!existing) {
+      script.src = src;
+      script.async = true;
+      script.dataset.documentRuntime = src;
+      document.head.append(script);
+    }
+  });
+}
+
+function ensureDocxRuntime() {
+  if (window.docx?.renderAsync && window.JSZip) return Promise.resolve(window.docx);
+  if (!docxRuntimePromise) {
+    docxRuntimePromise = DOCX_RUNTIME_SCRIPTS.reduce(
+      (chain, src) => chain.then(() => loadScript(src)),
+      Promise.resolve()
+    ).then(() => {
+      if (!window.docx?.renderAsync || !window.JSZip) throw new Error('Компонент просмотра DOCX загрузился некорректно.');
+      return window.docx;
+    }).catch((error) => {
+      docxRuntimePromise = null;
+      throw error;
+    });
+  }
+  return docxRuntimePromise;
+}
+
+function showDocumentLoading(message) {
+  elements.strategyDocumentConsent.hidden = true;
+  elements.strategyPdfFrame.src = 'about:blank';
+  elements.strategyPdfFrame.hidden = true;
+  elements.strategyDocxViewer.hidden = true;
+  elements.strategyDocumentError.hidden = true;
+  elements.strategyDocumentLoadingText.textContent = message;
+  elements.strategyDocumentLoading.hidden = false;
+}
+
+function showDocumentError(error) {
+  elements.strategyDocumentLoading.hidden = true;
+  elements.strategyDocumentErrorText.textContent = `${error?.message || 'Неизвестная ошибка.'} Файл можно скачать по ссылке выше.`;
+  elements.strategyDocumentError.hidden = false;
+}
+
+async function loadCurrentDocx() {
+  const strategyDocument = state.currentDocument;
+  if (!canRenderDocx(strategyDocument)) return;
+
+  lastDocumentFormat = 'docx';
+  abortDocumentLoad();
+  elements.strategyDocxViewer.replaceChildren();
+  showDocumentLoading('Подключаем просмотрщик DOCX…');
+  const documentId = strategyDocument.id;
+
+  try {
+    const renderer = await ensureDocxRuntime();
+    if (state.currentDocument?.id !== documentId) return;
+
+    const controller = new AbortController();
+    documentLoadController = controller;
+    showDocumentLoading('Загружаем выбранный DOCX…');
+    const response = await fetch(strategyDocument.original_url, {
+      cache: 'default',
+      signal: controller.signal
+    });
+    if (!response.ok) throw new Error(`Сервер вернул ошибку ${response.status}.`);
+    const contents = await response.arrayBuffer();
+    if (state.currentDocument?.id !== documentId || controller.signal.aborted) return;
+
+    showDocumentLoading('Готовим страницы документа…');
+    await renderer.renderAsync(contents, elements.strategyDocxViewer, elements.strategyDocxViewer, {
+      className: 'docx',
+      inWrapper: true,
+      ignoreWidth: false,
+      ignoreHeight: false,
+      ignoreFonts: false,
+      breakPages: true,
+      renderHeaders: true,
+      renderFooters: true,
+      renderFootnotes: true,
+      renderEndnotes: true,
+      renderAltChunks: false,
+      debug: false
+    });
+    if (state.currentDocument?.id !== documentId || controller.signal.aborted) return;
+    elements.strategyDocumentLoading.hidden = true;
+    elements.strategyDocxViewer.hidden = false;
+    elements.strategyDocxViewer.focus({ preventScroll: true });
+  } catch (error) {
+    if (error?.name !== 'AbortError' && state.currentDocument?.id === documentId) showDocumentError(error);
+  }
+}
+
+function retryCurrentDocument() {
+  if (lastDocumentFormat === 'docx') loadCurrentDocx();
+  else loadCurrentPdf();
 }
 
 function closeStrategyViewer() {
   state.currentDocument = null;
   elements.strategyWorkspace?.classList.remove('has-open-document');
-  elements.strategyPdfFrame.src = 'about:blank';
-  elements.strategyPdfFrame.hidden = true;
+  resetDocumentStage();
   elements.strategyViewerContent.hidden = true;
   elements.strategyViewerPlaceholder.hidden = false;
-  elements.strategyPdfStage.querySelector('.strategy-unavailable-stage')?.remove();
+  elements.strategyDocumentStage.querySelector('.strategy-unavailable-stage')?.remove();
   renderStrategyList();
   syncQuery();
 }
@@ -1442,6 +1598,8 @@ function setupControls() {
     renderStrategyList();
   });
   elements.loadStrategyPdf.addEventListener('click', loadCurrentPdf);
+  elements.loadStrategyDocx.addEventListener('click', loadCurrentDocx);
+  elements.retryStrategyDocument.addEventListener('click', retryCurrentDocument);
   elements.closeStrategyViewer.addEventListener('click', closeStrategyViewer);
 }
 

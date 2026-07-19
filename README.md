@@ -61,7 +61,7 @@ site/
     region-comparison-engine.js      региональные профили, сравнение и CSV
     module-shell.js                  общие функции пользовательских страниц
   assets/                            существующие логотипы, изображения и favicon
-  vendor/                            существующая локальная сборка Lucide
+  vendor/                            локальные сборки Lucide, JSZip и docx-preview с лицензиями
   data/                              существующий каталог, метаданные, карта и детали
 scripts/
   adapters/sovetmam.mjs              существующий адаптер источника

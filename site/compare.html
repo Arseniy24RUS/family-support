@@ -81,9 +81,9 @@
       <div class="map-toolbar" aria-label="Настройки карты">
         <fieldset class="map-layer-switch" id="map-layer-switch">
           <legend>Фоновый слой</legend>
-          <label><input type="radio" name="map-layer" value="strategies" checked> <span>Стратегии</span></label>
+          <label><input type="radio" name="map-layer" value="neutral" checked> <span>Нейтральный</span></label>
+          <label><input type="radio" name="map-layer" value="strategies"> <span>Стратегии</span></label>
           <label><input type="radio" name="map-layer" value="catalog"> <span>Каталог мер</span></label>
-          <label><input type="radio" name="map-layer" value="neutral"> <span>Нейтральный</span></label>
         </fieldset>
         <div class="map-toolbar__actions">
           <button type="button" class="toolbar-button" id="open-region-search" aria-controls="region-search-panel" aria-expanded="false">
@@ -257,7 +257,7 @@
           <div>
             <span class="module-eyebrow">Документальная база</span>
             <h2 id="strategy-library-title">Полные тексты стратегий и программ повышения рождаемости</h2>
-            <p>Документы открываются внутри страницы только по запросу. PDF можно скачать, а для преобразованных Word/RTF-файлов доступен и исходный формат.</p>
+            <p>PDF и доступные DOCX открываются прямо на странице только по запросу. Выбранный файл подгружается после нажатия, поэтому весь каталог не расходует трафик пользователя.</p>
           </div>
           <div class="strategy-library-heading__actions">
             <a class="secondary-action" href="./data/strategies-manifest.csv" download>
@@ -338,14 +338,30 @@
               </div>
               <div class="strategy-viewer__actions" id="strategy-viewer-actions"></div>
               <dl class="strategy-viewer__details" id="strategy-viewer-details"></dl>
-              <div class="strategy-pdf-stage" id="strategy-pdf-stage">
-                <div class="strategy-pdf-consent" id="strategy-pdf-consent">
+              <div class="strategy-document-stage" id="strategy-document-stage">
+                <div class="strategy-document-consent" id="strategy-document-consent">
                   <i data-lucide="file-text" aria-hidden="true"></i>
-                  <strong>PDF пока не загружен</strong>
-                  <p id="strategy-pdf-consent-text"></p>
-                  <button type="button" class="primary-action primary-action--button" id="load-strategy-pdf"><i data-lucide="eye" aria-hidden="true"></i> Просмотреть на странице</button>
+                  <strong id="strategy-document-consent-title">Полный текст пока не загружен</strong>
+                  <p id="strategy-document-consent-text"></p>
+                  <div class="strategy-document-load-actions" id="strategy-document-load-actions">
+                    <button type="button" class="primary-action primary-action--button" id="load-strategy-pdf"><i data-lucide="file-text" aria-hidden="true"></i> Просмотреть PDF</button>
+                    <button type="button" class="secondary-action secondary-action--button" id="load-strategy-docx" hidden><i data-lucide="file-type-2" aria-hidden="true"></i> Просмотреть DOCX</button>
+                  </div>
+                  <small>Загрузится только выбранный формат этого документа.</small>
+                </div>
+                <div class="strategy-document-loading" id="strategy-document-loading" role="status" aria-live="polite" hidden>
+                  <span class="strategy-document-spinner" aria-hidden="true"></span>
+                  <strong id="strategy-document-loading-text">Загружаем документ…</strong>
+                  <p>Большие файлы могут открываться несколько секунд.</p>
                 </div>
                 <iframe id="strategy-pdf-frame" title="Просмотр полного текста документа" loading="lazy" hidden></iframe>
+                <div class="strategy-docx-viewer" id="strategy-docx-viewer" aria-label="Полный текст документа DOCX" tabindex="-1" hidden></div>
+                <div class="strategy-document-error" id="strategy-document-error" role="alert" hidden>
+                  <i data-lucide="circle-alert" aria-hidden="true"></i>
+                  <strong>Не удалось открыть документ</strong>
+                  <p id="strategy-document-error-text"></p>
+                  <button type="button" class="secondary-action secondary-action--button" id="retry-strategy-document">Попробовать ещё раз</button>
+                </div>
               </div>
             </div>
           </aside>

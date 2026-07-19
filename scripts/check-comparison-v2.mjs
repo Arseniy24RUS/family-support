@@ -99,6 +99,10 @@ const requiredFiles = [
   'site/data/strategies.json',
   'site/data/strategies-manifest.csv',
   'site/data/strategies-lexical-profile.csv',
+  'site/vendor/jszip.min.js',
+  'site/vendor/docx-preview.min.js',
+  'site/vendor/JSZIP-LICENSE.txt',
+  'site/vendor/DOCX-PREVIEW-LICENSE.txt',
   'scripts/profile-strategy-texts.py'
 ];
 for (const relative of requiredFiles) {
@@ -110,7 +114,8 @@ const html = await exists(htmlPath) ? await readFile(htmlPath, 'utf8') : '';
 const requiredIds = [
   'comparison-map', 'comparison-map-regions', 'comparison-map-markers', 'selected-regions',
   'run-comparison', 'comparison-results', 'strategy-library', 'strategy-document-list',
-  'strategy-viewer-content', 'strategy-pdf-frame', 'load-strategy-pdf', 'strategy-load-more',
+  'strategy-viewer-content', 'strategy-document-stage', 'strategy-pdf-frame', 'strategy-docx-viewer',
+  'load-strategy-pdf', 'load-strategy-docx', 'strategy-load-more',
   'strategy-timeline', 'strategy-theme-matrix', 'strategy-lexical-similarity'
 ];
 for (const id of requiredIds) {
@@ -119,7 +124,10 @@ for (const id of requiredIds) {
 if (!html.includes('./compare-v2.css')) fail('compare.html: не подключён compare-v2.css.');
 if (!html.includes('type="module" src="./compare.js"')) fail('compare.html: compare.js должен подключаться как ES-модуль.');
 if (/id="strategy-pdf-frame"[^>]+src=/u.test(html)) fail('compare.html: iframe PDF не должен иметь исходный src — документы загружаются лениво.');
-if (!/value="strategies"/u.test(html) || !/value="catalog"/u.test(html)) fail('compare.html: отсутствуют аналитические слои карты.');
+if (!/value="strategies"/u.test(html) || !/value="catalog"/u.test(html) || !/value="neutral"/u.test(html)) fail('compare.html: отсутствуют слои карты.');
+if (!/value="neutral" checked/u.test(html)) fail('compare.html: нейтральный слой должен быть выбран по умолчанию.');
+if (html.indexOf('value="neutral"') > html.indexOf('value="strategies"')) fail('compare.html: нейтральный слой должен идти первым.');
+if (/src="\.\/vendor\/(?:jszip|docx-preview)\.min\.js"/u.test(html)) fail('compare.html: просмотрщик DOCX нельзя загружать до запроса пользователя.');
 
 for (const relative of [
   'site/compare.js', 'site/lib/compare-map.js', 'site/lib/strategy-library.js',
