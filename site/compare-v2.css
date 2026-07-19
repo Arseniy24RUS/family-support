@@ -292,6 +292,7 @@
 .comparison-map__region {
   stroke: #fff;
   stroke-width: 0.95px;
+  outline: none;
   vector-effect: non-scaling-stroke;
   cursor: pointer;
   transition: fill 150ms ease, opacity 150ms ease, filter 150ms ease, stroke 150ms ease;
@@ -344,6 +345,11 @@
   stroke: #fff;
   stroke-width: 2.4px;
   filter: drop-shadow(0 1px 2px rgb(76 31 103 / 0.34));
+}
+
+.comparison-map__region:focus-visible {
+  stroke: var(--compare-navy);
+  stroke-width: 2.6px;
 }
 
 .comparison-map__marker {
