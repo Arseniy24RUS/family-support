@@ -71,7 +71,7 @@ test.describe('комплексное расширение платформы', 
     await expect(regions).toHaveCount(89, { timeout: 20_000 });
     await regions.nth(0).click({ force: true });
     await regions.nth(1).click({ force: true });
-    await expect(page.locator('#selection-count')).toHaveText('2 / 4');
+    await expect(page.locator('#selection-count')).toHaveText('2 / 10');
     await page.locator('#run-comparison').click();
 
     await expect(page.locator('#comparison-results')).toBeVisible();

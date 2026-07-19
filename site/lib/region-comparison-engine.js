@@ -1,5 +1,7 @@
 import { DATA_STATUS, inferProviderType, normalizeText } from './platform-core.js';
 
+export const MAX_COMPARISON_REGIONS = 10;
+
 function categoryCounts(measures) {
   const counts = new Map();
   for (const measure of measures) {
@@ -95,7 +97,7 @@ export function titleOverlap(profileA, profileB) {
 }
 
 export function compareRegions(measures, regions) {
-  const selected = [...new Set(regions.filter(Boolean))].slice(0, 4);
+  const selected = [...new Set(regions.filter(Boolean))].slice(0, MAX_COMPARISON_REGIONS);
   const profiles = selected.map((region) => buildRegionProfile(measures, region));
   const allCategories = [...new Set(profiles.flatMap((profile) => profile.categories.map((item) => item.category)))]
     .sort((a, b) => {

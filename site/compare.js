@@ -6,7 +6,7 @@ import {
   normalizeText,
   pluralMeasures
 } from './lib/platform-core.js';
-import { compareRegions, comparisonToCsv } from './lib/region-comparison-engine.js';
+import { MAX_COMPARISON_REGIONS, compareRegions, comparisonToCsv } from './lib/region-comparison-engine.js';
 import { copyText, downloadText, icon, initModuleShell, refreshIcons, showToast } from './lib/module-shell.js';
 import {
   clampZoom,
@@ -50,9 +50,9 @@ import {
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const MAP_WIDTH = 1120;
 const MAP_HEIGHT = 520;
-const MAX_SELECTED_REGIONS = 4;
 const REGION_SEARCH_LIMIT = 24;
-const SLOT_COLORS = ['#0072b2', '#d55e00', '#008a68', '#8f4db8'];
+const SLOT_COLORS = ['#0072b2', '#d55e00', '#008a68', '#8f4db8', '#b44b83', '#9b6500', '#007f91', '#6e6a00', '#b13c4b', '#526a7f'];
+const SLOT_SOFT_COLORS = ['#e8f4fb', '#fff0e4', '#e6f6f0', '#f5ebfb', '#f9eaf3', '#fff4d8', '#e5f6f8', '#f3f2dc', '#fae9eb', '#edf1f4'];
 const DOCX_RUNTIME_SCRIPTS = ['./vendor/jszip.min.js', './vendor/docx-preview.min.js'];
 
 let docxRuntimePromise = null;
@@ -207,6 +207,17 @@ function createText(tag, text, className = '') {
   return node;
 }
 
+function applySlotTheme(element, slot) {
+  const index = Number(slot) - 1;
+  element.style.setProperty('--slot-color', SLOT_COLORS[index] || SLOT_COLORS[0]);
+  element.style.setProperty('--slot-soft', SLOT_SOFT_COLORS[index] || SLOT_SOFT_COLORS[0]);
+}
+
+function clearSlotTheme(element) {
+  element.style.removeProperty('--slot-color');
+  element.style.removeProperty('--slot-soft');
+}
+
 function appendDefinitionList(list, rows) {
   list.replaceChildren();
   for (const [term, value] of rows) {
@@ -238,7 +249,7 @@ function restoreQuery() {
   const params = new URLSearchParams(location.search);
   state.selected = [...new Set(params.getAll('region'))]
     .filter((region) => state.regions.includes(region))
-    .slice(0, MAX_SELECTED_REGIONS);
+    .slice(0, MAX_COMPARISON_REGIONS);
   state.mapLayer = ['strategies', 'catalog', 'neutral'].includes(params.get('layer'))
     ? params.get('layer')
     : 'neutral';
@@ -330,7 +341,10 @@ function renderMap() {
     path.classList.add('comparison-map__region', mapPathClass(region));
     path.dataset.region = region;
     const slot = selectionSlot(state.selected, region);
-    if (slot) path.dataset.slot = String(slot);
+    if (slot) {
+      path.dataset.slot = String(slot);
+      applySlotTheme(path, slot);
+    }
 
     const title = document.createElementNS(SVG_NS, 'title');
     title.textContent = `${region}. ${mapRegionDescription(region)}`;
@@ -379,8 +393,13 @@ function renderMapSelection() {
   elements.comparisonMapMarkers.replaceChildren();
   for (const [region, path] of state.map.paths) {
     const slot = selectionSlot(state.selected, region);
-    if (slot) path.dataset.slot = String(slot);
-    else delete path.dataset.slot;
+    if (slot) {
+      path.dataset.slot = String(slot);
+      applySlotTheme(path, slot);
+    } else {
+      delete path.dataset.slot;
+      clearSlotTheme(path);
+    }
     path.setAttribute('aria-pressed', String(Boolean(slot)));
     path.setAttribute('aria-label', `${region}: ${mapRegionDescription(region)}. Нажмите для изменения выбора.`);
     const title = path.querySelector('title');
@@ -394,6 +413,7 @@ function renderMapSelection() {
     const group = document.createElementNS(SVG_NS, 'g');
     group.classList.add('comparison-map__marker');
     group.dataset.slot = String(index + 1);
+    applySlotTheme(group, index + 1);
     group.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
     const circle = document.createElementNS(SVG_NS, 'circle');
     circle.setAttribute('r', '12');
@@ -451,7 +471,7 @@ function renderMapLegend() {
     swatch.style.width = '7px';
     swatches.append(swatch);
   }
-  selected.append(swatches, createText('span', 'Выбранные субъекты — постоянные цвета 1–4'));
+  selected.append(swatches, createText('span', 'Выбранные субъекты — постоянные цвета 1–10'));
   elements.mapLegend.append(selected);
 }
 
@@ -581,8 +601,8 @@ function toggleRegion(region) {
   if (!state.regions.includes(region)) return;
   if (state.selected.includes(region)) {
     state.selected = state.selected.filter((item) => item !== region);
-  } else if (state.selected.length >= MAX_SELECTED_REGIONS) {
-    showToast('Одновременно можно сравнить не более четырёх субъектов.');
+  } else if (state.selected.length >= MAX_COMPARISON_REGIONS) {
+    showToast('Одновременно можно сравнить не более десяти субъектов.');
     return;
   } else {
     state.selected.push(region);
@@ -609,7 +629,7 @@ function selectionChanged() {
 
 function renderSelectedRegions() {
   elements.selectedRegions.replaceChildren();
-  elements.selectionCount.textContent = `${state.selected.length} / ${MAX_SELECTED_REGIONS}`;
+  elements.selectionCount.textContent = `${state.selected.length} / ${MAX_COMPARISON_REGIONS}`;
 
   if (!state.selected.length) {
     elements.selectedRegions.append(createText('p', 'На карте пока ничего не выбрано.', 'selected-regions-v2__empty'));
@@ -620,6 +640,7 @@ function renderSelectedRegions() {
       const card = document.createElement('article');
       card.className = 'selected-region-card';
       card.dataset.slot = String(index + 1);
+      applySlotTheme(card, index + 1);
       const badge = createText('span', String(index + 1), 'region-slot-badge');
       const body = document.createElement('div');
       body.append(
@@ -640,9 +661,9 @@ function renderSelectedRegions() {
   elements.runComparison.disabled = state.selected.length < 2;
   elements.selectionNote.textContent = missing
     ? `Для построения результата выберите ещё ${missing === 1 ? 'один субъект' : 'два субъекта'}.`
-    : state.selected.length < MAX_SELECTED_REGIONS
+    : state.selected.length < MAX_COMPARISON_REGIONS
       ? 'Сравнение обновляется автоматически; можно добавить ещё субъекты.'
-      : 'Достигнут предел: четыре субъекта.';
+      : 'Достигнут предел: десять субъектов.';
   refreshIcons();
 }
 
@@ -756,6 +777,7 @@ function renderMetrics() {
     const card = document.createElement('article');
     card.className = 'region-metric-card-v2';
     card.dataset.slot = String(index + 1);
+    applySlotTheme(card, index + 1);
     const head = document.createElement('div');
     head.className = 'region-metric-card-v2__head';
     const badge = createText('span', String(index + 1), 'region-slot-badge');
@@ -828,6 +850,7 @@ function renderCategoryBars(rows) {
       const line = document.createElement('div');
       line.className = 'comparison-bar-line-v2';
       line.dataset.slot = String(index + 1);
+      applySlotTheme(line, index + 1);
       const label = createText('span', profile.region);
       label.title = profile.region;
       const track = document.createElement('div');
@@ -890,6 +913,7 @@ function renderStrategyPassports() {
     const card = document.createElement('article');
     card.className = 'strategy-passport';
     card.dataset.slot = String(index + 1);
+    applySlotTheme(card, index + 1);
     const head = document.createElement('div');
     head.className = 'strategy-passport__head';
     head.append(
@@ -984,6 +1008,7 @@ function renderStrategyTimeline(documents) {
     const row = document.createElement('div');
     row.className = 'strategy-timeline-row';
     row.dataset.slot = String(index + 1);
+    applySlotTheme(row, index + 1);
     const label = document.createElement('div');
     label.className = 'strategy-timeline-row__label';
     label.append(
@@ -1025,6 +1050,7 @@ function renderStrategyLexicalProfiles(documents) {
     const chip = document.createElement('div');
     chip.className = 'strategy-lexical-profile-chip';
     chip.dataset.slot = String(index + 1);
+    applySlotTheme(chip, index + 1);
     chip.append(
       createText('strong', strategyDocument.territory),
       createText('span', profile
@@ -1050,6 +1076,7 @@ function renderStrategyLexicalProfiles(documents) {
       const line = document.createElement('div');
       line.className = 'strategy-theme-line';
       line.dataset.slot = String(index + 1);
+      applySlotTheme(line, index + 1);
       const label = createText('span', item.region);
       label.title = item.region;
       const barTrack = document.createElement('div');
@@ -1119,6 +1146,7 @@ function renderDistinctive() {
     const section = document.createElement('section');
     section.className = 'distinctive-region-v2';
     section.dataset.slot = String(index + 1);
+    applySlotTheme(section, index + 1);
     section.append(
       createText('h4', profile.region),
       createText('p', 'До 12 названий, не совпавших с названиями в других выбранных субъектах.')

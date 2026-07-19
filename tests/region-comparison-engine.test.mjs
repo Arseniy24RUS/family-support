@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  MAX_COMPARISON_REGIONS,
   buildRegionProfile,
   compareRegions,
   comparisonToCsv,
@@ -28,6 +29,14 @@ test('comparison keeps federal measures outside regional structural counts', () 
   assert.equal(result.federalCount, 1);
   assert.equal(result.profiles[0].regionalCount, 2);
   assert.equal(result.profiles[1].regionalCount, 1);
+});
+
+test('comparison accepts ten unique regions and applies the shared limit', () => {
+  const regions = Array.from({ length: 12 }, (_, index) => `Регион ${index + 1}`);
+  const result = compareRegions(measures, regions);
+  assert.equal(MAX_COMPARISON_REGIONS, 10);
+  assert.equal(result.profiles.length, 10);
+  assert.equal(result.overlaps.length, 45);
 });
 
 test('title overlap is explicitly based on normalized names', () => {
