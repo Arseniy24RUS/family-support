@@ -10,6 +10,23 @@ async function waitForComparisonModule(page) {
 test('карта выбирает регионы и строит межрегиональное сравнение', async ({ page }) => {
   await waitForComparisonModule(page);
 
+  const mapGeometry = await page.locator('#comparison-map-regions').evaluate((layer) => {
+    const box = layer.getBBox();
+    const svg = layer.ownerSVGElement;
+    const rendered = svg.getBoundingClientRect();
+    return {
+      viewBoxHeight: svg.viewBox.baseVal.height,
+      geometryRatio: box.width / box.height,
+      geometryFill: box.height / svg.viewBox.baseVal.height,
+      renderedRatio: rendered.width / rendered.height
+    };
+  });
+  expect(mapGeometry.viewBoxHeight).toBe(620);
+  expect(mapGeometry.geometryRatio).toBeGreaterThan(1.8);
+  expect(mapGeometry.geometryRatio).toBeLessThan(1.95);
+  expect(mapGeometry.geometryFill).toBeGreaterThan(0.85);
+  expect(mapGeometry.renderedRatio).toBeCloseTo(1120 / 620, 1);
+
   const regions = page.locator('#comparison-map-regions [data-region]');
   const first = regions.nth(0);
   const second = regions.nth(1);

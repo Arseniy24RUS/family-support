@@ -49,7 +49,7 @@ import {
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const MAP_WIDTH = 1120;
-const MAP_HEIGHT = 520;
+const MAP_HEIGHT = 620;
 const REGION_SEARCH_LIMIT = 24;
 const SLOT_COLORS = ['#0072b2', '#d55e00', '#008a68', '#8f4db8', '#b44b83', '#9b6500', '#007f91', '#6e6a00', '#b13c4b', '#526a7f'];
 const SLOT_SOFT_COLORS = ['#e8f4fb', '#fff0e4', '#e6f6f0', '#f5ebfb', '#f9eaf3', '#fff4d8', '#e5f6f8', '#f3f2dc', '#fae9eb', '#edf1f4'];

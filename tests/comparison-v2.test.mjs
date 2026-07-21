@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 import {
@@ -6,6 +7,7 @@ import {
   createMapProjection,
   featureRegionName,
   geometryCentroid,
+  geometryRings,
   geometryPath,
   quantileClass,
   quantileThresholds,
@@ -36,6 +38,10 @@ import {
   strategyPeriodDomain,
   strategyPeriodPosition
 } from '../site/lib/strategy-text-analysis.js';
+import {
+  RUSSIA_LAMBERT_PARAMETERS,
+  createRussiaLambertProjection
+} from '../site/lib/russia-map-projection.js';
 
 const feature = {
   type: 'Feature',
@@ -118,13 +124,34 @@ test('названия GeoJSON нормализуются к справочни�
 });
 
 test('проекция, path и центроид формируются для полигона', () => {
-  const project = createMapProjection([feature], 1120, 520, 24);
+  const project = createMapProjection([feature], 1120, 620, 24);
   const path = geometryPath(feature.geometry, project);
   const [x, y] = geometryCentroid(feature.geometry, project);
   assert.match(path, /^M/);
   assert.match(path, /Z$/);
   assert.ok(x > 0 && x < 1120);
-  assert.ok(y > 0 && y < 520);
+  assert.ok(y > 0 && y < 620);
+});
+
+test('россия-центричная проекция Ламберта сохраняет пропорции всей карты', () => {
+  const geoData = JSON.parse(readFileSync(new URL('../site/data/ru-regions.geojson', import.meta.url), 'utf8'));
+  const project = createRussiaLambertProjection(geoData.features, 1100, 600, 24);
+  const points = geoData.features.flatMap((item) => geometryRings(item.geometry))
+    .flatMap((ring) => ring)
+    .map(project);
+  const xs = points.map(([x]) => x);
+  const ys = points.map(([, y]) => y);
+  const projectedWidth = Math.max(...xs) - Math.min(...xs);
+  const projectedHeight = Math.max(...ys) - Math.min(...ys);
+
+  assert.equal(project.metadata.name, 'Lambert Conformal Conic — Russia');
+  assert.deepEqual(project.metadata.parameters, RUSSIA_LAMBERT_PARAMETERS);
+  assert.ok(project.metadata.scale > 0);
+  assert.ok(Math.min(...xs) >= 24 - 1e-7 && Math.max(...xs) <= 1100 - 24 + 1e-7);
+  assert.ok(Math.min(...ys) >= 24 - 1e-7 && Math.max(...ys) <= 600 - 24 + 1e-7);
+  assert.ok(projectedWidth / projectedHeight > 1.8);
+  assert.ok(projectedWidth / projectedHeight < 1.95);
+  assert.ok(projectedHeight > 0.9 * (600 - 48));
 });
 
 test('квантили дают отдельный класс нулевым значениям', () => {

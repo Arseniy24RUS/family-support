@@ -1,3 +1,5 @@
+import { createRussiaLambertProjection } from './russia-map-projection.js';
+
 const MAP_REGION_ALIASES = new Map([
   ['Город Москва', 'Москва'],
   ['Город Санкт-Петербург', 'Санкт-Петербург'],
@@ -29,40 +31,8 @@ export function geometryRings(geometry) {
   return [];
 }
 
-export function geometryBounds(features) {
-  const bounds = { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity };
-  for (const feature of features ?? []) {
-    for (const ring of geometryRings(feature?.geometry)) {
-      for (const coordinate of ring ?? []) {
-        const [longitude, latitude] = coordinate;
-        if (!Number.isFinite(longitude) || !Number.isFinite(latitude)) continue;
-        bounds.minX = Math.min(bounds.minX, longitude);
-        bounds.maxX = Math.max(bounds.maxX, longitude);
-        bounds.minY = Math.min(bounds.minY, latitude);
-        bounds.maxY = Math.max(bounds.maxY, latitude);
-      }
-    }
-  }
-  if (![bounds.minX, bounds.minY, bounds.maxX, bounds.maxY].every(Number.isFinite)) {
-    return { minX: 0, minY: 0, maxX: 1, maxY: 1 };
-  }
-  return bounds;
-}
-
-export function createMapProjection(features, width = 1120, height = 520, padding = 24) {
-  const bounds = geometryBounds(features);
-  const mercatorY = (latitude) => {
-    const clamped = Math.max(-85, Math.min(85, latitude));
-    return Math.log(Math.tan(Math.PI / 4 + clamped * Math.PI / 360));
-  };
-  const minMercator = mercatorY(bounds.minY);
-  const maxMercator = mercatorY(bounds.maxY);
-  const longitudeSpan = Math.max(bounds.maxX - bounds.minX, 1e-9);
-  const mercatorSpan = Math.max(maxMercator - minMercator, 1e-9);
-  return ([longitude, latitude]) => [
-    padding + ((longitude - bounds.minX) / longitudeSpan) * (width - padding * 2),
-    padding + ((maxMercator - mercatorY(latitude)) / mercatorSpan) * (height - padding * 2)
-  ];
+export function createMapProjection(features, width = 1120, height = 620, padding = 28) {
+  return createRussiaLambertProjection(features, width, height, padding);
 }
 
 export function geometryPath(geometry, project) {

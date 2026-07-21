@@ -57,6 +57,7 @@ site/
   modules.css                        оформление дополнительных страниц
   lib/
     platform-core.js                 загрузка данных, URL, coverage и общие функции
+    russia-map-projection.js         общая россия-центричная проекция Ламберта для карт
     life-situation-engine.js         прозрачное ранжирование карточек
     region-comparison-engine.js      региональные профили, сравнение и CSV
     module-shell.js                  общие функции пользовательских страниц

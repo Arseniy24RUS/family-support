@@ -267,7 +267,7 @@
 .comparison-map-shell {
   position: relative;
   min-width: 0;
-  min-height: 570px;
+  min-height: 0;
   overflow: hidden;
   border: 1px solid #ccd9e5;
   border-radius: 15px;
@@ -284,8 +284,10 @@
 }
 
 .comparison-map {
+  display: block;
   width: 100%;
-  min-height: 520px;
+  height: auto;
+  aspect-ratio: 1120 / 620;
   user-select: none;
 }
 
@@ -2366,10 +2368,6 @@
     grid-template-columns: minmax(0, 1fr) 300px;
   }
 
-  .comparison-map-shell {
-    min-height: 530px;
-  }
-
   .comparison-insights,
   .regional-metrics-v2,
   .strategy-passports {
@@ -2529,11 +2527,11 @@
 
   .comparison-map {
     min-width: 760px;
-    min-height: 390px;
+    min-height: 0;
   }
 
   .comparison-map-shell {
-    min-height: 430px;
+    min-height: 0;
     overflow: auto hidden;
     touch-action: pan-x pan-y;
   }

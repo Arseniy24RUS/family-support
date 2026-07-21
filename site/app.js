@@ -1,4 +1,5 @@
 import { buildIssueUrl, inferProviderType, safeLocalStorage } from './lib/platform-core.js';
+import { createRussiaLambertProjection } from './lib/russia-map-projection.js';
 
 const PAGE_SIZE = 12;
 const SEARCH_DELAY = 180;
@@ -458,32 +459,6 @@ function geometryRings(geometry) {
   return [];
 }
 
-function geometryBounds(features) {
-  const bounds = { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity };
-  for (const feature of features) {
-    for (const ring of geometryRings(feature.geometry)) {
-      for (const coordinate of ring) {
-        bounds.minX = Math.min(bounds.minX, coordinate[0]);
-        bounds.maxX = Math.max(bounds.maxX, coordinate[0]);
-        bounds.minY = Math.min(bounds.minY, coordinate[1]);
-        bounds.maxY = Math.max(bounds.maxY, coordinate[1]);
-      }
-    }
-  }
-  return bounds;
-}
-
-function createMapProjection(features, width = 1100, height = 430, padding = 18) {
-  const bounds = geometryBounds(features);
-  const mercatorY = (latitude) => Math.log(Math.tan(Math.PI / 4 + latitude * Math.PI / 360));
-  const minMercator = mercatorY(bounds.minY);
-  const maxMercator = mercatorY(bounds.maxY);
-  return ([longitude, latitude]) => [
-    padding + ((longitude - bounds.minX) / (bounds.maxX - bounds.minX)) * (width - padding * 2),
-    padding + ((maxMercator - mercatorY(latitude)) / (maxMercator - minMercator)) * (height - padding * 2)
-  ];
-}
-
 function geometryPath(geometry, project) {
   return geometryRings(geometry).map((ring) => ring.map((coordinate, index) => {
     const [x, y] = project(coordinate);
@@ -561,7 +536,7 @@ function renderRegionMap() {
     return;
   }
 
-  const project = createMapProjection(features);
+  const project = createRussiaLambertProjection(features, 1100, 600, 24);
   const maximum = Math.max(...state.regionalCounts.values(), 1);
   const fragment = document.createDocumentFragment();
   const svgNamespace = 'http://www.w3.org/2000/svg';
