@@ -92,6 +92,9 @@ const requiredFiles = [
   'site/compare.html',
   'site/compare.js',
   'site/compare-v2.css',
+  'site/documents.html',
+  'site/documents.js',
+  'site/documents.css',
   'site/lib/compare-map.js',
   'site/lib/strategy-library.js',
   'site/lib/comparison-insights.js',
@@ -113,9 +116,7 @@ const htmlPath = path.join(site, 'compare.html');
 const html = await exists(htmlPath) ? await readFile(htmlPath, 'utf8') : '';
 const requiredIds = [
   'comparison-map', 'comparison-map-regions', 'comparison-map-markers', 'selected-regions',
-  'run-comparison', 'comparison-results', 'strategy-library', 'strategy-document-list',
-  'strategy-viewer-content', 'strategy-document-stage', 'strategy-pdf-frame', 'strategy-docx-viewer',
-  'load-strategy-pdf', 'load-strategy-docx', 'strategy-load-more',
+  'run-comparison', 'comparison-results',
   'strategy-timeline', 'strategy-theme-matrix', 'strategy-lexical-similarity'
 ];
 for (const id of requiredIds) {
@@ -123,14 +124,25 @@ for (const id of requiredIds) {
 }
 if (!html.includes('./compare-v2.css')) fail('compare.html: не подключён compare-v2.css.');
 if (!html.includes('type="module" src="./compare.js"')) fail('compare.html: compare.js должен подключаться как ES-модуль.');
-if (/id="strategy-pdf-frame"[^>]+src=/u.test(html)) fail('compare.html: iframe PDF не должен иметь исходный src — документы загружаются лениво.');
 if (!/value="strategies"/u.test(html) || !/value="catalog"/u.test(html) || !/value="neutral"/u.test(html)) fail('compare.html: отсутствуют слои карты.');
 if (!/value="neutral" checked/u.test(html)) fail('compare.html: нейтральный слой должен быть выбран по умолчанию.');
 if (html.indexOf('value="neutral"') > html.indexOf('value="strategies"')) fail('compare.html: нейтральный слой должен идти первым.');
-if (/src="\.\/vendor\/(?:jszip|docx-preview)\.min\.js"/u.test(html)) fail('compare.html: просмотрщик DOCX нельзя загружать до запроса пользователя.');
+if (html.includes('id="document-library"')) fail('compare.html: документальная база должна находиться на отдельной странице.');
+
+const documentsPath = path.join(site, 'documents.html');
+const documentsHtml = await exists(documentsPath) ? await readFile(documentsPath, 'utf8') : '';
+for (const id of [
+  'document-library', 'documents-region-checklist', 'strategy-document-list',
+  'strategy-viewer-content', 'strategy-document-stage', 'strategy-pdf-frame', 'strategy-docx-viewer',
+  'load-strategy-pdf', 'load-strategy-docx', 'strategy-load-more'
+]) {
+  if (!documentsHtml.includes(`id="${id}"`)) fail(`documents.html: отсутствует #${id}.`);
+}
+if (/id="strategy-pdf-frame"[^>]+src=/u.test(documentsHtml)) fail('documents.html: iframe PDF не должен иметь исходный src — документы загружаются лениво.');
+if (/src="\.\/vendor\/(?:jszip|docx-preview)\.min\.js"/u.test(documentsHtml)) fail('documents.html: просмотрщик DOCX нельзя загружать до запроса пользователя.');
 
 for (const relative of [
-  'site/compare.js', 'site/lib/compare-map.js', 'site/lib/strategy-library.js',
+  'site/compare.js', 'site/documents.js', 'site/lib/compare-map.js', 'site/lib/strategy-library.js',
   'site/lib/comparison-insights.js', 'site/lib/strategy-text-analysis.js', 'scripts/check-comparison-v2.mjs'
 ]) {
   const filepath = path.join(root, relative);

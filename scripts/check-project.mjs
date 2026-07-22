@@ -12,6 +12,9 @@ const requiredFiles = [
   'situations.js',
   'compare.html',
   'compare.js',
+  'documents.html',
+  'documents.js',
+  'documents.css',
   'methodology.html',
   'methodology.js',
   'modules.css',
@@ -78,6 +81,7 @@ async function validateHtml(file) {
   assert(/\.\/index\.html/.test(html), `${file}: нет ссылки на каталог.`);
   assert(/\.\/situations\.html/.test(html), `${file}: нет ссылки на подбор.`);
   assert(/\.\/compare\.html/.test(html), `${file}: нет ссылки на сравнение.`);
+  assert(/\.\/documents\.html/.test(html), `${file}: нет ссылки на документы.`);
   assert(/\.\/methodology\.html/.test(html), `${file}: нет ссылки на методологию.`);
 
   const ids = idsIn(html);
@@ -91,7 +95,7 @@ async function validateHtml(file) {
   return html;
 }
 
-const htmlFiles = ['index.html', 'situations.html', 'compare.html', 'methodology.html'];
+const htmlFiles = ['index.html', 'situations.html', 'compare.html', 'documents.html', 'methodology.html'];
 const htmlByFile = new Map();
 for (const file of htmlFiles) htmlByFile.set(file, await validateHtml(file));
 
@@ -133,7 +137,7 @@ assert(/ответы[^<]*(?:устройств|браузер)|не переда
 const compareHtml = htmlByFile.get('compare.html');
 const comparisonV2 = compareHtml.includes('id="comparison-map"');
 const comparisonIds = comparisonV2
-  ? ['comparison-map', 'comparison-map-regions', 'selected-regions', 'run-comparison', 'comparison-results', 'category-table', 'strategy-library']
+  ? ['comparison-map', 'comparison-map-regions', 'selected-regions', 'run-comparison', 'comparison-results', 'category-table']
   : ['compare-form', 'compare-region-select', 'selected-regions', 'comparison-results', 'category-table'];
 for (const id of comparisonIds) {
   assert(compareHtml.includes(`id="${id}"`), `compare.html: отсутствует #${id}.`);
@@ -145,6 +149,20 @@ assert(comparisonV2
   : /не измеряет[^<]*(?:финанс|эффектив)/i.test(compareHtml),
 'Страница сравнения должна ограничивать интерпретацию показателей.');
 
+const documentsHtml = htmlByFile.get('documents.html');
+for (const id of [
+  'document-library', 'documents-region-checklist', 'strategy-document-list',
+  'strategy-viewer-content', 'strategy-document-stage', 'strategy-pdf-frame', 'strategy-docx-viewer'
+]) {
+  assert(documentsHtml.includes(`id="${id}"`), `documents.html: отсутствует #${id}.`);
+}
+assert(!/id="strategy-pdf-frame"[^>]+src=/u.test(documentsHtml),
+  'documents.html: PDF не должен загружаться до команды пользователя.');
+assert(!/src="\.\/vendor\/(?:jszip|docx-preview)\.min\.js"/u.test(documentsHtml),
+  'documents.html: просмотрщик DOCX нельзя загружать до команды пользователя.');
+assert(!compareHtml.includes('id="document-library"'),
+  'compare.html: самостоятельная документальная база не должна дублироваться на странице сравнения.');
+
 const methodologyHtml = htmlByFile.get('methodology.html');
 for (const anchor of ['data', 'matching', 'comparison', 'privacy', 'corrections']) {
   assert(methodologyHtml.includes(`id="${anchor}"`), `methodology.html: отсутствует раздел #${anchor}.`);
@@ -152,7 +170,9 @@ for (const anchor of ['data', 'matching', 'comparison', 'privacy', 'corrections'
 
 for (const [file, html] of htmlByFile) {
   assert(html.includes('class="platform-nav"'), `${file}: отсутствует основная навигация платформы.`);
-  for (const href of ['./index.html', './situations.html', './compare.html', './methodology.html']) {
+  assert(html.includes('class="institution-brand" href="https://isd-ras.ru/"'),
+    `${file}: логотип Института должен вести на https://isd-ras.ru/.`);
+  for (const href of ['./index.html', './situations.html', './compare.html', './documents.html', './methodology.html']) {
     assert(html.includes(`href="${href}"`), `${file}: в header отсутствует ссылка ${href}.`);
   }
   assert((html.match(/aria-current="page"/g) || []).length === 1,
@@ -294,5 +314,5 @@ console.log([
   `${regionsBase.length} позиций регионального справочника;`,
   `${representedRegions.size} субъектов представлены в источнике;`,
   `${officialLinkCount} точных официальных ссылок;`,
-  '4 пользовательские страницы и взаимные ссылки проверены.'
+  '5 пользовательских страниц и взаимные ссылки проверены.'
 ].join(' '));

@@ -620,8 +620,6 @@ function selectionChanged() {
   renderSelectedRegions();
   renderMapSelection();
   renderRegionSearch();
-  renderStrategyCounts();
-  renderStrategyList();
   syncQuery();
   if (state.selected.length >= 2) renderComparison();
   else hideComparison();
@@ -936,27 +934,23 @@ function renderStrategyPassports() {
     );
     const actions = document.createElement('div');
     actions.className = 'strategy-passport__actions';
+    const documentsUrl = new URL('./documents.html', location.href);
+    documentsUrl.searchParams.append('region', summary.region);
+    if (doc?.id) documentsUrl.searchParams.set('doc', doc.id);
+    documentsUrl.hash = 'document-library';
     if (doc?.availability === 'available') {
-      const view = document.createElement('button');
-      view.type = 'button';
+      const view = document.createElement('a');
+      view.href = documentsUrl.href;
       view.append(icon('eye'), document.createTextNode('Открыть'));
-      view.addEventListener('click', () => {
-        openStrategyDocument(doc);
-        document.querySelector('#strategy-library')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
       const download = document.createElement('a');
       download.href = doc.download_url;
       download.download = '';
       download.append(icon('download'), document.createTextNode('PDF'));
       actions.append(view, download);
     } else {
-      const browse = document.createElement('button');
-      browse.type = 'button';
+      const browse = document.createElement('a');
+      browse.href = documentsUrl.href;
       browse.append(icon('file-warning'), document.createTextNode('Карточка'));
-      browse.addEventListener('click', () => {
-        openStrategyDocument(doc);
-        document.querySelector('#strategy-library')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
       actions.append(browse);
     }
     const catalog = document.createElement('a');
@@ -1598,66 +1592,15 @@ function setupControls() {
   elements.downloadResearchJson.addEventListener('click', exportJson);
   elements.printComparison.addEventListener('click', () => print());
 
-  for (const tab of elements.strategyTabs) {
-    tab.addEventListener('click', () => {
-      state.strategyScope = tab.dataset.strategyScope;
-      resetStrategyListLimit();
-      for (const item of elements.strategyTabs) item.setAttribute('aria-selected', String(item === tab));
-      renderStrategyList();
-    });
-  }
-  elements.strategySearchInput.addEventListener('input', () => {
-    state.strategyQuery = elements.strategySearchInput.value;
-    resetStrategyListLimit();
-    renderStrategyList();
-  });
-  elements.strategyQualityFilter.addEventListener('change', () => {
-    state.strategyQuality = elements.strategyQualityFilter.value;
-    resetStrategyListLimit();
-    renderStrategyList();
-  });
-  elements.strategyTemporalFilter.addEventListener('change', () => {
-    state.strategyTemporal = elements.strategyTemporalFilter.value;
-    resetStrategyListLimit();
-    renderStrategyList();
-  });
-  elements.strategyLoadMore.addEventListener('click', () => {
-    state.strategyListLimit += 24;
-    renderStrategyList();
-  });
-  elements.loadStrategyPdf.addEventListener('click', loadCurrentPdf);
-  elements.loadStrategyDocx.addEventListener('click', loadCurrentDocx);
-  elements.retryStrategyDocument.addEventListener('click', retryCurrentDocument);
-  elements.closeStrategyViewer.addEventListener('click', closeStrategyViewer);
 }
 
 function validateDocumentRequest(documentId) {
   if (!documentId) return;
-  const strategyDocument = state.strategyIndex.byId.get(documentId);
-  if (!strategyDocument) {
-    showToast('Документ из ссылки не найден в текущем корпусе.');
-    return;
-  }
-  openStrategyDocument(strategyDocument, { updateUrl: false });
-}
-
-function renderCorpusProvenance() {
-  const body = elements.strategyProvenanceNote.querySelector('div');
-  if (!body || !state.corpus?.provenance) return;
-  const paragraph = body.querySelector('p');
-  if (paragraph) {
-    paragraph.textContent = `${state.corpus.provenance.note} Снимок реестра сформирован ${formatDate(state.corpus.generated_at)}; техническая проверка не заменяет проверку официальной редакции.`;
-  }
-  if (state.corpus.provenance.official_collection_url) {
-    const link = document.createElement('a');
-    link.href = state.corpus.provenance.official_collection_url;
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    link.className = 'text-link';
-    link.style.color = '#b5e7de';
-    link.textContent = 'Раздел демографической политики Минтруда России';
-    body.append(link);
-  }
+  const url = new URL('./documents.html', location.href);
+  for (const region of state.selected) url.searchParams.append('region', region);
+  url.searchParams.set('doc', documentId);
+  url.hash = 'document-library';
+  location.replace(url.href);
 }
 
 async function initialize() {
@@ -1678,15 +1621,15 @@ async function initialize() {
     state.strategyIndex = createStrategyIndex(corpus);
     buildRegionalCounts();
     const requestedDocument = restoreQuery();
+    if (requestedDocument) {
+      validateDocumentRequest(requestedDocument);
+      return;
+    }
     updateDataStatus();
-    renderCorpusProvenance();
     renderMap();
     renderSelectedRegions();
     renderRegionSearch();
-    renderStrategyCounts();
-    renderStrategyList();
     if (state.selected.length >= 2) renderComparison();
-    validateDocumentRequest(requestedDocument);
     syncQuery();
     refreshIcons();
   } catch (error) {

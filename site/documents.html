@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Открытая библиотека региональных и федеральных документов по демографической и семейной политике">
+  <meta name="theme-color" content="#ffffff">
+  <title>Документы — меры поддержки семей с детьми</title>
+  <link rel="icon" type="image/png" href="./assets/favicon.png">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./modules.css">
+  <link rel="stylesheet" href="./compare-v2.css">
+  <link rel="stylesheet" href="./documents.css">
+  <script src="./vendor/lucide.min.js" defer></script>
+  <script type="module" src="./documents.js"></script>
+</head>
+<body class="module-page compare-page documents-page">
+  <a class="skip-link" href="#main-content">Перейти к основному содержанию</a>
+  <header class="site-header" id="site-header">
+    <div class="main-header">
+      <div class="site-container main-header__inner">
+        <div class="header-organizations" aria-label="Организации проекта">
+          <a class="institution-brand" href="https://isd-ras.ru/" target="_blank" rel="noopener noreferrer" aria-label="Институт социальной демографии ФНИСЦ РАН">
+            <img src="./assets/logo-isd.png" alt="Институт социальной демографии ФНИСЦ РАН" width="450" height="189">
+          </a>
+          <span class="header-organizations__divider" aria-hidden="true"></span>
+          <a class="council-brand" href="https://app.sovetmam.ru/" target="_blank" rel="noopener noreferrer" aria-label="Совет матерей — Шпаргалка для родителей">
+            <img src="./assets/logo-sovetmam-horizontal.jpg" alt="Совет матерей" width="1280" height="658">
+          </a>
+        </div>
+        <div class="product-brand" aria-label="Название информационного ресурса">
+          <strong>Меры поддержки семей с детьми</strong>
+          <nav class="platform-nav" aria-label="Разделы платформы">
+            <a href="./index.html">Каталог</a>
+            <a href="./situations.html">Подбор по ситуации</a>
+            <a href="./compare.html">Сравнение регионов</a>
+            <a href="./documents.html" aria-current="page">Документы</a>
+            <a href="./methodology.html">Методология</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" tabindex="-1">
+    <section class="compare-hero documents-hero">
+      <div class="site-container compare-hero__grid">
+        <div class="compare-hero__content">
+          <span class="module-eyebrow">Открытая документальная база</span>
+          <h1>Стратегии и программы повышения рождаемости</h1>
+          <p>Найдите документы одного или нескольких субъектов Российской Федерации, изучите метаданные и откройте полный текст прямо на странице. Файлы загружаются только после отдельной команды.</p>
+          <div class="compare-hero__actions">
+            <a class="primary-action" href="#document-library"><i data-lucide="files" aria-hidden="true"></i> Перейти к документам</a>
+            <a class="secondary-action" href="./compare.html"><i data-lucide="chart-no-axes-combined" aria-hidden="true"></i> Сравнить регионы</a>
+          </div>
+        </div>
+        <aside class="compare-hero__note">
+          <i data-lucide="hard-drive-download" aria-hidden="true"></i>
+          <div>
+            <strong>Экономия трафика</strong>
+            <p>При открытии страницы загружается только компактный реестр. PDF, DOCX и компоненты просмотра подключаются по необходимости.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="site-container module-status documents-data-status" id="data-status" aria-live="polite">
+      <i data-lucide="database" aria-hidden="true"></i>
+      <span>Загрузка реестра документов…</span>
+    </section>
+
+    <section class="strategy-library-section documents-library-section" id="document-library" aria-labelledby="document-library-title">
+      <div class="site-container">
+        <div class="strategy-library-heading">
+          <div>
+            <span class="module-eyebrow">Документальная база</span>
+            <h2 id="document-library-title">Полные тексты стратегий и программ</h2>
+            <p>Используйте множественный фильтр субъектов, поиск и признаки документа. Отмеченные субъекты применяются одновременно: в результате показываются документы каждого из них.</p>
+          </div>
+          <div class="strategy-library-heading__actions">
+            <a class="secondary-action" href="./data/strategies-manifest.csv" download>
+              <i data-lucide="sheet" aria-hidden="true"></i> Реестр CSV
+            </a>
+            <a class="secondary-action" href="./data/strategies-lexical-profile.csv" download>
+              <i data-lucide="scan-text" aria-hidden="true"></i> Лексический профиль CSV
+            </a>
+          </div>
+        </div>
+
+        <div class="strategy-corpus-stats" id="strategy-corpus-stats" aria-live="polite"></div>
+        <div class="strategy-provenance-note" id="strategy-provenance-note">
+          <i data-lucide="shield-alert" aria-hidden="true"></i>
+          <div>
+            <strong>Происхождение и актуальность</strong>
+            <p>Корпус передан владельцем проекта и технически проверен на читаемость. Перед аналитическим или правовым использованием необходимо сверить редакцию с официальным источником.</p>
+          </div>
+        </div>
+
+        <div class="documents-scope-bar">
+          <div class="strategy-tabs" role="tablist" aria-label="Разделы библиотеки">
+            <button type="button" role="tab" aria-selected="true" data-document-scope="territorial">Регионы и муниципалитеты <span id="territorial-document-count">0</span></button>
+            <button type="button" role="tab" aria-selected="false" data-document-scope="federal">Федеральные документы <span id="federal-document-count">0</span></button>
+          </div>
+          <p><i data-lucide="info" aria-hidden="true"></i> Фильтр субъектов действует для региональных и муниципальных материалов.</p>
+        </div>
+
+        <div class="documents-filter-layout">
+          <fieldset class="documents-region-filter" id="documents-region-filter">
+            <legend>Субъекты Российской Федерации</legend>
+            <div class="documents-region-filter__heading">
+              <label class="documents-region-search" for="documents-region-search">
+                <i data-lucide="search" aria-hidden="true"></i>
+                <span class="visually-hidden">Найти субъект</span>
+                <input id="documents-region-search" type="search" autocomplete="off" placeholder="Найти субъект">
+              </label>
+              <div class="documents-region-filter__actions">
+                <button type="button" id="select-all-document-regions">Отметить все</button>
+                <button type="button" id="clear-document-regions">Сбросить</button>
+              </div>
+            </div>
+            <div class="documents-region-summary" id="documents-region-summary" aria-live="polite">Все субъекты</div>
+            <div class="documents-region-checklist" id="documents-region-checklist"></div>
+          </fieldset>
+
+          <div class="documents-primary-filters" aria-label="Дополнительные фильтры документов">
+            <label class="strategy-search" for="strategy-search-input">
+              <span>Поиск по документам</span>
+              <div><i data-lucide="search" aria-hidden="true"></i><input id="strategy-search-input" type="search" autocomplete="off" placeholder="Название, акт или период"></div>
+            </label>
+            <label>
+              <span>Полнота документа</span>
+              <select id="strategy-quality-filter">
+                <option value="all">Любая полнота</option>
+                <option value="full">Полный текст</option>
+                <option value="partial">Частичный материал</option>
+                <option value="unavailable">Файл не передан</option>
+                <option value="missing">Нет в корпусе</option>
+              </select>
+            </label>
+            <label>
+              <span>Период документа</span>
+              <select id="strategy-temporal-filter">
+                <option value="all">Любой период</option>
+                <option value="active">Включает 2026 год</option>
+                <option value="historical">Завершённый период</option>
+                <option value="undated">Период не установлен</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="strategy-workspace">
+          <div class="strategy-document-column">
+            <div class="strategy-list-summary" id="strategy-list-summary" aria-live="polite"></div>
+            <div class="strategy-document-list" id="strategy-document-list"></div>
+            <button type="button" class="strategy-load-more" id="strategy-load-more" hidden>
+              <i data-lucide="list-plus" aria-hidden="true"></i> Показать ещё
+            </button>
+          </div>
+
+          <aside class="strategy-viewer" id="strategy-viewer" aria-labelledby="strategy-viewer-title">
+            <div class="strategy-viewer__placeholder" id="strategy-viewer-placeholder">
+              <i data-lucide="file-search-2" aria-hidden="true"></i>
+              <h3 id="strategy-viewer-title">Выберите документ слева</h3>
+              <p>Полный текст не загружается до нажатия «Просмотреть», поэтому библиотека остаётся быстрой даже при большом корпусе.</p>
+            </div>
+            <div class="strategy-viewer__content" id="strategy-viewer-content" hidden>
+              <div class="strategy-viewer__header">
+                <div>
+                  <span class="strategy-viewer__eyebrow" id="strategy-viewer-eyebrow"></span>
+                  <h3 id="strategy-viewer-document-title"></h3>
+                  <p id="strategy-viewer-document-meta"></p>
+                </div>
+                <button type="button" class="icon-button" id="close-strategy-viewer" aria-label="Закрыть просмотр документа"><i data-lucide="x" aria-hidden="true"></i></button>
+              </div>
+              <div class="strategy-viewer__actions" id="strategy-viewer-actions"></div>
+              <dl class="strategy-viewer__details" id="strategy-viewer-details"></dl>
+              <div class="strategy-document-stage" id="strategy-document-stage">
+                <div class="strategy-document-consent" id="strategy-document-consent">
+                  <i data-lucide="file-text" aria-hidden="true"></i>
+                  <strong id="strategy-document-consent-title">Полный текст пока не загружен</strong>
+                  <p id="strategy-document-consent-text"></p>
+                  <div class="strategy-document-load-actions" id="strategy-document-load-actions">
+                    <button type="button" class="primary-action primary-action--button" id="load-strategy-pdf"><i data-lucide="file-text" aria-hidden="true"></i> Просмотреть PDF</button>
+                    <button type="button" class="secondary-action secondary-action--button" id="load-strategy-docx" hidden><i data-lucide="file-type-2" aria-hidden="true"></i> Просмотреть DOCX</button>
+                  </div>
+                  <small>Загрузится только выбранный формат этого документа.</small>
+                </div>
+                <div class="strategy-document-loading" id="strategy-document-loading" role="status" aria-live="polite" hidden>
+                  <span class="strategy-document-spinner" aria-hidden="true"></span>
+                  <strong id="strategy-document-loading-text">Загружаем документ…</strong>
+                  <p>Большие файлы могут открываться несколько секунд.</p>
+                </div>
+                <iframe id="strategy-pdf-frame" title="Просмотр полного текста документа" loading="lazy" hidden></iframe>
+                <div class="strategy-docx-viewer" id="strategy-docx-viewer" aria-label="Полный текст документа DOCX" tabindex="-1" hidden></div>
+                <div class="strategy-document-error" id="strategy-document-error" role="alert" hidden>
+                  <i data-lucide="circle-alert" aria-hidden="true"></i>
+                  <strong>Не удалось открыть документ</strong>
+                  <p id="strategy-document-error-text"></p>
+                  <button type="button" class="secondary-action secondary-action--button" id="retry-strategy-document">Попробовать ещё раз</button>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer module-footer">
+    <div class="site-container footer-grid">
+      <div class="footer-brand">
+        <img src="./assets/logo-isd.png" alt="Институт социальной демографии ФНИСЦ РАН" width="450" height="189">
+        <p>Информационная платформа мер поддержки семей с детьми.</p>
+      </div>
+      <div class="footer-links">
+        <a href="./index.html">Каталог мер</a>
+        <a href="./situations.html">Подбор по ситуации</a>
+        <a href="./compare.html">Сравнение регионов</a>
+        <a href="./documents.html">Документы</a>
+        <a href="./methodology.html">Методология</a>
+      </div>
+      <div class="footer-meta">
+        <p>© <span id="current-year"></span> Институт социальной демографии ФНИСЦ РАН</p>
+        <p>Сведения носят справочный характер.</p>
+      </div>
+    </div>
+  </footer>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
