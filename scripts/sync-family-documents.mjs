@@ -256,69 +256,76 @@ dd { margin: 0; overflow-wrap: anywhere; }
 
 async function renderHtmlSource(context, item, source, targetPath) {
   if (item.format !== 'pdf') throw new Error('HTML-источник нельзя сохранить как DOCX');
+  const openedPages = new Set();
   let page = await context.newPage();
-  page.setDefaultTimeout(15000);
-  await page.setExtraHTTPHeaders({ 'Accept-Language': 'ru-RU,ru;q=0.9,en;q=0.4' });
-  const response = await page.goto(source.url, { waitUntil: 'domcontentloaded', timeout: 90000 });
-  const httpStatus = response?.status() ?? 0;
-  if (httpStatus < 200 || httpStatus >= 300) throw new Error(`HTTP ${httpStatus || 'не определён'}`);
-  await page.waitForLoadState('networkidle', { timeout: 12000 }).catch(() => {});
-  await clickConsent(page);
-  page = await expandDocument(context, page);
-  await page.waitForTimeout(800);
+  openedPages.add(page);
+  try {
+    page.setDefaultTimeout(15000);
+    await page.setExtraHTTPHeaders({ 'Accept-Language': 'ru-RU,ru;q=0.9,en;q=0.4' });
+    const response = await page.goto(source.url, { waitUntil: 'domcontentloaded', timeout: 45000 });
+    const httpStatus = response?.status() ?? 0;
+    if (httpStatus < 200 || httpStatus >= 300) throw new Error(`HTTP ${httpStatus || 'не определён'}`);
+    await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {});
+    await clickConsent(page);
+    const expandedPage = await expandDocument(context, page);
+    if (expandedPage !== page) openedPages.add(expandedPage);
+    page = expandedPage;
+    await page.waitForTimeout(800);
 
-  const bodyText = await page.locator('body').innerText({ timeout: 15000 }).catch(() => '');
-  const marker = blockedMarker(bodyText);
-  if (marker) throw new Error(`страница заблокирована или ошибочна: ${marker}`);
-  const extracted = await extractDocumentHtml(page);
-  const textChars = extracted.text.replace(/\s+/gu, ' ').trim().length;
-  if (textChars < Number(item.min_text_chars ?? 1000)) {
-    throw new Error(`недостаточный объём текста: ${textChars}`);
-  }
-  const phraseErrors = requiredPhraseErrors(extracted.text, item);
-  if (phraseErrors.length) throw new Error(phraseErrors.join('; '));
+    const bodyText = await page.locator('body').innerText({ timeout: 15000 }).catch(() => '');
+    const marker = blockedMarker(bodyText);
+    if (marker) throw new Error(`страница заблокирована или ошибочна: ${marker}`);
+    const extracted = await extractDocumentHtml(page);
+    const textChars = extracted.text.replace(/\s+/gu, ' ').trim().length;
+    if (textChars < Number(item.min_text_chars ?? 1000)) {
+      throw new Error(`недостаточный объём текста: ${textChars}`);
+    }
+    const phraseErrors = requiredPhraseErrors(extracted.text, item);
+    if (phraseErrors.length) throw new Error(phraseErrors.join('; '));
 
-  const retrievedAt = new Date().toISOString();
-  const finalUrl = page.url();
-  const printPage = await context.newPage();
-  await printPage.setContent(printableHtml(item, source, finalUrl, retrievedAt, extracted), {
-    waitUntil: 'load',
-    timeout: 60000
-  });
-  await mkdir(path.dirname(targetPath), { recursive: true });
-  const temporary = `${targetPath}.part`;
-  await rm(temporary, { force: true });
-  await printPage.pdf({
-    path: temporary,
-    format: 'A4',
-    printBackground: true,
-    preferCSSPageSize: true,
-    displayHeaderFooter: true,
-    headerTemplate: '<span></span>',
-    footerTemplate: `<div style="width:100%;font-size:8px;color:#555;padding:0 12mm;display:flex;justify-content:space-between;font-family:sans-serif"><span>${escapeHtml(item.id)}</span><span><span class="pageNumber"></span> / <span class="totalPages"></span></span></div>`,
-    margin: { top: '8mm', bottom: '12mm', left: '0mm', right: '0mm' }
-  });
-  await printPage.close();
-  await page.close();
-  const inspection = await inspectDocument(temporary, item);
-  if (!inspection.ok) {
+    const retrievedAt = new Date().toISOString();
+    const finalUrl = page.url();
+    const printPage = await context.newPage();
+    openedPages.add(printPage);
+    await printPage.setContent(printableHtml(item, source, finalUrl, retrievedAt, extracted), {
+      waitUntil: 'load',
+      timeout: 30000
+    });
+    await mkdir(path.dirname(targetPath), { recursive: true });
+    const temporary = `${targetPath}.part`;
     await rm(temporary, { force: true });
-    throw new Error(inspection.errors.join('; '));
+    await printPage.pdf({
+      path: temporary,
+      format: 'A4',
+      printBackground: true,
+      preferCSSPageSize: true,
+      displayHeaderFooter: true,
+      headerTemplate: '<span></span>',
+      footerTemplate: `<div style="width:100%;font-size:8px;color:#555;padding:0 12mm;display:flex;justify-content:space-between;font-family:sans-serif"><span>${escapeHtml(item.id)}</span><span><span class="pageNumber"></span> / <span class="totalPages"></span></span></div>`,
+      margin: { top: '8mm', bottom: '12mm', left: '0mm', right: '0mm' }
+    });
+    const inspection = await inspectDocument(temporary, item);
+    if (!inspection.ok) {
+      await rm(temporary, { force: true });
+      throw new Error(inspection.errors.join('; '));
+    }
+    await rename(temporary, targetPath);
+    return {
+      source_url: source.url,
+      final_url: finalUrl,
+      source_publisher: source.publisher,
+      source_class: source.source_class,
+      source_is_official: Boolean(source.official),
+      source_http_status: httpStatus,
+      content_type: response?.headers()['content-type'] ?? 'text/html',
+      method: 'rendered_fulltext_pdf',
+      retrieved_at: retrievedAt,
+      ...inspection,
+      text_preview: extracted.text.replace(/\s+/gu, ' ').trim().slice(0, 1800)
+    };
+  } finally {
+    await Promise.all([...openedPages].map((openedPage) => openedPage.close().catch(() => {})));
   }
-  await rename(temporary, targetPath);
-  return {
-    source_url: source.url,
-    final_url: finalUrl,
-    source_publisher: source.publisher,
-    source_class: source.source_class,
-    source_is_official: Boolean(source.official),
-    source_http_status: httpStatus,
-    content_type: response?.headers()['content-type'] ?? 'text/html',
-    method: 'rendered_fulltext_pdf',
-    retrieved_at: retrievedAt,
-    ...inspection,
-    text_preview: extracted.text.replace(/\s+/gu, ' ').trim().slice(0, 1800)
-  };
 }
 
 function extractPdfRange(downloadPath, outputPath, pageRange) {
@@ -349,7 +356,7 @@ function extractPdfRange(downloadPath, outputPath, pageRange) {
 
 async function downloadBinarySource(request, item, source, targetPath) {
   const response = await request.get(source.url, {
-    timeout: 120000,
+    timeout: 60000,
     maxRedirects: 10,
     failOnStatusCode: false
   });

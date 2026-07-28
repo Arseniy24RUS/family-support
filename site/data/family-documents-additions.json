@@ -73,6 +73,14 @@
           "priority": 1
         },
         {
+          "url": "https://base.garant.ru/10105807/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 50
+        },
+        {
           "url": "https://www.consultant.ru/document/cons_doc_LAW_8982/",
           "publisher": "КонсультантПлюс",
           "source_class": "reference_fallback",
@@ -124,6 +132,14 @@
           "official": true,
           "mode": "html",
           "priority": 1
+        },
+        {
+          "url": "https://base.garant.ru/10101162/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 50
         },
         {
           "url": "https://www.consultant.ru/document/cons_doc_LAW_6659/",
@@ -179,6 +195,14 @@
           "priority": 1
         },
         {
+          "url": "https://base.garant.ru/12151286/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 50
+        },
+        {
           "url": "https://www.consultant.ru/document/cons_doc_LAW_64872/",
           "publisher": "КонсультантПлюс",
           "source_class": "reference_fallback",
@@ -230,6 +254,14 @@
           "official": true,
           "mode": "html",
           "priority": 1
+        },
+        {
+          "url": "https://base.garant.ru/12151284/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 50
         },
         {
           "url": "https://www.consultant.ru/document/cons_doc_LAW_64871/",
@@ -285,6 +317,14 @@
           "priority": 1
         },
         {
+          "url": "https://base.garant.ru/71846616/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 50
+        },
+        {
           "url": "https://www.consultant.ru/document/cons_doc_LAW_286470/",
           "publisher": "КонсультантПлюс",
           "source_class": "reference_fallback",
@@ -338,6 +378,14 @@
           "priority": 1
         },
         {
+          "url": "https://base.garant.ru/72285782/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 50
+        },
+        {
           "url": "https://www.consultant.ru/document/cons_doc_LAW_328152/",
           "publisher": "КонсультантПлюс",
           "source_class": "reference_fallback",
@@ -374,7 +422,7 @@
       "format": "pdf",
       "target_path": "site/documents/legal/federal/federal-unified-benefit-rules-2330.pdf",
       "min_bytes": 30000,
-      "min_text_chars": 50000,
+      "min_text_chars": 26000,
       "required_phrases": [
         "О порядке назначения и выплаты ежемесячного пособия",
         "2330",
@@ -389,6 +437,14 @@
           "official": true,
           "mode": "html",
           "priority": 1
+        },
+        {
+          "url": "https://base.garant.ru/405970639/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 50
         },
         {
           "url": "https://www.consultant.ru/document/cons_doc_LAW_434753/",
@@ -427,7 +483,7 @@
       "format": "pdf",
       "target_path": "site/documents/legal/methodology/methodology-regional-fertility-programs-126.pdf",
       "min_bytes": 18000,
-      "min_text_chars": 20000,
+      "min_text_chars": 9000,
       "required_phrases": [
         "методических рекомендаций по реализации региональных программ по повышению рождаемости",
         "30 марта 2026",
@@ -442,6 +498,14 @@
           "official": true,
           "mode": "html",
           "priority": 1
+        },
+        {
+          "url": "https://www.garant.ru/products/ipo/prime/doc/414053467/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 50
         },
         {
           "url": "https://pravo.ppt.ru/prikaz/mintrud/n-126-336619",
@@ -552,7 +616,7 @@
       "required_phrases": [
         "О социальной поддержке семей с детьми в городе Москве",
         "23 ноября 2005",
-        "многодетная семья"
+        "семьи с детьми"
       ],
       "official_url": "https://dszn.ru/uploads/magic/ru-RU/Document-0-674-src-1758547592.2506.pdf",
       "sources": [
@@ -601,7 +665,7 @@
       "format": "pdf",
       "target_path": "site/documents/legal/regional/moscow/regional-moscow-social-support-program.pdf",
       "min_bytes": 100000,
-      "min_text_chars": 50000,
+      "min_text_chars": 18000,
       "required_phrases": [
         "Социальная поддержка жителей города Москвы",
         "420-ПП",
@@ -625,6 +689,14 @@
           "official": true,
           "mode": "html",
           "priority": 2
+        },
+        {
+          "url": "https://base.garant.ru/397564/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 50
         }
       ]
     },
@@ -654,7 +726,7 @@
       "format": "pdf",
       "target_path": "site/documents/legal/regional/saint-petersburg/regional-spb-social-code-728-132.pdf",
       "min_bytes": 50000,
-      "min_text_chars": 100000,
+      "min_text_chars": 42000,
       "required_phrases": [
         "Социальный кодекс Санкт-Петербурга",
         "728-132",
@@ -677,6 +749,14 @@
           "official": true,
           "mode": "html",
           "priority": 2
+        },
+        {
+          "url": "https://base.garant.ru/35358030/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 50
         },
         {
           "url": "https://www.consultant.ru/cons/cgi/online.cgi?base=SPB&n=117459&req=doc",
@@ -714,7 +794,7 @@
       "format": "pdf",
       "target_path": "site/documents/legal/regional/moscow-oblast/regional-moscow-oblast-family-support-law-1-2006.pdf",
       "min_bytes": 25000,
-      "min_text_chars": 30000,
+      "min_text_chars": 14000,
       "required_phrases": [
         "О мерах социальной поддержки семьи и детей в Московской области",
         "1/2006-ОЗ",
@@ -729,6 +809,14 @@
           "official": true,
           "mode": "html",
           "priority": 1
+        },
+        {
+          "url": "https://base.garant.ru/28943540/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 50
         },
         {
           "url": "https://docs.cntd.ru/document/5812473",
@@ -818,7 +906,7 @@
       "format": "pdf",
       "target_path": "site/documents/legal/regional/krasnodar-krai/regional-krasnodar-children-kuban-program.pdf",
       "min_bytes": 30000,
-      "min_text_chars": 50000,
+      "min_text_chars": 14000,
       "required_phrases": [
         "Государственная программа Краснодарского края",
         "Дети Кубани",
@@ -841,6 +929,14 @@
           "official": false,
           "mode": "html",
           "priority": 90
+        },
+        {
+          "url": "https://base.garant.ru/36996886/53f89421bbdaf741eb2d1ecc4ddb4c33/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 95
         }
       ]
     },
@@ -892,6 +988,14 @@
           "priority": 1
         },
         {
+          "url": "https://base.garant.ru/412091638/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 50
+        },
+        {
           "url": "https://docs.cntd.ru/document/1312918144",
           "publisher": "Кодекс / Техэксперт",
           "source_class": "reference_fallback",
@@ -927,7 +1031,7 @@
       "format": "pdf",
       "target_path": "site/documents/legal/regional/saint-petersburg/supporting/regional-spb-social-code-amendment-434-72-2026.pdf",
       "min_bytes": 8000,
-      "min_text_chars": 2500,
+      "min_text_chars": 1500,
       "required_phrases": [
         "434-72",
         "Социальный кодекс Санкт-Петербурга",
@@ -943,6 +1047,14 @@
           "mode": "binary",
           "format": "pdf",
           "priority": 1
+        },
+        {
+          "url": "https://base.garant.ru/414451997/1cafb24d049dcd1e7707a22d98e9858f/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 50
         }
       ]
     },
@@ -972,7 +1084,7 @@
       "format": "pdf",
       "target_path": "site/documents/legal/regional/saint-petersburg/supporting/regional-spb-social-code-amendment-450-81-2026.pdf",
       "min_bytes": 8000,
-      "min_text_chars": 2500,
+      "min_text_chars": 1500,
       "required_phrases": [
         "450-81",
         "Социальный кодекс Санкт-Петербурга",
@@ -988,6 +1100,14 @@
           "mode": "binary",
           "format": "pdf",
           "priority": 1
+        },
+        {
+          "url": "https://base.garant.ru/414472513/1cafb24d049dcd1e7707a22d98e9858f/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 50
         }
       ]
     },
@@ -1017,7 +1137,7 @@
       "format": "pdf",
       "target_path": "site/documents/legal/regional/krasnodar-krai/supporting/regional-krasnodar-large-family-law-amendment-5338-kz-2025.pdf",
       "min_bytes": 8000,
-      "min_text_chars": 2500,
+      "min_text_chars": 1800,
       "required_phrases": [
         "5338-КЗ",
         "О внесении изменений в некоторые законодательные акты Краснодарского края",
@@ -1033,6 +1153,14 @@
           "mode": "binary",
           "format": "pdf",
           "priority": 1
+        },
+        {
+          "url": "https://krasnodarpravo.ru/zakon/2025/04/04/n-5338-kz/",
+          "publisher": "Правовые акты Краснодарского края",
+          "source_class": "public_fulltext_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 50
         }
       ]
     },
@@ -1062,7 +1190,7 @@
       "format": "pdf",
       "target_path": "site/documents/legal/regional/krasnodar-krai/supporting/regional-krasnodar-children-kuban-program-amendment-87-2026.pdf",
       "min_bytes": 10000,
-      "min_text_chars": 5000,
+      "min_text_chars": 2500,
       "required_phrases": [
         "27 февраля 2026",
         "Дети Кубани",
@@ -1078,6 +1206,14 @@
           "mode": "binary",
           "format": "pdf",
           "priority": 1
+        },
+        {
+          "url": "https://krasnodarpravo.ru/postanovlenie/2026/02/27/n-87/",
+          "publisher": "Правовые акты Краснодарского края",
+          "source_class": "public_fulltext_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 50
         }
       ]
     },
@@ -1108,7 +1244,7 @@
       "format": "pdf",
       "target_path": "site/documents/legal/federal/federal-maternity-capital-balance-payment-1249.pdf",
       "min_bytes": 8000,
-      "min_text_chars": 5000,
+      "min_text_chars": 4000,
       "required_phrases": [
         "материнского семейного капитала",
         "единовременной выплаты",
@@ -1132,6 +1268,22 @@
           "official": true,
           "mode": "html",
           "priority": 2
+        },
+        {
+          "url": "https://base.garant.ru/410384185/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 50
+        },
+        {
+          "url": "https://rulaws.ru/goverment/Postanovlenie-Pravitelstva-RF-ot-11.09.2024-N-1249/",
+          "publisher": "Кодификация.РФ",
+          "source_class": "public_fulltext_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 60
         }
       ]
     },
@@ -1159,8 +1311,8 @@
         "label": "2025–2030 годы",
         "temporal_status": "active"
       },
-      "format": "docx",
-      "target_path": "site/documents/legal/federal/federal-national-project-family-passport-2025.docx",
+      "format": "pdf",
+      "target_path": "site/documents/legal/federal/federal-national-project-family-passport-2025.pdf",
       "min_bytes": 25000,
       "min_text_chars": 15000,
       "required_phrases": [
@@ -1178,6 +1330,22 @@
           "mode": "binary",
           "format": "docx",
           "priority": 1
+        },
+        {
+          "url": "https://pravo.ppt.ru/pasport/311257",
+          "publisher": "ППТ.РУ",
+          "source_class": "public_fulltext_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 50
+        },
+        {
+          "url": "https://legalacts.ru/doc/pasport-natsionalnogo-proekta-semja-utv-mintrudom-rossii/",
+          "publisher": "Legalacts.ru",
+          "source_class": "public_fulltext_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 60
         }
       ]
     }
