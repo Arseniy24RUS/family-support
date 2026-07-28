@@ -134,7 +134,8 @@ const documentsHtml = await exists(documentsPath) ? await readFile(documentsPath
 for (const id of [
   'document-library', 'documents-region-checklist', 'strategy-document-list',
   'strategy-viewer-content', 'strategy-document-stage', 'strategy-pdf-frame', 'strategy-docx-viewer',
-  'load-strategy-pdf', 'load-strategy-docx', 'strategy-load-more'
+  'load-strategy-pdf', 'load-strategy-docx', 'strategy-load-more',
+  'federal-collection-guide', 'federal-section-filter'
 ]) {
   if (!documentsHtml.includes(`id="${id}"`)) fail(`documents.html: отсутствует #${id}.`);
 }
@@ -189,13 +190,16 @@ if (corpus) {
     ids.add(document.id);
     if (!document.title) fail(`${label}: отсутствует title.`);
     if (!['regional', 'municipal', 'federal'].includes(document.scope)) fail(`${label}: недопустимый scope.`);
-    if (!['regional', 'municipal', 'strategic', 'methodology'].includes(document.group)) fail(`${label}: недопустимый group.`);
+    if (!['regional', 'municipal', 'strategic', 'implementation', 'normative', 'methodology'].includes(document.group)) fail(`${label}: недопустимый group.`);
     if (!['available', 'unavailable', 'missing'].includes(document.availability)) fail(`${label}: недопустимый availability.`);
     if (!['full', 'partial', 'unavailable', 'missing'].includes(document.quality)) fail(`${label}: недопустимый quality.`);
     if (!document.period || !['active', 'historical', 'future', 'undated'].includes(document.period.temporal_status)) {
       fail(`${label}: некорректный временной статус.`);
     }
     if (document.official_url && !/^https:\/\//u.test(document.official_url)) fail(`${label}: official_url должен использовать HTTPS.`);
+    if (document.scope === 'federal' && !['core', 'implementation', 'student-family', 'related', 'methodology', 'archive'].includes(document.federal_section)) {
+      fail(`${label}: отсутствует или недопустим federal_section.`);
+    }
 
     if (document.scope === 'regional') regional.push(document);
     if (document.scope === 'regional') {
@@ -212,8 +216,11 @@ if (corpus) {
       if (!textProfile || textProfile.method !== lexicalDefinition?.method) {
         fail(`${label}: отсутствует воспроизводимый лексический профиль.`);
       } else {
-        if (!Number.isInteger(textProfile.token_count) || textProfile.token_count < 1) fail(`${label}: некорректный token_count.`);
-        if (!['standard', 'limited'].includes(textProfile.reliability)) fail(`${label}: некорректная надёжность лексического профиля.`);
+        if (!Number.isInteger(textProfile.token_count) || textProfile.token_count < 0) fail(`${label}: некорректный token_count.`);
+        if (!['standard', 'limited', 'unavailable'].includes(textProfile.reliability)) fail(`${label}: некорректная надёжность лексического профиля.`);
+        if (textProfile.token_count === 0 && textProfile.reliability !== 'unavailable') {
+          fail(`${label}: нулевой текстовый слой должен быть явно отмечен как unavailable.`);
+        }
         for (const themeId of lexicalThemeIds) {
           const theme = textProfile.themes?.[themeId];
           if (!theme || !Number.isFinite(Number(theme.matches)) || !Number.isFinite(Number(theme.per_10000_words))) {
@@ -239,7 +246,7 @@ if (corpus) {
           totalPdfBytes += info.size;
           totalPages += document.pages;
           availableFiles += 1;
-          if (document.scope === 'federal' && document.group === 'strategic') federalAvailable += 1;
+          if (document.scope === 'federal' && document.group !== 'methodology') federalAvailable += 1;
           if (document.group === 'methodology') methodologyAvailable += 1;
           if (document.scope === 'municipal') municipalAvailable += 1;
         }

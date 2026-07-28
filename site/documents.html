@@ -105,6 +105,20 @@
           <p><i data-lucide="info" aria-hidden="true"></i> Фильтр субъектов действует для региональных и муниципальных материалов.</p>
         </div>
 
+        <section class="federal-collection-guide" id="federal-collection-guide" hidden>
+          <div class="federal-collection-guide__heading">
+            <div>
+              <span>Федеральная подборка · проверено 28 июля 2026 года</span>
+              <h3>От действующих основ к нормативным актам и планам реализации</h3>
+              <p>Завершённые документы сохранены как архив, а новые правовые основания и материалы по студенческим семьям выделены отдельно.</p>
+            </div>
+            <a href="https://publication.pravo.gov.ru/document/0001202507230065" target="_blank" rel="noopener noreferrer">
+              <i data-lucide="scale" aria-hidden="true"></i> Определение студенческой семьи
+            </a>
+          </div>
+          <div class="federal-section-shortcuts" id="federal-section-shortcuts" aria-label="Разделы федеральной подборки"></div>
+        </section>
+
         <div class="documents-filter-layout">
           <fieldset class="documents-region-filter" id="documents-region-filter">
             <legend>Субъекты Российской Федерации</legend>
@@ -145,6 +159,18 @@
                 <option value="active">Включает 2026 год</option>
                 <option value="historical">Завершённый период</option>
                 <option value="undated">Период не установлен</option>
+              </select>
+            </label>
+            <label id="federal-section-filter-wrap" hidden>
+              <span>Раздел федеральной базы</span>
+              <select id="federal-section-filter">
+                <option value="all">Все федеральные документы</option>
+                <option value="core">Действующие основы</option>
+                <option value="implementation">Планы реализации</option>
+                <option value="student-family">Студенческие семьи</option>
+                <option value="related">Связанные стратегии и указы</option>
+                <option value="methodology">Методические материалы</option>
+                <option value="archive">Архив до 2025 года</option>
               </select>
             </label>
           </div>

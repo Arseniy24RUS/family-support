@@ -25,6 +25,24 @@ const measures = [
     category: 'Образование',
     level: 'regional',
     region: 'Тульская область'
+  },
+  {
+    id: 'student-family-housing',
+    title: 'Компенсация найма жилья студенческим семьям',
+    summary: 'Семье родителей-студентов компенсируют аренду жилья.',
+    category: 'Жильё',
+    audiences: ['Студенческие семьи'],
+    student_family_relevance: 'targeted',
+    level: 'regional',
+    region: 'Москва'
+  },
+  {
+    id: 'student-from-large-family',
+    title: 'Питание студентам из многодетных семей',
+    summary: 'Льгота ребёнку из многодетной семьи, который учится в колледже.',
+    category: 'Образование',
+    level: 'regional',
+    region: 'Москва'
   }
 ];
 
@@ -68,4 +86,12 @@ test('results are grouped without claiming legal eligibility', () => {
   assert.ok(result.all.length > 0);
   assert.equal(result.all[0].measure.id, 'moscow-large');
   assert.ok(['high', 'check', 'related'].includes(result.all[0].tier));
+});
+
+test('student-family situation uses the explicit cross-cutting audience', () => {
+  const result = matchMeasuresToProfile(measures, {
+    region: 'Москва', situationId: 'student-family', factIds: [], query: ''
+  });
+  assert.deepEqual(result.all.map((item) => item.measure.id), ['student-family-housing']);
+  assert.ok(result.all[0].reasons.some((reason) => reason.includes('прямо адресована')));
 });

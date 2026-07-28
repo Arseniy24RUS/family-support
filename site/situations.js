@@ -40,6 +40,7 @@ const elements = {
   form: document.querySelector('#profile-form'),
   region: document.querySelector('#situation-region'),
   situationGrid: document.querySelector('#situation-grid'),
+  studentFamilyDefinition: document.querySelector('#student-family-definition'),
   factGrid: document.querySelector('#fact-grid'),
   query: document.querySelector('#profile-query'),
   dataStatus: document.querySelector('#data-status'),
@@ -138,6 +139,10 @@ function selectedSituationId() {
   return elements.form.elements.namedItem('life-situation')?.value || '';
 }
 
+function updateStudentFamilyDefinition() {
+  elements.studentFamilyDefinition.hidden = selectedSituationId() !== 'student-family';
+}
+
 function selectedFactIds() {
   return [...elements.form.querySelectorAll('input[name="profile-fact"]:checked')]
     .map((input) => input.value);
@@ -230,6 +235,7 @@ function createResultCard(result) {
   tags.append(createTag(statusLabel(result.tier), result.tier));
   tags.append(createTag(levelLabel(measure)));
   if (measure.level === 'regional' && measure.region) tags.append(createTag(measure.region, 'region'));
+  if (measure.audiences?.includes('Студенческие семьи')) tags.append(createTag('Студенческие семьи'));
   top.append(tags);
 
   const title = document.createElement('h4');
@@ -598,6 +604,9 @@ function planText() {
 
 function bindEvents() {
   elements.form.addEventListener('submit', handleSubmit);
+  elements.form.addEventListener('change', (event) => {
+    if (event.target?.name === 'life-situation') updateStudentFamilyDefinition();
+  });
   elements.form.addEventListener('reset', () => {
     window.setTimeout(() => {
       state.profile = null;
@@ -607,6 +616,7 @@ function bindEvents() {
       elements.warning.hidden = true;
       elements.tools.hidden = true;
       elements.placeholder.hidden = false;
+      updateStudentFamilyDefinition();
       history.replaceState(null, '', location.pathname);
     });
   });
@@ -653,6 +663,7 @@ async function init() {
     populateRegions();
     updateDataStatus();
     const restored = restorePublicQuery();
+    updateStudentFamilyDefinition();
     refreshIcons();
     if (restored) elements.form.requestSubmit();
   } catch (error) {

@@ -263,7 +263,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/posobie-po-beremennosti-i-rodam",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "487ffc2f92fb40df045d0b5215c14f5c566119779a8b9534568a04bf5522a490"
+    "content_hash": "487ffc2f92fb40df045d0b5215c14f5c566119779a8b9534568a04bf5522a490",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:regionalnye-nagrady-mnogodetnym",
@@ -403,7 +407,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/zhilyo-dlya-studencheskih-semey",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "98e5e101538b65160a9413f92d96e726fff375cc6ee33296583f27821197bcb3"
+    "content_hash": "98e5e101538b65160a9413f92d96e726fff375cc6ee33296583f27821197bcb3",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:zhilyo-dop-ploshchad-invalid",
@@ -977,7 +985,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/vyplaty-studencheskim-semyam-ot-vuza",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "7ea5bd81a1f510627a280446122827c364a2219aacedef93de288ad3e0450bb8"
+    "content_hash": "7ea5bd81a1f510627a280446122827c364a2219aacedef93de288ad3e0450bb8",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:stipendii-gosudarstvennye",
@@ -1019,7 +1031,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/obrazovatelnye-garantii-beremennym",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "2c13a6b13d9ee126eb35c6267cbf6c4bccf20c98d643c0fc092cfc99a6a9f31a"
+    "content_hash": "2c13a6b13d9ee126eb35c6267cbf6c4bccf20c98d643c0fc092cfc99a6a9f31a",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:obrazovatelnyy-kredit",
@@ -1075,7 +1091,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/podderzhka-studencheskih-semey",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "1e9d0d67b5e78124282421aab7c1bdef0ef3e063e7c7b344b1807f73136d9ab2"
+    "content_hash": "1e9d0d67b5e78124282421aab7c1bdef0ef3e063e7c7b344b1807f73136d9ab2",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:stipendii-prezidentskie-imennye",
@@ -1509,7 +1529,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/reg-altayskiy-kray-006",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "59770bf387bcf7899b5c899bce5934354c169a38d3775cc32e9b83b23c784277"
+    "content_hash": "59770bf387bcf7899b5c899bce5934354c169a38d3775cc32e9b83b23c784277",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:reg-altayskiy-kray-004",
@@ -1523,7 +1547,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/reg-altayskiy-kray-004",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "d95e4e57f40c1832d41db423d2ff85a30be6ab5d9ee1cc2ee8a3042cc14f4639"
+    "content_hash": "d95e4e57f40c1832d41db423d2ff85a30be6ab5d9ee1cc2ee8a3042cc14f4639",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:reg-altayskiy-kray-010",
@@ -1929,7 +1957,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/amur-003",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "84a12fefc9b4652c851a3c1f0e300dcff191d577d06b1f1fdabaac37aadde316"
+    "content_hash": "84a12fefc9b4652c851a3c1f0e300dcff191d577d06b1f1fdabaac37aadde316",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:amur-014",
@@ -1957,7 +1989,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/amur-004",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "ead160e600e354e4661d408102b9c7693ac76ea496ddf882f1e6f856e757d6d7"
+    "content_hash": "ead160e600e354e4661d408102b9c7693ac76ea496ddf882f1e6f856e757d6d7",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:amur-020",
@@ -2055,7 +2091,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/amur-005",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "80f21a9432ef1607980eab037875dac4062c729a173a082610d7ba027b8684f8"
+    "content_hash": "80f21a9432ef1607980eab037875dac4062c729a173a082610d7ba027b8684f8",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:amur-015",
@@ -3063,7 +3103,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/blg-013",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "50f68e008f6db64a1fcbd62ea742a0d24f942d992a4d57434ea55180a38ff502"
+    "content_hash": "50f68e008f6db64a1fcbd62ea742a0d24f942d992a4d57434ea55180a38ff502",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:blg-002",
@@ -3119,7 +3163,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/blg-012",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "281c1863e7d84f1ccf5ed5e6607d4ede3f451277847e5b3f8669247fc34d107e"
+    "content_hash": "281c1863e7d84f1ccf5ed5e6607d4ede3f451277847e5b3f8669247fc34d107e",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:blg-003",
@@ -3679,7 +3727,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/vld-001",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "b4f7703e971983025c2a398edab16ef1fc248d9f0d2dae6c235fc08910411293"
+    "content_hash": "b4f7703e971983025c2a398edab16ef1fc248d9f0d2dae6c235fc08910411293",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:vld-011",
@@ -4799,7 +4851,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/voronezh-005",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "40539a1707d9b20ffb48afa537d356df3a3ef8b169ee869d7404ce949ce918e0"
+    "content_hash": "40539a1707d9b20ffb48afa537d356df3a3ef8b169ee869d7404ce949ce918e0",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:voronezh-003",
@@ -5331,7 +5387,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/eao-006",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "878d53a88f2d118f37135ae66c61c6bee16cc3ab5d6568717534b6a440e5146d"
+    "content_hash": "878d53a88f2d118f37135ae66c61c6bee16cc3ab5d6568717534b6a440e5146d",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:eao-008",
@@ -5597,7 +5657,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/ivn-002",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "2db281910076dd62bc9105c3416c5f763f333869a9f371aabfb569d02cd384c7"
+    "content_hash": "2db281910076dd62bc9105c3416c5f763f333869a9f371aabfb569d02cd384c7",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:ivn-005",
@@ -5667,7 +5731,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/ivn-007",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "8fef99976d49de7bfa3251d5c0a0c250af2f184964ffc635cbe6b213c8764904"
+    "content_hash": "8fef99976d49de7bfa3251d5c0a0c250af2f184964ffc635cbe6b213c8764904",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:ivn-006",
@@ -6465,7 +6533,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/reg-kaliningradskaya-oblast-007",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "e9753c86ca0f38d84869205fc2a84b484bb8b933a9e10a112314686182398a52"
+    "content_hash": "e9753c86ca0f38d84869205fc2a84b484bb8b933a9e10a112314686182398a52",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:reg-kaliningradskaya-oblast-003",
@@ -6493,7 +6565,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/reg-kaliningradskaya-oblast-009",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "d53fa6c201cbefa0734d0c3a469dd506d682202c83ce4c01c0377c00284683fa"
+    "content_hash": "d53fa6c201cbefa0734d0c3a469dd506d682202c83ce4c01c0377c00284683fa",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:reg-kaliningradskaya-oblast-006",
@@ -6535,7 +6611,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/reg-kaliningradskaya-oblast-008",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "c51ff7300c2e4c22889e83cbb3b82044c922dbdc9426b8439be9cca160c8f63a"
+    "content_hash": "c51ff7300c2e4c22889e83cbb3b82044c922dbdc9426b8439be9cca160c8f63a",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:reg-kaliningradskaya-oblast-015",
@@ -6773,7 +6853,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/klg-017",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "458a6a9c6b1070f879c4821c76f81315a892179dde0a8f8b437df04fe78dba62"
+    "content_hash": "458a6a9c6b1070f879c4821c76f81315a892179dde0a8f8b437df04fe78dba62",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:klg-013",
@@ -7277,7 +7361,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/kchr-010",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "771ea422f4ece1c2cc530d22d7a6428d03b225247e90aca891884e69d238893e"
+    "content_hash": "771ea422f4ece1c2cc530d22d7a6428d03b225247e90aca891884e69d238893e",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:kchr-008",
@@ -7585,7 +7673,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/kemerovo-002",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "95c108b2321f149fe2469caabb55571cf47762015c147c2da5300ac6ee6d6b35"
+    "content_hash": "95c108b2321f149fe2469caabb55571cf47762015c147c2da5300ac6ee6d6b35",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:kemerovo-004",
@@ -9167,7 +9259,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/krg-015",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "bc3c136a5a367032d3daaea4aeda26c4a19ea5df47f03b4481a479878d0fff35"
+    "content_hash": "bc3c136a5a367032d3daaea4aeda26c4a19ea5df47f03b4481a479878d0fff35",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:krg-016",
@@ -9265,7 +9361,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/krsk-018",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "b65c0fc85aa61fa880ba38093a7a81b9aea4647f90f0a65beb6be6030c1da70c"
+    "content_hash": "b65c0fc85aa61fa880ba38093a7a81b9aea4647f90f0a65beb6be6030c1da70c",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:krsk-017",
@@ -9377,7 +9477,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/krsk-009",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "d14a1cd3d5a5c207b31f1a9220ac48a8fe4bfcb3f3289d576b9c1e168376b0bf"
+    "content_hash": "d14a1cd3d5a5c207b31f1a9220ac48a8fe4bfcb3f3289d576b9c1e168376b0bf",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:krsk-019",
@@ -9489,7 +9593,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/krsk-003",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "123a68e2247e02a61e89ab3862dc5337dce8b3b8d772d2d019e390a2ede93995"
+    "content_hash": "123a68e2247e02a61e89ab3862dc5337dce8b3b8d772d2d019e390a2ede93995",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:krsk-005",
@@ -9573,7 +9681,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/lenobl-001",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "dfb77f0dfdb12238ebb8dd528255f23d2b2d78ec51b5a7e7913eba7a69dcc6d8"
+    "content_hash": "dfb77f0dfdb12238ebb8dd528255f23d2b2d78ec51b5a7e7913eba7a69dcc6d8",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:lenobl-015",
@@ -9587,7 +9699,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/lenobl-015",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "1d71fcdb413146500282326f8af389619c28b83b6d0694317ae691d8f664f616"
+    "content_hash": "1d71fcdb413146500282326f8af389619c28b83b6d0694317ae691d8f664f616",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:lenobl-002",
@@ -10861,7 +10977,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/lnr-021",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "01e11b12aa5ac1434d2db2ba4349fed325d99cfed078fe601249a5cdf714ae98"
+    "content_hash": "01e11b12aa5ac1434d2db2ba4349fed325d99cfed078fe601249a5cdf714ae98",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:lnr-010",
@@ -10931,7 +11051,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/mgd-049",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "9bc20cdb72f8b83d3fb2d289117bc606bdb1d1da41d019759c62e95f6a72e43c"
+    "content_hash": "9bc20cdb72f8b83d3fb2d289117bc606bdb1d1da41d019759c62e95f6a72e43c",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:mgd-013",
@@ -11029,7 +11153,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/mgd-051",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "05399938799f8db64c67cfb5492393f49b7e3a6e2808ba24ecafb6fc6e600b47"
+    "content_hash": "05399938799f8db64c67cfb5492393f49b7e3a6e2808ba24ecafb6fc6e600b47",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:mgd-003",
@@ -11099,7 +11227,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/mgd-050",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "181a92102b030baaa0fd98039992598d1e86a84a209e99fa00b0b52798558bdf"
+    "content_hash": "181a92102b030baaa0fd98039992598d1e86a84a209e99fa00b0b52798558bdf",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:mgd-056",
@@ -13101,7 +13233,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/nnov-004",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "55d4bd254482e9853dc30f34a69b7f4987149ed8ef6dd3ac697a9b37a92519cd"
+    "content_hash": "55d4bd254482e9853dc30f34a69b7f4987149ed8ef6dd3ac697a9b37a92519cd",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:nnov-012",
@@ -13577,7 +13713,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/reg-novosibirskaya-oblast-014",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "d7bc6720bcd658eef5da2c41bc201e8edda0fa4e1f670316d8fff7f34e05eac9"
+    "content_hash": "d7bc6720bcd658eef5da2c41bc201e8edda0fa4e1f670316d8fff7f34e05eac9",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:reg-novosibirskaya-oblast-003",
@@ -13689,7 +13829,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/omsk-005",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "07d15f02bb750e0bd055bc48d96df0989d2e59c3074da8354a285f6580c265ba"
+    "content_hash": "07d15f02bb750e0bd055bc48d96df0989d2e59c3074da8354a285f6580c265ba",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:omsk-002",
@@ -13731,7 +13875,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/omsk-004",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "13d9aad1def6fcb2a9e9b0fafe5f44c311ab106e016561f5fe1c3c55af39d2c1"
+    "content_hash": "13d9aad1def6fcb2a9e9b0fafe5f44c311ab106e016561f5fe1c3c55af39d2c1",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:omsk-001",
@@ -14361,7 +14509,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/orl-011",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "5592d03060e0efb8ede0a2e29280b471cb5b833df720a6bfa8d5924d28e2469c"
+    "content_hash": "5592d03060e0efb8ede0a2e29280b471cb5b833df720a6bfa8d5924d28e2469c",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:orl-015",
@@ -14781,7 +14933,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/pnz-012",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "e8cbfb4f4a4b80ecbfe8901729541ca27736f29c1fe1f1da8f25b064de5d1f87"
+    "content_hash": "e8cbfb4f4a4b80ecbfe8901729541ca27736f29c1fe1f1da8f25b064de5d1f87",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:pnz-024",
@@ -14809,7 +14965,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/pnz-013",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "c54d38a31602a230fcdae92c8f675ffe93bab1cce674fd1b0754ed80afb9ff31"
+    "content_hash": "c54d38a31602a230fcdae92c8f675ffe93bab1cce674fd1b0754ed80afb9ff31",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:pnz-017",
@@ -14921,7 +15081,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/pnz-011",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "1648f14b12a4c8e705d939b3217c3c442fe606c0bb0534d06b7c2cf5702c70e4"
+    "content_hash": "1648f14b12a4c8e705d939b3217c3c442fe606c0bb0534d06b7c2cf5702c70e4",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:pnz-003",
@@ -15103,7 +15267,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/pnz-026",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "347c8fc31147b1b955fc23c3a3e82293be345c267ec34619215cabee37ff8c21"
+    "content_hash": "347c8fc31147b1b955fc23c3a3e82293be345c267ec34619215cabee37ff8c21",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:pnz-027",
@@ -15117,7 +15285,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/pnz-027",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "4659a5f40b0a1703d890574abf74c4062159269cf3776b3becb8d619d97162a0"
+    "content_hash": "4659a5f40b0a1703d890574abf74c4062159269cf3776b3becb8d619d97162a0",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:pnz-021",
@@ -15145,7 +15317,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/pnz-031",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "f97382c3b40d91cc4aa0bb50efc789d3af38eda91aff6a5eb3e2040ef38a93ae"
+    "content_hash": "f97382c3b40d91cc4aa0bb50efc789d3af38eda91aff6a5eb3e2040ef38a93ae",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:pnz-020",
@@ -15789,7 +15965,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/psk-022",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "c2a12ca95f32005bf5c1c3fbbb0a36e728ec88d44a792dfd928497bf6c4d2d4f"
+    "content_hash": "c2a12ca95f32005bf5c1c3fbbb0a36e728ec88d44a792dfd928497bf6c4d2d4f",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:psk-030",
@@ -16363,7 +16543,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/adg-008",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "8db11e80ebf187f604355de534c2d4b3df18585f48b9e40bfe03a06db8627773"
+    "content_hash": "8db11e80ebf187f604355de534c2d4b3df18585f48b9e40bfe03a06db8627773",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:adg-004",
@@ -16937,7 +17121,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/bsh-026",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "2f3d93ad898793ded41670c7a74f79cdfc8187f58faebad3ef29bce27d69ad08"
+    "content_hash": "2f3d93ad898793ded41670c7a74f79cdfc8187f58faebad3ef29bce27d69ad08",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:bsh-021",
@@ -18029,7 +18217,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/kar-006",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "1187a47af73526a57cd6a0583a301da049fa0a4c1b456dad4d0338463b9d3beb"
+    "content_hash": "1187a47af73526a57cd6a0583a301da049fa0a4c1b456dad4d0338463b9d3beb",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:kar-009",
@@ -18911,7 +19103,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/krym-011",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "ecb3c6b768f047a42861a0117a7ff037ab083b37de26bc6f094f6d7df9d16304"
+    "content_hash": "ecb3c6b768f047a42861a0117a7ff037ab083b37de26bc6f094f6d7df9d16304",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:krym-017",
@@ -19177,7 +19373,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/mari-003",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "4374b761799d4902af193ed07647db98569df1456d20ccc1064171550c87793d"
+    "content_hash": "4374b761799d4902af193ed07647db98569df1456d20ccc1064171550c87793d",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:mari-006",
@@ -20437,7 +20637,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/tat-012",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "efa9625239427471261e3e6a8a30a4c31d88b5b947a69d0bb79bbb6a2a2be13b"
+    "content_hash": "efa9625239427471261e3e6a8a30a4c31d88b5b947a69d0bb79bbb6a2a2be13b",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:tat-005",
@@ -20745,7 +20949,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/rtadd-007",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "7d4d5a2801b6e7aa3e1e0a2becd9226faf4ed42b87bfdaa63c48b5300e5ba122"
+    "content_hash": "7d4d5a2801b6e7aa3e1e0a2becd9226faf4ed42b87bfdaa63c48b5300e5ba122",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:tat-008",
@@ -21291,7 +21499,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/rst-014",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "605c7e1aa0de9ae24dd4263e8c55454400d96e95ae38ba104ca5899e0a48c859"
+    "content_hash": "605c7e1aa0de9ae24dd4263e8c55454400d96e95ae38ba104ca5899e0a48c859",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:rst-013",
@@ -21781,7 +21993,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/ryaz-001",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "96f73bdc20df5d139eaf8f5dc47b01bd082fb5ac9f9a48ad2bd5b5d9ccd8ac7b"
+    "content_hash": "96f73bdc20df5d139eaf8f5dc47b01bd082fb5ac9f9a48ad2bd5b5d9ccd8ac7b",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:ryaz-035",
@@ -22397,7 +22613,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/samara-002",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "720106e20bc30c20eff8fa8279422e6dce8ef63e85cb4e8b41d069fbf8d51fed"
+    "content_hash": "720106e20bc30c20eff8fa8279422e6dce8ef63e85cb4e8b41d069fbf8d51fed",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:samara-001",
@@ -22495,7 +22715,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/samara-006",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "20670c5dda30799acd6b357f6bf356f5f4a43be1ce42bb47d27d2a8968c002e4"
+    "content_hash": "20670c5dda30799acd6b357f6bf356f5f4a43be1ce42bb47d27d2a8968c002e4",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:samara-009",
@@ -22677,7 +22901,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/spb-009",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "bd8193dfc461f227a8b8989cc61ecb6723a3e6af2f8d48694e5f37c39e3c206a"
+    "content_hash": "bd8193dfc461f227a8b8989cc61ecb6723a3e6af2f8d48694e5f37c39e3c206a",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:spb-007",
@@ -22719,7 +22947,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/spb-006",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "1e7ae7aa9fc8b27d27b217f917edcab86ccf4e16b584d232412c5b2b9a705219"
+    "content_hash": "1e7ae7aa9fc8b27d27b217f917edcab86ccf4e16b584d232412c5b2b9a705219",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:spb-002",
@@ -23097,7 +23329,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/saratov-010",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "f7aeee74975e8b823edfdac3d363c67c526b0fcb7a5ae2598f4b7a40cad26b5d"
+    "content_hash": "f7aeee74975e8b823edfdac3d363c67c526b0fcb7a5ae2598f4b7a40cad26b5d",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:saratov-013",
@@ -23433,7 +23669,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/sah-029",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "81eeca409c3f17ab9c9abc72b0bcdfb6051c466195cc12c7ca5f276ea73e43f3"
+    "content_hash": "81eeca409c3f17ab9c9abc72b0bcdfb6051c466195cc12c7ca5f276ea73e43f3",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:sah-020",
@@ -24035,7 +24275,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/sve-011",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "b4b441800bd6eb9d7e8fa34f0d9aa15356278fb771d691d7681cdf2d70017b8b"
+    "content_hash": "b4b441800bd6eb9d7e8fa34f0d9aa15356278fb771d691d7681cdf2d70017b8b",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:sve-016",
@@ -24203,7 +24447,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/sev-013",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "89945abde9e5874550549e22726684cafce34e38f6ce146740056badbd5a5ed5"
+    "content_hash": "89945abde9e5874550549e22726684cafce34e38f6ce146740056badbd5a5ed5",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:sev-016",
@@ -24623,7 +24871,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/smol-013",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "40f98055f7d00ccfa418df43d76c34d222f8cd1b8f17beed18b73a88c27c1108"
+    "content_hash": "40f98055f7d00ccfa418df43d76c34d222f8cd1b8f17beed18b73a88c27c1108",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:smol-004",
@@ -24665,7 +24917,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/smol-010",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "d32418e15b1a7cea525e87644ff9ffc63cefa169a336e9259fa7355e81455aef"
+    "content_hash": "d32418e15b1a7cea525e87644ff9ffc63cefa169a336e9259fa7355e81455aef",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:smol-007",
@@ -24679,7 +24935,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/smol-007",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "26b0019d6f98a54459020f2385d0a90985f51c2c054461e6dd7a677817aa6e94"
+    "content_hash": "26b0019d6f98a54459020f2385d0a90985f51c2c054461e6dd7a677817aa6e94",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:smol-003",
@@ -24931,7 +25191,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/smol-011",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "44df7c140c0447238d94bd01998d2791fb0b01bf24885efaa20bcf8cf3d8be4b"
+    "content_hash": "44df7c140c0447238d94bd01998d2791fb0b01bf24885efaa20bcf8cf3d8be4b",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:smol-029",
@@ -25015,7 +25279,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/smol-028",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "adaa6f0151dfc5c711895b7e08831a428075e059383321ba13a4495279c0c755"
+    "content_hash": "adaa6f0151dfc5c711895b7e08831a428075e059383321ba13a4495279c0c755",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:smol-027",
@@ -25099,7 +25367,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/stavropol-005",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "7a5d8943962e9a619042610df8ec15c55f3441f06ee2a4ecb77d9238411fd6fb"
+    "content_hash": "7a5d8943962e9a619042610df8ec15c55f3441f06ee2a4ecb77d9238411fd6fb",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:stavropol-001",
@@ -25323,7 +25595,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/tamb-002",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "1c15eb60570c43c955a5869c015cb0e50ea43795270e1f5414f24b9a3ca3ee57"
+    "content_hash": "1c15eb60570c43c955a5869c015cb0e50ea43795270e1f5414f24b9a3ca3ee57",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:tamb-022",
@@ -25407,7 +25683,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/tamb-016",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "530bff610c405cec694de281de68705416d1239897858ebe99ee42fb1aaaef2b"
+    "content_hash": "530bff610c405cec694de281de68705416d1239897858ebe99ee42fb1aaaef2b",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:tamb-011",
@@ -25631,7 +25911,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/tver-017",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "f976f7316c96a387209e067371dacd48bed7f37caf837cfb8d2d48381b5a33c7"
+    "content_hash": "f976f7316c96a387209e067371dacd48bed7f37caf837cfb8d2d48381b5a33c7",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:tver-019",
@@ -26051,7 +26335,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/tomsk-016",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "a353ab1ea05aa88fa72bbe2f2b2142bedc8bd9ff3e5c098feda13d22eb4c24ea"
+    "content_hash": "a353ab1ea05aa88fa72bbe2f2b2142bedc8bd9ff3e5c098feda13d22eb4c24ea",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:tomsk-004",
@@ -26415,7 +26703,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/tula-009",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "b3c2696c9cc11fba265061450ca4d692616d23f684124f1a5facfe565e9c351f"
+    "content_hash": "b3c2696c9cc11fba265061450ca4d692616d23f684124f1a5facfe565e9c351f",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:tula-013",
@@ -26471,7 +26763,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/tula-005",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "b40a8c38363c66648d5102741c4dead3dcd37da2561b025ea245585b4c9d7e00"
+    "content_hash": "b40a8c38363c66648d5102741c4dead3dcd37da2561b025ea245585b4c9d7e00",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:tula-011",
@@ -26527,7 +26823,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/tula-002",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "4ff3da4aa64afffb1fdf7ce15dbab0aa8b02b8b0f90fff39d4e619f828ad22b4"
+    "content_hash": "4ff3da4aa64afffb1fdf7ce15dbab0aa8b02b8b0f90fff39d4e619f828ad22b4",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:tula-024",
@@ -27045,7 +27345,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/udm-001",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "6bb2e9645cebd32b6ebb3e9d7f2383c3bf8c5eeb1e8c72ee8ac228adb8cbeda8"
+    "content_hash": "6bb2e9645cebd32b6ebb3e9d7f2383c3bf8c5eeb1e8c72ee8ac228adb8cbeda8",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:udm-003",
@@ -27087,7 +27391,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/udm-002",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "b5eba854e06a1cd759e21d0b114604dc007899972b6674027a64104b37180e29"
+    "content_hash": "b5eba854e06a1cd759e21d0b114604dc007899972b6674027a64104b37180e29",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:udm-004",
@@ -27465,7 +27773,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/ulyan-001",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "f4ef83d627a3a5d51c0fbd64c2b7417098fe3cb8cb6e9543010787cd2d1f5a0e"
+    "content_hash": "f4ef83d627a3a5d51c0fbd64c2b7417098fe3cb8cb6e9543010787cd2d1f5a0e",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:ulyan-020",
@@ -27535,7 +27847,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/ulyan-002",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "409fbd7c773046f5d82528b67755953bc843fb81079c8473d68fff12214b6bf6"
+    "content_hash": "409fbd7c773046f5d82528b67755953bc843fb81079c8473d68fff12214b6bf6",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:ulyan-011",
@@ -27563,7 +27879,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/ulyan-029",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "b08f09ca3d723f0ea12e3e43ef7d4ec2deb8b5e39c279ac84d0a485824f5101e"
+    "content_hash": "b08f09ca3d723f0ea12e3e43ef7d4ec2deb8b5e39c279ac84d0a485824f5101e",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:ulyan-013",
@@ -27829,7 +28149,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/ulyan-008",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "f526488d82851a17d10c8ba173e054a4439378e2d97632c899adce3dc7c8dccd"
+    "content_hash": "f526488d82851a17d10c8ba173e054a4439378e2d97632c899adce3dc7c8dccd",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:ulyan-003",
@@ -27941,7 +28265,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/khab-002",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "610f91bcc924c57e59e9265b55d76ff2c38956b88e63ecde4feb4abc695e1f7b"
+    "content_hash": "610f91bcc924c57e59e9265b55d76ff2c38956b88e63ecde4feb4abc695e1f7b",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:khab-006",
@@ -28431,7 +28759,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/hmao-001",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "babbb78b3939ca1867b80e7bf1d4660b5689299259604307a8e2aa67ec9c8f75"
+    "content_hash": "babbb78b3939ca1867b80e7bf1d4660b5689299259604307a8e2aa67ec9c8f75",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:hmao-018",
@@ -28459,7 +28791,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/hmao-004",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "dcc4794a9317df5f592e0e455412a4027bad7b8975c635191b6703fd69788392"
+    "content_hash": "dcc4794a9317df5f592e0e455412a4027bad7b8975c635191b6703fd69788392",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:hmao-009",
@@ -28837,7 +29173,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/chel-015",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "15032a2f2ef2cedaf5bacf7aa5fe0996291d5f9701c746db9b8d791934d2a8df"
+    "content_hash": "15032a2f2ef2cedaf5bacf7aa5fe0996291d5f9701c746db9b8d791934d2a8df",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "targeted"
   },
   {
     "id": "sovetmam:chel-009",
@@ -29131,7 +29471,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/chuv-018",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "5144649719a8528c119454fa3e044ab0591a06f4212b43995c7ad435de93e9fb"
+    "content_hash": "5144649719a8528c119454fa3e044ab0591a06f4212b43995c7ad435de93e9fb",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:chuv-017",
@@ -30195,7 +30539,11 @@
     "source_name": "Шпаргалка для родителей — Совет матерей",
     "source_url": "https://app.sovetmam.ru/catalog/yarosl-011",
     "fetched_at": "2026-07-18T14:57:46.123Z",
-    "content_hash": "43f657920de4898077f8083784d1a52d447ddfb3c17936c68838eb40964d8b12"
+    "content_hash": "43f657920de4898077f8083784d1a52d447ddfb3c17936c68838eb40964d8b12",
+    "audiences": [
+      "Студенческие семьи"
+    ],
+    "student_family_relevance": "related"
   },
   {
     "id": "sovetmam:yarosl-031",

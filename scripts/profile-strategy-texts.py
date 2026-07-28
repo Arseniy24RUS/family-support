@@ -105,7 +105,7 @@ def profile_text(text: str, quality: str) -> dict[str, Any]:
             "matches": matches,
             "per_10000_words": per_10000,
         }
-    reliability = "limited" if quality != "full" or token_count < 1500 else "standard"
+    reliability = "unavailable" if token_count == 0 else ("limited" if quality != "full" or token_count < 1500 else "standard")
     return {
         "method": METHOD_VERSION,
         "token_count": token_count,
@@ -146,7 +146,7 @@ def main() -> None:
 
     csv_path = site_root / "data" / "strategies-lexical-profile.csv"
     with csv_path.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.writer(handle, delimiter=";")
+        writer = csv.writer(handle, delimiter=";", lineterminator="\n")
         header = ["document_id", "scope", "territory", "quality", "token_count", "reliability"]
         for theme_id, definition in THEMES.items():
             header += [f"{theme_id}_matches", f"{theme_id}_per_10000_words"]

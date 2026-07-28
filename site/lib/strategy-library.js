@@ -16,6 +16,8 @@ export const STRATEGY_GROUP_LABELS = Object.freeze({
   regional: 'Региональная программа',
   municipal: 'Муниципальная программа',
   strategic: 'Федеральный стратегический документ',
+  implementation: 'Федеральный план реализации',
+  normative: 'Федеральный нормативный акт',
   methodology: 'Методический документ'
 });
 

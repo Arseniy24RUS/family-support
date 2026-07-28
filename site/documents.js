@@ -13,6 +13,14 @@ import {
 
 const PAGE_SIZE = 24;
 const DOCX_RUNTIME_SCRIPTS = ['./vendor/jszip.min.js', './vendor/docx-preview.min.js'];
+const FEDERAL_SECTION_LABELS = Object.freeze({
+  core: 'Действующие основы',
+  implementation: 'Планы реализации',
+  'student-family': 'Студенческие семьи',
+  related: 'Связанные стратегии и указы',
+  methodology: 'Методические материалы',
+  archive: 'Архив до 2025 года'
+});
 
 let docxRuntimePromise = null;
 let documentLoadController = null;
@@ -28,6 +36,7 @@ const state = {
   regionQuery: '',
   quality: 'all',
   temporal: 'all',
+  federalSection: 'all',
   listLimit: PAGE_SIZE,
   currentDocument: null
 };
@@ -38,6 +47,10 @@ const elements = Object.fromEntries([
   'strategy-provenance-note',
   'territorial-document-count',
   'federal-document-count',
+  'federal-collection-guide',
+  'federal-section-shortcuts',
+  'federal-section-filter-wrap',
+  'federal-section-filter',
   'documents-region-filter',
   'documents-region-search',
   'documents-region-summary',
@@ -118,6 +131,7 @@ function currentUrl() {
   if (state.query) url.searchParams.set('q', state.query);
   if (state.quality !== 'all') url.searchParams.set('quality', state.quality);
   if (state.temporal !== 'all') url.searchParams.set('period', state.temporal);
+  if (state.scope === 'federal' && state.federalSection !== 'all') url.searchParams.set('section', state.federalSection);
   if (state.currentDocument?.id) url.searchParams.set('doc', state.currentDocument.id);
   return url;
 }
@@ -135,9 +149,11 @@ function restoreQuery() {
   state.query = params.get('q') || '';
   state.quality = ['full', 'partial', 'unavailable', 'missing'].includes(params.get('quality')) ? params.get('quality') : 'all';
   state.temporal = ['active', 'historical', 'undated'].includes(params.get('period')) ? params.get('period') : 'all';
+  state.federalSection = Object.hasOwn(FEDERAL_SECTION_LABELS, params.get('section')) ? params.get('section') : 'all';
   elements.strategySearchInput.value = state.query;
   elements.strategyQualityFilter.value = state.quality;
   elements.strategyTemporalFilter.value = state.temporal;
+  elements.federalSectionFilter.value = state.federalSection;
   return params.get('doc');
 }
 
@@ -154,7 +170,11 @@ function filteredDocuments() {
     quality: state.quality,
     temporal: state.temporal
   });
-  if (state.scope === 'federal') return filtered;
+  if (state.scope === 'federal') {
+    return state.federalSection === 'all'
+      ? filtered
+      : filtered.filter((strategyDocument) => strategyDocument.federal_section === state.federalSection);
+  }
   const selected = new Set(state.selectedRegions);
   return filtered.filter((strategyDocument) => {
     if (!['regional', 'municipal'].includes(strategyDocument.scope)) return false;
@@ -210,6 +230,30 @@ function renderCorpusProvenance() {
   }
 }
 
+function setFederalSection(section) {
+  state.federalSection = Object.hasOwn(FEDERAL_SECTION_LABELS, section) ? section : 'all';
+  elements.federalSectionFilter.value = state.federalSection;
+  state.listLimit = PAGE_SIZE;
+  renderFederalCollectionGuide();
+  renderDocumentList();
+  syncQuery();
+}
+
+function renderFederalCollectionGuide() {
+  const federal = state.index.documents.filter((item) => item.scope === 'federal');
+  elements.federalSectionShortcuts.replaceChildren();
+  for (const [section, label] of Object.entries(FEDERAL_SECTION_LABELS)) {
+    const count = federal.filter((item) => item.federal_section === section).length;
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.dataset.federalSection = section;
+    button.className = state.federalSection === section ? 'is-active' : '';
+    button.append(createText('strong', label), createText('span', `${formatNumber(count)} док.`));
+    button.addEventListener('click', () => setFederalSection(section));
+    elements.federalSectionShortcuts.append(button);
+  }
+}
+
 function renderRegionChecklist() {
   const selected = new Set(state.selectedRegions);
   const query = normalizeText(state.regionQuery);
@@ -252,6 +296,7 @@ function strategyCardMeta(strategyDocument) {
   if (strategyDocument.availability !== 'available') return strategyQualityLabel(strategyDocument);
   return [
     strategyQualityLabel(strategyDocument),
+    strategyDocument.federal_section ? FEDERAL_SECTION_LABELS[strategyDocument.federal_section] : null,
     strategyDocument.period?.label,
     strategyDocument.pages ? `${formatNumber(strategyDocument.pages)} стр.` : null
   ].filter(Boolean).join(' · ');
@@ -328,6 +373,12 @@ function openDocument(strategyDocument, { updateUrl = true } = {}) {
     ['Нормативное основание', strategyDocument.act || 'в метаданных корпуса не установлено'],
     ['Период', strategyDocument.period?.label || 'не установлен'],
     ['Временной статус', strategyTemporalLabel(strategyDocument)],
+    ...(strategyDocument.federal_section
+      ? [['Раздел федеральной базы', FEDERAL_SECTION_LABELS[strategyDocument.federal_section]]]
+      : []),
+    ...(strategyDocument.source_verified_at
+      ? [['Официальный источник проверен', formatDate(strategyDocument.source_verified_at)]]
+      : []),
     ['Объём', strategyDocument.pages ? `${formatNumber(strategyDocument.pages)} стр.; ${formatFileSize(strategyDocument.size_bytes)}` : 'файл недоступен'],
     ['Контрольная сумма', strategyDocument.sha256 ? `SHA-256: ${strategyDocument.sha256}` : 'не рассчитывалась'],
     ['Исходное имя', strategyDocument.source_filename || 'не указано'],
@@ -551,6 +602,8 @@ function updateScope() {
   for (const tab of elements.scopeTabs) tab.setAttribute('aria-selected', String(tab.dataset.documentScope === state.scope));
   elements.documentsRegionFilter.disabled = state.scope === 'federal';
   elements.documentsRegionFilter.classList.toggle('is-disabled', state.scope === 'federal');
+  elements.federalCollectionGuide.hidden = state.scope !== 'federal';
+  elements.federalSectionFilterWrap.hidden = state.scope !== 'federal';
 }
 
 function setupControls() {
@@ -599,6 +652,9 @@ function setupControls() {
     renderDocumentList();
     syncQuery();
   });
+  elements.federalSectionFilter.addEventListener('change', () => {
+    setFederalSection(elements.federalSectionFilter.value);
+  });
   elements.strategyLoadMore.addEventListener('click', () => {
     state.listLimit += PAGE_SIZE;
     renderDocumentList();
@@ -620,6 +676,7 @@ async function initialize() {
     renderStatus();
     renderCorpusStats();
     renderCorpusProvenance();
+    renderFederalCollectionGuide();
     renderRegionChecklist();
     updateScope();
     renderDocumentList();

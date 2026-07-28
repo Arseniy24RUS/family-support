@@ -1,4 +1,10 @@
-import { buildIssueUrl, inferProviderType, safeLocalStorage } from './lib/platform-core.js';
+import {
+  buildIssueUrl,
+  inferProviderType,
+  measureCategoryValues,
+  measureMatchesCategory,
+  safeLocalStorage
+} from './lib/platform-core.js';
 import { createRussiaLambertProjection } from './lib/russia-map-projection.js';
 
 const PAGE_SIZE = 12;
@@ -443,8 +449,9 @@ function buildCategoryCounts() {
   state.regionalCounts = new Map();
   state.federalCount = 0;
   for (const measure of state.measures) {
-    const category = measure.category || 'Прочие меры';
-    state.categoryCounts.set(category, (state.categoryCounts.get(category) || 0) + 1);
+    for (const category of measureCategoryValues(measure)) {
+      state.categoryCounts.set(category, (state.categoryCounts.get(category) || 0) + 1);
+    }
     if (measure.level === 'federal') {
       state.federalCount += 1;
     } else if (measure.region) {
@@ -641,6 +648,7 @@ function createMeasureCard(measure) {
   tags.className = 'measure-card__tags';
   tags.append(createStatusTag(levelLabel(measure)));
   if (measure.level === 'regional' && measure.region) tags.append(createStatusTag(measure.region, true));
+  if (measure.audiences?.includes('Студенческие семьи')) tags.append(createStatusTag('Студенческие семьи', true));
   const headActions = document.createElement('div');
   headActions.className = 'measure-card__head-actions';
   headActions.append(tags, createFavoriteButton(measure));
@@ -754,7 +762,7 @@ function applyFilters({ preservePage = false } = {}) {
 
   state.filtered = state.measures.filter((measure) => {
     const regionMatches = !region || measure.level === 'federal' || measure.region === region;
-    const categoryMatches = !category || measure.category === category;
+    const categoryMatches = measureMatchesCategory(measure, category);
     const levelMatches = !level || measure.level === level;
     const haystack = normalize([
       measure.title,
@@ -762,6 +770,7 @@ function applyFilters({ preservePage = false } = {}) {
       measure.benefit,
       measure.region,
       measure.category,
+      ...(Array.isArray(measure.audiences) ? measure.audiences : []),
       sourceName(measure)
     ].join(' '));
     const favoriteMatches = !state.favoritesOnly || state.favoriteIds.has(measure.id);
@@ -989,6 +998,7 @@ function renderMeasureDetail(measure, detail) {
   const metadataRows = [
     ['Поставщик / уровень', `${provider.label}${provider.inferred ? ' (определено автоматически, требует проверки)' : ''}`],
     ['Территория', measure.level === 'regional' ? (measure.region || 'Регион не указан') : 'Российская Федерация'],
+    ...(measure.audiences?.length ? [['Категория получателей', measure.audiences.join(', ')]] : []),
     ['Источник описания', sourceName(measure)],
     ['Дата получения карточки', formatDate(measure.fetched_at)],
     ['Официальный маршрут', links.length ? `Подтверждено ссылок: ${links.length}` : 'В карточке отсутствует'],
@@ -1039,7 +1049,12 @@ async function openMeasureDialog(measure, { reuse = false } = {}) {
   state.requestedMeasureId = measure.id;
   syncQuery();
   elements.measureDialogTitle.textContent = measure.title;
-  elements.measureDialogScope.textContent = [levelLabel(measure), measure.region, measure.category].filter(Boolean).join(' · ');
+  elements.measureDialogScope.textContent = [
+    levelLabel(measure),
+    measure.region,
+    measure.category,
+    ...(Array.isArray(measure.audiences) ? measure.audiences : [])
+  ].filter(Boolean).join(' · ');
 
   const loading = document.createElement('div');
   loading.className = 'measure-dialog__loading';

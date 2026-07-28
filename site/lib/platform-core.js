@@ -69,8 +69,20 @@ export function measureSearchText(measure) {
     measure?.benefit,
     measure?.region,
     measure?.category,
+    ...(Array.isArray(measure?.audiences) ? measure.audiences : []),
     sourceName(measure)
   ].join(' '));
+}
+
+export function measureCategoryValues(measure) {
+  return [...new Set([
+    measure?.category || 'Прочие меры',
+    ...(Array.isArray(measure?.audiences) ? measure.audiences : [])
+  ].filter(Boolean))];
+}
+
+export function measureMatchesCategory(measure, category) {
+  return !category || measureCategoryValues(measure).includes(category);
 }
 
 export function measureMatchesRegion(measure, region) {

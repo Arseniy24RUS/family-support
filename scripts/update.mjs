@@ -3,6 +3,7 @@ import { scrapeSovetmam } from './adapters/sovetmam.mjs';
 import { readJson, writeJsonAtomic } from './lib/io.mjs';
 import { validateSnapshot } from './lib/validate.mjs';
 import { detailShardKey } from './lib/details.mjs';
+import { annotateMeasureAudiences, STUDENT_FAMILY_AUDIENCE } from './lib/audiences.mjs';
 
 const dataDirectory = resolve('site/data');
 const measuresPath = resolve(dataDirectory, 'measures.json');
@@ -16,6 +17,7 @@ const baseRegions = await readJson(regionsBasePath, []);
 
 console.log('Получение каталога мер поддержки…');
 const result = await scrapeSovetmam();
+result.measures = annotateMeasureAudiences(result.measures);
 const validation = validateSnapshot({
   measures: result.measures,
   reportedCount: result.reportedCount,
@@ -54,6 +56,8 @@ if (validation.errors.length) {
     measure_count: result.measures.length,
     region_count: validation.stats.regions,
     category_count: validation.stats.categories,
+    audience_count: 1,
+    student_family_measure_count: result.measures.filter((item) => item.audiences?.includes(STUDENT_FAMILY_AUDIENCE)).length,
     parse_error_count: result.parseErrors.length,
     detail_count: result.details.length,
     detail_error_count: result.detailErrors.length,

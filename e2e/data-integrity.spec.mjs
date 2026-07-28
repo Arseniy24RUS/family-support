@@ -60,7 +60,8 @@ test('снимок данных полон, уникален и согласов
 test('все фактические категории доступны в фильтре и имеют SVG-иконки', async ({ page }) => {
   await openReady(page);
   const measures = await jsonFrom(page, '/data/measures.json');
-  const categories = [...new Set(measures.map((item) => item.category))].sort((a, b) => a.localeCompare(b, 'ru'));
+  const categories = [...new Set(measures.flatMap((item) => [item.category, ...(item.audiences || [])]))]
+    .sort((a, b) => a.localeCompare(b, 'ru'));
   const options = await page.locator('#category-filter option').evaluateAll((nodes) => nodes.slice(1).map((node) => node.value).sort((a, b) => a.localeCompare(b, 'ru')));
   expect(options).toEqual(categories);
   await expect(page.locator('.category-card')).toHaveCount(categories.length);

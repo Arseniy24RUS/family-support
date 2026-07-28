@@ -37,6 +37,115 @@
   height: 15px;
 }
 
+.federal-collection-guide {
+  margin-top: 12px;
+  padding: 18px;
+  border: 1px solid rgb(141 216 202 / 0.24);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 92% 10%, rgb(141 216 202 / 0.14), transparent 34%),
+    rgb(255 255 255 / 0.07);
+}
+
+.federal-collection-guide[hidden] {
+  display: none;
+}
+
+.federal-collection-guide__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.federal-collection-guide__heading span {
+  color: #8dd8ca;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.federal-collection-guide__heading h3 {
+  margin: 5px 0 4px;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.federal-collection-guide__heading p {
+  max-width: 730px;
+  margin: 0;
+  color: rgb(255 255 255 / 0.7);
+  font-size: 0.68rem;
+  line-height: 1.5;
+}
+
+.federal-collection-guide__heading > a {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 9px 12px;
+  border: 1px solid rgb(141 216 202 / 0.34);
+  border-radius: 9px;
+  background: rgb(141 216 202 / 0.1);
+  color: #fff;
+  font-size: 0.64rem;
+  font-weight: 760;
+  text-decoration: none;
+}
+
+.federal-collection-guide__heading > a svg {
+  width: 16px;
+  height: 16px;
+  color: #8dd8ca;
+}
+
+.federal-section-shortcuts {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 15px;
+}
+
+.federal-section-shortcuts button {
+  min-width: 0;
+  min-height: 58px;
+  display: grid;
+  align-content: center;
+  gap: 3px;
+  padding: 9px 10px;
+  border: 1px solid rgb(255 255 255 / 0.13);
+  border-radius: 9px;
+  background: rgb(255 255 255 / 0.055);
+  color: rgb(255 255 255 / 0.76);
+  text-align: left;
+  cursor: pointer;
+}
+
+.federal-section-shortcuts button:hover,
+.federal-section-shortcuts button.is-active {
+  border-color: rgb(141 216 202 / 0.55);
+  background: rgb(141 216 202 / 0.13);
+  color: #fff;
+}
+
+.federal-section-shortcuts strong,
+.federal-section-shortcuts span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.federal-section-shortcuts strong {
+  font-size: 0.62rem;
+}
+
+.federal-section-shortcuts span {
+  color: #8dd8ca;
+  font-size: 0.57rem;
+}
+
 .documents-filter-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.45fr) minmax(290px, 0.55fr);
@@ -237,6 +346,10 @@
   .documents-primary-filters {
     grid-template-columns: minmax(220px, 1.4fr) repeat(2, minmax(170px, 0.8fr));
   }
+
+  .federal-section-shortcuts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 760px) {
@@ -263,5 +376,18 @@
 
   .documents-primary-filters {
     grid-template-columns: 1fr;
+  }
+
+  .federal-collection-guide__heading {
+    flex-direction: column;
+  }
+
+  .federal-collection-guide__heading > a {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .federal-section-shortcuts {
+    grid-template-columns: 1fr 1fr;
   }
 }

@@ -1,4 +1,10 @@
-import { measureMatchesRegion, measureSearchText, normalizeText, tokenize } from './platform-core.js';
+import {
+  measureCategoryValues,
+  measureMatchesRegion,
+  measureSearchText,
+  normalizeText,
+  tokenize
+} from './platform-core.js';
 
 const situation = (id, title, description, icon, patterns, categories = []) => ({
   id,
@@ -34,7 +40,10 @@ export const LIFE_SITUATIONS = Object.freeze([
   situation('preschool', 'Детский сад и дошкольное образование', 'Очередь, отсутствие места, компенсация платы и питание.', 'school', [
     'детск.{0,10}сад', 'дошколь', 'не предоставлен.{0,20}мест', 'компенсац.{0,25}родительск.{0,15}плат', 'присмотр.{0,15}уход'
   ], ['образ', 'детсад', 'школ']),
-  situation('education', 'Школа, колледж, вуз или студенческая семья', 'Питание, проезд, обучение, общежитие и поддержка студентов-родителей.', 'graduation-cap', [
+  situation('student-family', 'Студенческая семья', 'Оба супруга учатся в колледже или вузе либо учится единственный родитель; возраст — до 35 лет включительно.', 'book-heart', [
+    'студенческ.{0,15}сем', 'родител.{0,12}студент', 'студент.{0,12}родител', 'беременн.{0,15}студент'
+  ], ['студенческ', 'образ']),
+  situation('education', 'Школа, колледж или вуз', 'Питание, проезд, обучение, общежитие и общие образовательные гарантии.', 'graduation-cap', [
     'школ', 'обучен', 'образован', 'студент', 'вуз', 'университет', 'колледж', 'общежити', 'школьн.{0,15}питан'
   ], ['образ', 'школ', 'проезд', 'транспорт']),
   situation('housing', 'Жилищный вопрос', 'Ипотека, субсидии, земельные участки и улучшение жилищных условий.', 'house', [
@@ -66,7 +75,7 @@ export const PROFILE_FACTS = Object.freeze([
   fact('child-disabled', 'У ребёнка установлена инвалидность или ОВЗ', ['ребен.{0,15}инвалид', 'дет.{0,15}инвалид', '\\bовз\\b', 'ограниченн.{0,15}возможност']),
   fact('adoptive-family', 'Семья усыновила ребёнка или оформила опеку', ['усынов', 'удочер', 'опек', 'попечител', 'приемн.{0,15}сем']),
   fact('single-parent', 'Ребёнка воспитывает один родитель', ['неполн.{0,15}сем', 'одинок.{0,15}родител', 'единственн.{0,15}родител', 'алимент']),
-  fact('student-family', 'Один или оба родителя учатся', ['студент', 'вуз', 'университет', 'колледж', 'обучающ']),
+  fact('student-family', 'Оба супруга учатся в СПО/вузе либо учится единственный родитель; возраст до 35 лет', ['студенческ.{0,15}сем', 'родител.{0,12}студент', 'студент.{0,12}родител']),
   fact('military-family', 'Есть военнослужащий или участник боевых действий', ['военнослуж', 'мобилиз', 'участник.{0,15}(сво|боев)', 'ветеран.{0,15}боев']),
   fact('employment-change', 'Изменился статус занятости или снизился трудовой доход', ['безработ', 'занятост', 'трудоустрой', 'самозанят', 'социальн.{0,15}контракт']),
   fact('preschool-no-place', 'Ребёнку не предоставлено место в детском саду', ['не предоставлен.{0,20}мест', 'очеред.{0,15}детск.{0,10}сад', 'компенсац.{0,20}детск.{0,10}сад']),
@@ -85,9 +94,11 @@ function matchingPatterns(text, patterns) {
   return patterns.filter((pattern) => matchesPattern(text, pattern));
 }
 
-function normalizedCategoryMatch(category, candidates) {
-  const normalized = normalizeText(category);
-  return candidates.some((candidate) => normalized.includes(normalizeText(candidate)));
+function normalizedCategoryMatch(categories, candidates) {
+  return categories.some((category) => {
+    const normalized = normalizeText(category);
+    return candidates.some((candidate) => normalized.includes(normalizeText(candidate)));
+  });
 }
 
 const constraintDetectors = Object.freeze([
@@ -115,6 +126,8 @@ function tierForScore(score) {
 export function scoreMeasureForProfile(measure, profile) {
   const selectedSituation = LIFE_SITUATIONS.find((item) => item.id === profile?.situationId);
   if (!selectedSituation || !measureMatchesRegion(measure, profile?.region)) return null;
+  const isStudentFamilyMeasure = measure?.audiences?.includes('Студенческие семьи');
+  if (selectedSituation.id === 'student-family' && !isStudentFamilyMeasure) return null;
 
   const title = normalizeText(measure?.title);
   const text = measureSearchText(measure);
@@ -123,20 +136,31 @@ export function scoreMeasureForProfile(measure, profile) {
   const matchedSituation = matchingPatterns(text, selectedSituation.patterns);
   const matchedSituationTitle = matchingPatterns(title, selectedSituation.patterns);
 
-  if (matchedSituationTitle.length) score += Math.min(7, 4.5 + matchedSituationTitle.length * 0.75);
+  if (selectedSituation.id === 'student-family') {
+    score += measure.student_family_relevance === 'targeted' ? 8 : 6;
+    reasons.push(measure.student_family_relevance === 'targeted'
+      ? 'Мера прямо адресована студенческим семьям или родителям-студентам'
+      : 'Мера непосредственно связана с беременностью или рождением ребёнка у обучающейся');
+  } else if (matchedSituationTitle.length) score += Math.min(7, 4.5 + matchedSituationTitle.length * 0.75);
   else if (matchedSituation.length) score += Math.min(5, 2.5 + matchedSituation.length * 0.5);
 
-  if (matchedSituation.length) {
+  if (matchedSituation.length && selectedSituation.id !== 'student-family') {
     reasons.push(`Текст карточки связан с ситуацией «${selectedSituation.title}»`);
   }
 
-  if (normalizedCategoryMatch(measure?.category, selectedSituation.categories)) {
+  if (normalizedCategoryMatch(measureCategoryValues(measure), selectedSituation.categories)) {
     score += 1.25;
-    reasons.push(`Категория «${measure.category}» релевантна выбранной ситуации`);
+    reasons.push('Категория меры релевантна выбранной ситуации');
   }
 
   const selectedFacts = PROFILE_FACTS.filter((item) => profile?.factIds?.includes(item.id));
   for (const selectedFact of selectedFacts) {
+    if (selectedFact.id === 'student-family') {
+      if (!isStudentFamilyMeasure) continue;
+      score += 2.75;
+      reasons.push('Учтено соответствие официальной категории «студенческая семья»');
+      continue;
+    }
     const titleMatches = matchingPatterns(title, selectedFact.patterns);
     const bodyMatches = titleMatches.length ? titleMatches : matchingPatterns(text, selectedFact.patterns);
     if (!bodyMatches.length) continue;
@@ -152,7 +176,7 @@ export function scoreMeasureForProfile(measure, profile) {
   }
 
   if (measure?.level === 'regional' && measure?.region === profile?.region) score += 0.35;
-  if (score < 2.5 || !matchedSituation.length && reasons.length < 2) return null;
+  if (score < 2.5 || selectedSituation.id !== 'student-family' && !matchedSituation.length && reasons.length < 2) return null;
 
   reasons.push(measure?.level === 'federal'
     ? 'Федеральная запись учитывается для любого выбранного региона'

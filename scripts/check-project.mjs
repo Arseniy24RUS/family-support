@@ -230,6 +230,17 @@ if (process.env.ALLOW_DEMO !== '1') {
 }
 
 assert(Number(meta.measure_count) === measures.length, 'measure_count не совпадает с числом мер.');
+const studentFamilyMeasures = measures.filter((measure) => measure.audiences?.includes('Студенческие семьи'));
+assert(studentFamilyMeasures.length > 0, 'В каталоге отсутствует сквозная категория «Студенческие семьи».');
+assert(Number(meta.student_family_measure_count) === studentFamilyMeasures.length,
+  'student_family_measure_count не совпадает с числом размеченных карточек.');
+for (const measure of studentFamilyMeasures) {
+  assert(['targeted', 'related'].includes(measure.student_family_relevance),
+    `Некорректная релевантность студенческой семье у ${measure.id}.`);
+}
+assert(situationsHtml.includes('id="student-family-definition"')
+  && situationsHtml.includes('https://publication.pravo.gov.ru/document/0001202507230065'),
+  'situations.html: отсутствует определение студенческой семьи или ссылка на закон № 258-ФЗ.');
 assert(Number(meta.detail_count) === measures.length, 'detail_count не совпадает с числом мер.');
 assert(Number(detailManifest.measure_count) === measures.length, 'Манифест подробностей не совпадает с каталогом.');
 assert(Number(detailManifest.detail_count) === measures.length, 'detail_count манифеста не совпадает с каталогом.');
