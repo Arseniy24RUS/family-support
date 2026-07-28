@@ -28,7 +28,7 @@ permissions:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
-  SYNC_REVISION: "3"
+  SYNC_REVISION: "4"
   SYNC_SCOPE: ${{ inputs.scope || 'extended' }}
   FORCE_REFRESH: ${{ github.event_name == 'push' || inputs.force_refresh }}
 
