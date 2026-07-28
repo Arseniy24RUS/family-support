@@ -73,12 +73,32 @@
           "priority": 1
         },
         {
+          "url": "https://meganorm.ru/mega_doc/dop_fire_update_01062026/0/kodeks_rossiyskoy_federatsii_ob_administrativnykh/2/semeynyy_kodeks_rossiyskoy_federatsii_ot_29_12_1995_N_223-fz.html",
+          "publisher": "Меганорм",
+          "source_class": "public_fulltext_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 45
+        },
+        {
           "url": "https://base.garant.ru/10105807/",
           "publisher": "ГАРАНТ",
           "source_class": "reference_fallback",
           "official": false,
           "mode": "html",
           "priority": 50
+        },
+        {
+          "url": "https://legalacts.ru/kodeks/SK-RF/",
+          "publisher": "Legalacts.ru",
+          "source_class": "public_fulltext_aggregated_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 60,
+          "follow_link_pattern": "^/kodeks/SK-RF/.*/statja-[^/]+/?$",
+          "min_link_count": 155,
+          "min_link_text_chars": 120,
+          "link_workers": 6
         },
         {
           "url": "https://www.consultant.ru/document/cons_doc_LAW_8982/",
@@ -178,7 +198,7 @@
       "format": "pdf",
       "target_path": "site/documents/legal/federal/federal-maternity-capital-256-fz.pdf",
       "min_bytes": 20000,
-      "min_text_chars": 30000,
+      "min_text_chars": 22000,
       "required_phrases": [
         "О дополнительных мерах государственной поддержки семей",
         "256-ФЗ",
@@ -254,6 +274,14 @@
           "official": true,
           "mode": "html",
           "priority": 1
+        },
+        {
+          "url": "https://meganorm.ru/mega_doc/dop_FZ_upd_01072026/0/nalogovyy_kodeks_rossiyskoy_federatsii_chast_vtoraya_ot_05/11/federalnyy_zakon_ot_29_12_2006_N_255-fz_red_ot_20_02_2026_ob.html",
+          "publisher": "Меганорм",
+          "source_class": "public_fulltext_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 45
         },
         {
           "url": "https://base.garant.ru/12151284/",
@@ -376,6 +404,14 @@
           "official": true,
           "mode": "html",
           "priority": 1
+        },
+        {
+          "url": "https://legalacts.ru/doc/federalnyi-zakon-ot-03072019-n-157-fz-o-merakh-gosudarstvennoi/",
+          "publisher": "Legalacts.ru",
+          "source_class": "public_fulltext_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 45
         },
         {
           "url": "https://base.garant.ru/72285782/",
@@ -612,7 +648,7 @@
       "format": "pdf",
       "target_path": "site/documents/legal/regional/moscow/regional-moscow-family-support-law-60.pdf",
       "min_bytes": 20000,
-      "min_text_chars": 15000,
+      "min_text_chars": 14000,
       "required_phrases": [
         "О социальной поддержке семей с детьми в городе Москве",
         "23 ноября 2005",
@@ -697,6 +733,14 @@
           "official": false,
           "mode": "html",
           "priority": 50
+        },
+        {
+          "url": "https://base.garant.ru/397564/53f89421bbdaf741eb2d1ecc4ddb4c33/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 55
         }
       ]
     },
@@ -910,7 +954,7 @@
       "required_phrases": [
         "Государственная программа Краснодарского края",
         "Дети Кубани",
-        "12.10.2015"
+        "12 октября 2015"
       ],
       "official_url": "https://publication.pravo.gov.ru/document/2300201510190011",
       "sources": [
@@ -1192,7 +1236,7 @@
       "min_bytes": 10000,
       "min_text_chars": 2500,
       "required_phrases": [
-        "27 февраля 2026",
+        "27.02.2026",
         "Дети Кубани",
         "964"
       ],

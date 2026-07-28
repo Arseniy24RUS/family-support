@@ -215,6 +215,78 @@ async function extractDocumentHtml(page) {
   });
 }
 
+async function aggregateLinkedDocument(context, source, indexPage, indexExtracted) {
+  const pattern = String(source.follow_link_pattern ?? '');
+  if (!pattern) return { extracted: indexExtracted, componentCount: 0, componentStatuses: [] };
+
+  const links = await indexPage.evaluate((patternSource) => {
+    const matcher = new RegExp(patternSource, 'iu');
+    const seen = new Set();
+    const ordered = [];
+    for (const anchor of document.querySelectorAll('a[href]')) {
+      const url = new URL(anchor.href, document.baseURI);
+      if (url.origin !== location.origin || !matcher.test(`${url.pathname}${url.search}`)) continue;
+      url.hash = '';
+      const normalized = url.href;
+      if (seen.has(normalized)) continue;
+      seen.add(normalized);
+      ordered.push(normalized);
+    }
+    return ordered;
+  }, pattern);
+
+  const minimumLinks = Number(source.min_link_count ?? 1);
+  if (links.length < minimumLinks) {
+    throw new Error(`неполный индекс документа: найдено ссылок ${links.length}, требуется не менее ${minimumLinks}`);
+  }
+
+  const sections = new Array(links.length);
+  const statuses = new Array(links.length);
+  let cursor = 0;
+  const workerCount = Math.min(Number(source.link_workers ?? 6), links.length);
+  const timeout = Number(source.timeout_ms ?? 20000);
+
+  await Promise.all(Array.from({ length: workerCount }, async () => {
+    const workerPage = await context.newPage();
+    workerPage.setDefaultTimeout(12000);
+    await workerPage.setExtraHTTPHeaders({ 'Accept-Language': 'ru-RU,ru;q=0.9,en;q=0.4' });
+    try {
+      while (cursor < links.length) {
+        const index = cursor++;
+        const url = links[index];
+        const response = await workerPage.goto(url, { waitUntil: 'domcontentloaded', timeout });
+        const status = response?.status() ?? 0;
+        if (status < 200 || status >= 300) throw new Error(`HTTP ${status || 'не определён'}: ${url}`);
+        const bodyText = await workerPage.locator('body').innerText({ timeout: 12000 }).catch(() => '');
+        const marker = blockedMarker(bodyText);
+        if (marker) throw new Error(`страница компонента заблокирована (${marker}): ${url}`);
+        const extracted = await extractDocumentHtml(workerPage);
+        const chars = extracted.text.replace(/\s+/gu, ' ').trim().length;
+        if (chars < Number(source.min_link_text_chars ?? 80)) {
+          throw new Error(`пустой компонент документа (${chars} символов): ${url}`);
+        }
+        statuses[index] = status;
+        sections[index] = {
+          html: `<section class="archive-linked-page" data-source-url="${escapeHtml(url)}">${extracted.html}</section>`,
+          text: extracted.text
+        };
+      }
+    } finally {
+      await workerPage.close().catch(() => {});
+    }
+  }));
+
+  return {
+    extracted: {
+      pageTitle: indexExtracted.pageTitle,
+      html: `${indexExtracted.html}\n${sections.map((section) => section.html).join('\n')}`,
+      text: `${indexExtracted.text}\n${sections.map((section) => section.text).join('\n')}`
+    },
+    componentCount: links.length,
+    componentStatuses: statuses
+  };
+}
+
 function printableHtml(item, source, finalUrl, retrievedAt, extracted) {
   const cover = `
     <section class="archive-cover">
@@ -248,6 +320,7 @@ dd { margin: 0; overflow-wrap: anywhere; }
 .archive-document p { margin: 0 0 3mm; text-align: justify; }
 .archive-document table { border-collapse: collapse; width: 100%; margin: 4mm 0; font-size: 9pt; }
 .archive-document tr { page-break-inside: avoid; }
+.archive-linked-page { break-before: page; }
 .archive-document th, .archive-document td { border: .35pt solid #666; padding: 1.8mm; vertical-align: top; }
 .archive-document img { max-width: 100%; height: auto; }
 .archive-document a { color: inherit; text-decoration: none; }
@@ -262,7 +335,10 @@ async function renderHtmlSource(context, item, source, targetPath) {
   try {
     page.setDefaultTimeout(15000);
     await page.setExtraHTTPHeaders({ 'Accept-Language': 'ru-RU,ru;q=0.9,en;q=0.4' });
-    const response = await page.goto(source.url, { waitUntil: 'domcontentloaded', timeout: 45000 });
+    const response = await page.goto(source.url, {
+      waitUntil: 'domcontentloaded',
+      timeout: Number(source.timeout_ms ?? 20000)
+    });
     const httpStatus = response?.status() ?? 0;
     if (httpStatus < 200 || httpStatus >= 300) throw new Error(`HTTP ${httpStatus || 'не определён'}`);
     await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {});
@@ -275,7 +351,9 @@ async function renderHtmlSource(context, item, source, targetPath) {
     const bodyText = await page.locator('body').innerText({ timeout: 15000 }).catch(() => '');
     const marker = blockedMarker(bodyText);
     if (marker) throw new Error(`страница заблокирована или ошибочна: ${marker}`);
-    const extracted = await extractDocumentHtml(page);
+    let extracted = await extractDocumentHtml(page);
+    const aggregate = await aggregateLinkedDocument(context, source, page, extracted);
+    extracted = aggregate.extracted;
     const textChars = extracted.text.replace(/\s+/gu, ' ').trim().length;
     if (textChars < Number(item.min_text_chars ?? 1000)) {
       throw new Error(`недостаточный объём текста: ${textChars}`);
@@ -318,7 +396,9 @@ async function renderHtmlSource(context, item, source, targetPath) {
       source_is_official: Boolean(source.official),
       source_http_status: httpStatus,
       content_type: response?.headers()['content-type'] ?? 'text/html',
-      method: 'rendered_fulltext_pdf',
+      method: aggregate.componentCount ? 'rendered_aggregated_fulltext_pdf' : 'rendered_fulltext_pdf',
+      component_count: aggregate.componentCount,
+      component_http_statuses: aggregate.componentStatuses,
       retrieved_at: retrievedAt,
       ...inspection,
       text_preview: extracted.text.replace(/\s+/gu, ' ').trim().slice(0, 1800)
@@ -356,7 +436,7 @@ function extractPdfRange(downloadPath, outputPath, pageRange) {
 
 async function downloadBinarySource(request, item, source, targetPath) {
   const response = await request.get(source.url, {
-    timeout: 60000,
+    timeout: Number(source.timeout_ms ?? 30000),
     maxRedirects: 10,
     failOnStatusCode: false
   });
