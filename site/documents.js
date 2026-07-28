@@ -187,7 +187,7 @@ function renderStatus() {
   elements.dataStatus.querySelector('span').textContent = [
     `В реестре ${formatNumber(state.index.documents.length)} документов и записей покрытия.`,
     `${formatNumber(stats.regional_full ?? 0)} полных и ${formatNumber(stats.regional_partial ?? 0)} частичных региональных текстов.`,
-    `Доступные PDF: ${formatNumber(stats.available_files ?? 0)}; всего ${formatNumber(stats.total_pages ?? 0)} страниц.`
+    `Доступные файлы: ${formatNumber(stats.available_files ?? 0)}; всего ${formatNumber(stats.total_pages ?? 0)} страниц.`
   ].join(' ');
 }
 
@@ -199,7 +199,7 @@ function renderCorpusStats() {
     [coverage.full ?? 0, 'полных региональных текстов'],
     [coverage.partial ?? 0, 'частичных региональных материалов'],
     [state.index.documents.filter((item) => item.scope === 'federal').length, 'федеральных документов'],
-    [stats.total_pages ?? 0, 'страниц в доступных PDF']
+    [stats.total_pages ?? 0, 'страниц в доступных файлах']
   ];
   elements.strategyCorpusStats.replaceChildren();
   for (const [value, label] of cards) {
@@ -379,6 +379,12 @@ function openDocument(strategyDocument, { updateUrl = true } = {}) {
     ...(strategyDocument.source_verified_at
       ? [['Официальный источник проверен', formatDate(strategyDocument.source_verified_at)]]
       : []),
+    ...(strategyDocument.retrieved_at
+      ? [['Файл получен', formatDate(strategyDocument.retrieved_at)]]
+      : []),
+    ...(strategyDocument.source_publisher
+      ? [['Источник полного текста', strategyDocument.source_publisher]]
+      : []),
     ['Объём', strategyDocument.pages ? `${formatNumber(strategyDocument.pages)} стр.; ${formatFileSize(strategyDocument.size_bytes)}` : 'файл недоступен'],
     ['Контрольная сумма', strategyDocument.sha256 ? `SHA-256: ${strategyDocument.sha256}` : 'не рассчитывалась'],
     ['Исходное имя', strategyDocument.source_filename || 'не указано'],
@@ -406,10 +412,11 @@ function renderViewerActions(strategyDocument) {
     const download = document.createElement('a');
     download.href = strategyDocument.download_url;
     download.download = '';
-    download.append(icon('download'), document.createTextNode('Скачать PDF'));
+    const format = String(strategyDocument.file_format || 'pdf').toUpperCase();
+    download.append(icon('download'), document.createTextNode(`Скачать ${format}`));
     elements.strategyViewerActions.append(download);
   }
-  if (strategyDocument.original_url) {
+  if (strategyDocument.original_url && strategyDocument.original_url !== strategyDocument.download_url) {
     const original = document.createElement('a');
     original.href = strategyDocument.original_url;
     original.download = '';
@@ -462,10 +469,12 @@ function resetDocumentStage() {
 
 function prepareDocumentStage(strategyDocument) {
   resetDocumentStage();
-  elements.loadStrategyPdf.hidden = false;
-  elements.loadStrategyDocx.hidden = !canRenderDocx(strategyDocument);
+  const hasPdf = Boolean(strategyDocument.pdf_url);
+  const hasDocx = canRenderDocx(strategyDocument);
+  elements.loadStrategyPdf.hidden = !hasPdf;
+  elements.loadStrategyDocx.hidden = !hasDocx;
   elements.strategyDocumentStage.querySelector('.strategy-unavailable-stage')?.remove();
-  if (strategyDocument.availability !== 'available' || !strategyDocument.pdf_url) {
+  if (strategyDocument.availability !== 'available' || (!hasPdf && !hasDocx)) {
     elements.strategyDocumentConsent.hidden = true;
     const unavailable = document.createElement('div');
     unavailable.className = 'strategy-unavailable-stage';
@@ -477,9 +486,9 @@ function prepareDocumentStage(strategyDocument) {
     refreshIcons();
     return;
   }
-  const formats = canRenderDocx(strategyDocument) ? 'PDF или исходный DOCX' : 'PDF';
-  elements.strategyDocumentConsentTitle.textContent = `${formats} пока не загружен${canRenderDocx(strategyDocument) ? 'ы' : ''}`;
-  elements.strategyDocumentConsentText.textContent = `${formatNumber(strategyDocument.pages || 0)} стр., PDF — ${formatFileSize(strategyDocument.size_bytes)}. Выберите формат для просмотра внутри страницы; остальные файлы останутся незагруженными.`;
+  const formats = hasPdf && hasDocx ? 'PDF или исходный DOCX' : hasDocx ? 'DOCX' : 'PDF';
+  elements.strategyDocumentConsentTitle.textContent = `${formats} пока не загружен${hasPdf && hasDocx ? 'ы' : ''}`;
+  elements.strategyDocumentConsentText.textContent = `${formatNumber(strategyDocument.pages || 0)} стр., ${formatFileSize(strategyDocument.size_bytes)}. Выберите доступный формат для просмотра внутри страницы; остальные файлы останутся незагруженными.`;
 }
 
 function loadCurrentPdf() {

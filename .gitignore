@@ -1,4 +1,7 @@
 node_modules/
+__pycache__/
+*.py[cod]
+build/
 debug/*
 !debug/.gitkeep
 .DS_Store
@@ -7,3 +10,6 @@ playwright-report/
 test-results/
 artifacts/
 .runtime-tmp/
+*.part
+chromium-profile/
+.browser-profile/

@@ -16,8 +16,8 @@ export const STRATEGY_GROUP_LABELS = Object.freeze({
   regional: 'Региональная программа',
   municipal: 'Муниципальная программа',
   strategic: 'Федеральный стратегический документ',
-  implementation: 'Федеральный план реализации',
-  normative: 'Федеральный нормативный акт',
+  implementation: 'Программный документ и план реализации',
+  normative: 'Нормативный правовой акт',
   methodology: 'Методический документ'
 });
 
@@ -61,7 +61,7 @@ export function createStrategyIndex(corpus) {
     if (!byGroup.has(document.group)) byGroup.set(document.group, []);
     byGroup.get(document.group).push(document);
 
-    if (document.scope === 'regional' && document.territory) {
+    if (document.scope === 'regional' && document.group === 'regional' && document.territory) {
       regionalByTerritory.set(document.territory, document);
     }
     if (document.scope === 'municipal' && document.parent_region) {
@@ -120,7 +120,7 @@ export function strategyTemporalLabel(document) {
 export function strategyCoverageCounts(documents) {
   const result = { full: 0, partial: 0, unavailable: 0, missing: 0 };
   for (const document of safeArray(documents)) {
-    if (document?.scope !== 'regional') continue;
+    if (document?.scope !== 'regional' || document.group !== 'regional') continue;
     const status = document.availability === 'available' ? document.quality : document.availability;
     if (status in result) result[status] += 1;
   }
@@ -160,13 +160,17 @@ export function filterStrategyDocuments(documents, options = {}) {
 
     if (normalizedQuery) {
       const haystack = normalizeText([
+        document.id,
         document.title,
+        document.official_title,
         document.territory,
         document.parent_region,
         document.act,
+        document.status,
         document.revision,
         document.period?.label,
         document.source_filename,
+        document.source_publisher,
         document.text_preview
       ].filter(Boolean).join(' '));
       if (!haystack.includes(normalizedQuery)) return false;

@@ -13,6 +13,8 @@ import json
 import re
 import subprocess
 import tempfile
+import zipfile
+from xml.etree import ElementTree
 from pathlib import Path
 from typing import Any
 
@@ -73,7 +75,7 @@ WORD_RE = re.compile(r"[а-яёa-z]{2,}", re.IGNORECASE)
 SPACE_RE = re.compile(r"\s+")
 
 
-def extract_text(pdf_path: Path) -> str:
+def extract_pdf_text(pdf_path: Path) -> str:
     with tempfile.NamedTemporaryFile(suffix=".txt", delete=False) as handle:
         output_path = Path(handle.name)
     try:
@@ -87,6 +89,26 @@ def extract_text(pdf_path: Path) -> str:
         return output_path.read_text(encoding="utf-8", errors="ignore")
     finally:
         output_path.unlink(missing_ok=True)
+
+
+def extract_docx_text(docx_path: Path) -> str:
+    with zipfile.ZipFile(docx_path) as archive:
+        xml = archive.read("word/document.xml")
+    root = ElementTree.fromstring(xml)
+    chunks: list[str] = []
+    for node in root.iter():
+        tag = node.tag.rsplit("}", 1)[-1]
+        if tag == "t" and node.text:
+            chunks.append(node.text)
+        elif tag in {"p", "br", "tab"}:
+            chunks.append("\n" if tag != "tab" else "\t")
+    return "".join(chunks)
+
+
+def extract_text(document_path: Path) -> str:
+    if document_path.suffix.casefold() == ".docx":
+        return extract_docx_text(document_path)
+    return extract_pdf_text(document_path)
 
 
 def normalise(text: str) -> str:
@@ -125,15 +147,16 @@ def main() -> None:
     corpus = json.loads(corpus_path.read_text(encoding="utf-8"))
 
     for document in corpus.get("documents", []):
-        if document.get("availability") != "available" or not document.get("pdf_url"):
+        document_url = document.get("document_url") or document.get("pdf_url") or document.get("original_url")
+        if document.get("availability") != "available" or not document_url:
             document.pop("text_profile", None)
             continue
-        pdf_path = site_root / document["pdf_url"].removeprefix("./")
+        document_path = site_root / document_url.removeprefix("./")
         cache_path = args.text_cache / f"{document['id']}.txt" if args.text_cache else None
         if cache_path and cache_path.exists():
             text = cache_path.read_text(encoding="utf-8", errors="ignore")
         else:
-            text = extract_text(pdf_path)
+            text = extract_text(document_path)
         document["text_profile"] = profile_text(text, document.get("quality", "full"))
 
     corpus.setdefault("analysis", {})["lexical_profile"] = {

@@ -1,0 +1,1185 @@
+{
+  "schema_version": 2,
+  "package_id": "family-support-missing-fulltext-documents-kit-2026-07-28",
+  "created_at": "2026-07-28T00:00:00Z",
+  "verified_for_repository": "Arseniy24RUS/family-support",
+  "default_scope": "extended",
+  "scope_rules": {
+    "primary": [
+      "primary",
+      "supporting"
+    ],
+    "extended": [
+      "primary",
+      "supporting",
+      "extended"
+    ]
+  },
+  "expected_scope_counts": {
+    "primary": 20,
+    "extended": 22
+  },
+  "provenance_policy": {
+    "official_sources_first": true,
+    "reference_systems_only_as_fallback": true,
+    "reject_html_as_binary": true,
+    "reject_blocked_or_navigation_only_pages": true,
+    "require_extractable_full_text": true,
+    "require_http_status": true,
+    "require_sha256": true
+  },
+  "documents": [
+    {
+      "id": "federal-family-code-223-fz",
+      "package_group": "primary",
+      "scope": "federal",
+      "group": "normative",
+      "federal_section": "core",
+      "territory": "Российская Федерация",
+      "title": "Семейный кодекс Российской Федерации",
+      "official_title": "Семейный кодекс Российской Федерации",
+      "act": "Федеральный закон от 29.12.1995 № 223-ФЗ",
+      "act_identity": {
+        "kind": "Кодекс Российской Федерации",
+        "date": "1995-12-29",
+        "number": "223-ФЗ"
+      },
+      "status": "Действует",
+      "revision": "редакция от 23.03.2026; изменения от 15.05.2026",
+      "edition_as_of": "2026-05-15",
+      "period": {
+        "start_year": 1996,
+        "end_year": null,
+        "label": "действует с 1996 года",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/federal/federal-family-code-223-fz.pdf",
+      "min_bytes": 30000,
+      "min_text_chars": 50000,
+      "required_phrases": [
+        "Семейный кодекс Российской Федерации",
+        "223-ФЗ",
+        "семейные права"
+      ],
+      "official_url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=102038925",
+      "sources": [
+        {
+          "url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=102038925",
+          "publisher": "Официальный интернет-портал правовой информации",
+          "source_class": "official_consolidated_text",
+          "official": true,
+          "mode": "html",
+          "priority": 1
+        },
+        {
+          "url": "https://www.consultant.ru/document/cons_doc_LAW_8982/",
+          "publisher": "КонсультантПлюс",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 90
+        }
+      ]
+    },
+    {
+      "id": "federal-child-benefits-81-fz",
+      "package_group": "primary",
+      "scope": "federal",
+      "group": "normative",
+      "federal_section": "core",
+      "territory": "Российская Федерация",
+      "title": "О государственных пособиях гражданам, имеющим детей",
+      "official_title": "О государственных пособиях гражданам, имеющим детей",
+      "act": "Федеральный закон от 19.05.1995 № 81-ФЗ",
+      "act_identity": {
+        "kind": "Федеральный закон",
+        "date": "1995-05-19",
+        "number": "81-ФЗ"
+      },
+      "status": "Действует",
+      "revision": "редакция от 20.02.2026",
+      "edition_as_of": "2026-02-20",
+      "period": {
+        "start_year": 1995,
+        "end_year": null,
+        "label": "действует с 1995 года",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/federal/federal-child-benefits-81-fz.pdf",
+      "min_bytes": 15000,
+      "min_text_chars": 15000,
+      "required_phrases": [
+        "О государственных пособиях гражданам, имеющим детей",
+        "81-ФЗ",
+        "пособие по беременности и родам"
+      ],
+      "official_url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=102035632",
+      "sources": [
+        {
+          "url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=102035632",
+          "publisher": "Официальный интернет-портал правовой информации",
+          "source_class": "official_consolidated_text",
+          "official": true,
+          "mode": "html",
+          "priority": 1
+        },
+        {
+          "url": "https://www.consultant.ru/document/cons_doc_LAW_6659/",
+          "publisher": "КонсультантПлюс",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 90
+        }
+      ]
+    },
+    {
+      "id": "federal-maternity-capital-256-fz",
+      "package_group": "primary",
+      "scope": "federal",
+      "group": "normative",
+      "federal_section": "core",
+      "territory": "Российская Федерация",
+      "title": "О дополнительных мерах государственной поддержки семей, имеющих детей",
+      "official_title": "О дополнительных мерах государственной поддержки семей, имеющих детей",
+      "act": "Федеральный закон от 29.12.2006 № 256-ФЗ",
+      "act_identity": {
+        "kind": "Федеральный закон",
+        "date": "2006-12-29",
+        "number": "256-ФЗ"
+      },
+      "status": "Действует",
+      "revision": "редакция от 31.07.2025; часть изменений действует с 01.01.2026",
+      "edition_as_of": "2026-01-01",
+      "period": {
+        "start_year": 2007,
+        "end_year": null,
+        "label": "действует с 2007 года",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/federal/federal-maternity-capital-256-fz.pdf",
+      "min_bytes": 20000,
+      "min_text_chars": 30000,
+      "required_phrases": [
+        "О дополнительных мерах государственной поддержки семей",
+        "256-ФЗ",
+        "материнского семейного капитала"
+      ],
+      "official_url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=102111148",
+      "sources": [
+        {
+          "url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=102111148",
+          "publisher": "Официальный интернет-портал правовой информации",
+          "source_class": "official_consolidated_text",
+          "official": true,
+          "mode": "html",
+          "priority": 1
+        },
+        {
+          "url": "https://www.consultant.ru/document/cons_doc_LAW_64872/",
+          "publisher": "КонсультантПлюс",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 90
+        }
+      ]
+    },
+    {
+      "id": "federal-social-insurance-maternity-255-fz",
+      "package_group": "primary",
+      "scope": "federal",
+      "group": "normative",
+      "federal_section": "core",
+      "territory": "Российская Федерация",
+      "title": "Об обязательном социальном страховании на случай временной нетрудоспособности и в связи с материнством",
+      "official_title": "Об обязательном социальном страховании на случай временной нетрудоспособности и в связи с материнством",
+      "act": "Федеральный закон от 29.12.2006 № 255-ФЗ",
+      "act_identity": {
+        "kind": "Федеральный закон",
+        "date": "2006-12-29",
+        "number": "255-ФЗ"
+      },
+      "status": "Действует",
+      "revision": "редакция от 20.02.2026",
+      "edition_as_of": "2026-02-20",
+      "period": {
+        "start_year": 2007,
+        "end_year": null,
+        "label": "действует с 2007 года",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/federal/federal-social-insurance-maternity-255-fz.pdf",
+      "min_bytes": 25000,
+      "min_text_chars": 30000,
+      "required_phrases": [
+        "Об обязательном социальном страховании",
+        "255-ФЗ",
+        "страховое обеспечение"
+      ],
+      "official_url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=102111246",
+      "sources": [
+        {
+          "url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=102111246",
+          "publisher": "Официальный интернет-портал правовой информации",
+          "source_class": "official_consolidated_text",
+          "official": true,
+          "mode": "html",
+          "priority": 1
+        },
+        {
+          "url": "https://www.consultant.ru/document/cons_doc_LAW_64871/",
+          "publisher": "КонсультантПлюс",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 90
+        }
+      ]
+    },
+    {
+      "id": "federal-monthly-payments-418-fz",
+      "package_group": "primary",
+      "scope": "federal",
+      "group": "normative",
+      "federal_section": "core",
+      "territory": "Российская Федерация",
+      "title": "О ежемесячных выплатах семьям, имеющим детей",
+      "official_title": "О ежемесячных выплатах семьям, имеющим детей",
+      "act": "Федеральный закон от 28.12.2017 № 418-ФЗ",
+      "act_identity": {
+        "kind": "Федеральный закон",
+        "date": "2017-12-28",
+        "number": "418-ФЗ"
+      },
+      "status": "Действует",
+      "revision": "редакция от 25.12.2023",
+      "edition_as_of": "2023-12-25",
+      "period": {
+        "start_year": 2018,
+        "end_year": null,
+        "label": "действует с 2018 года",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/federal/federal-monthly-payments-418-fz.pdf",
+      "min_bytes": 10000,
+      "min_text_chars": 7000,
+      "required_phrases": [
+        "О ежемесячных выплатах семьям, имеющим детей",
+        "418-ФЗ",
+        "ежемесячная выплата"
+      ],
+      "official_url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=102455798",
+      "sources": [
+        {
+          "url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=102455798",
+          "publisher": "Официальный интернет-портал правовой информации",
+          "source_class": "official_consolidated_text",
+          "official": true,
+          "mode": "html",
+          "priority": 1
+        },
+        {
+          "url": "https://www.consultant.ru/document/cons_doc_LAW_286470/",
+          "publisher": "КонсультантПлюс",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 90
+        }
+      ]
+    },
+    {
+      "id": "federal-mortgage-large-families-157-fz",
+      "package_group": "primary",
+      "scope": "federal",
+      "group": "normative",
+      "federal_section": "core",
+      "territory": "Российская Федерация",
+      "title": "О мерах государственной поддержки семей, имеющих детей, в части погашения обязательств по ипотечным жилищным кредитам (займам)",
+      "official_title": "О мерах государственной поддержки семей, имеющих детей, в части погашения обязательств по ипотечным жилищным кредитам (займам) и о внесении изменений в статью 13.2 Федерального закона «Об актах гражданского состояния»",
+      "act": "Федеральный закон от 03.07.2019 № 157-ФЗ",
+      "act_identity": {
+        "kind": "Федеральный закон",
+        "date": "2019-07-03",
+        "number": "157-ФЗ"
+      },
+      "status": "Действует",
+      "revision": "редакция от 31.07.2025",
+      "edition_as_of": "2025-07-31",
+      "period": {
+        "start_year": 2019,
+        "end_year": null,
+        "label": "действует с 2019 года",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/federal/federal-mortgage-large-families-157-fz.pdf",
+      "min_bytes": 12000,
+      "min_text_chars": 10000,
+      "required_phrases": [
+        "О мерах государственной поддержки семей, имеющих детей",
+        "157-ФЗ",
+        "ипотечным жилищным кредитам"
+      ],
+      "official_url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=102568012",
+      "sources": [
+        {
+          "url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=102568012",
+          "publisher": "Официальный интернет-портал правовой информации",
+          "source_class": "official_consolidated_text",
+          "official": true,
+          "mode": "html",
+          "priority": 1
+        },
+        {
+          "url": "https://www.consultant.ru/document/cons_doc_LAW_328152/",
+          "publisher": "КонсультантПлюс",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 90
+        }
+      ]
+    },
+    {
+      "id": "federal-unified-benefit-rules-2330",
+      "package_group": "primary",
+      "scope": "federal",
+      "group": "implementation",
+      "federal_section": "implementation",
+      "territory": "Российская Федерация",
+      "title": "О порядке назначения и выплаты ежемесячного пособия в связи с рождением и воспитанием ребёнка",
+      "official_title": "О порядке назначения и выплаты ежемесячного пособия в связи с рождением и воспитанием ребенка",
+      "act": "Постановление Правительства Российской Федерации от 16.12.2022 № 2330",
+      "act_identity": {
+        "kind": "Постановление Правительства Российской Федерации",
+        "date": "2022-12-16",
+        "number": "2330"
+      },
+      "status": "Действует",
+      "revision": "редакция от 20.04.2026; отдельные положения вступают в силу позднее",
+      "edition_as_of": "2026-04-20",
+      "period": {
+        "start_year": 2023,
+        "end_year": null,
+        "label": "действует с 2023 года",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/federal/federal-unified-benefit-rules-2330.pdf",
+      "min_bytes": 30000,
+      "min_text_chars": 50000,
+      "required_phrases": [
+        "О порядке назначения и выплаты ежемесячного пособия",
+        "2330",
+        "ежемесячного пособия в связи с рождением и воспитанием ребенка"
+      ],
+      "official_url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=603599628",
+      "sources": [
+        {
+          "url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=603599628",
+          "publisher": "Официальный интернет-портал правовой информации",
+          "source_class": "official_consolidated_text",
+          "official": true,
+          "mode": "html",
+          "priority": 1
+        },
+        {
+          "url": "https://www.consultant.ru/document/cons_doc_LAW_434753/",
+          "publisher": "КонсультантПлюс",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 90
+        }
+      ]
+    },
+    {
+      "id": "methodology-regional-fertility-programs-126",
+      "package_group": "primary",
+      "scope": "federal",
+      "group": "methodology",
+      "federal_section": "methodology",
+      "territory": "Российская Федерация",
+      "title": "Методические рекомендации по реализации региональных программ по повышению рождаемости",
+      "official_title": "Об утверждении методических рекомендаций по реализации региональных программ по повышению рождаемости",
+      "act": "Приказ Минтруда России от 30.03.2026 № 126",
+      "act_identity": {
+        "kind": "Приказ Минтруда России",
+        "date": "2026-03-30",
+        "number": "126"
+      },
+      "status": "Действует",
+      "revision": "первоначальная редакция",
+      "edition_as_of": "2026-03-30",
+      "period": {
+        "start_year": 2026,
+        "end_year": 2030,
+        "label": "2026–2030 годы",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/methodology/methodology-regional-fertility-programs-126.pdf",
+      "min_bytes": 18000,
+      "min_text_chars": 20000,
+      "required_phrases": [
+        "методических рекомендаций по реализации региональных программ по повышению рождаемости",
+        "30 марта 2026",
+        "типовая региональная программа"
+      ],
+      "official_url": "https://mintrud.gov.ru/ministry/programms/6",
+      "sources": [
+        {
+          "url": "https://mintrud.gov.ru/ministry/programms/6",
+          "publisher": "Минтруд России",
+          "source_class": "official_departmental_collection",
+          "official": true,
+          "mode": "html",
+          "priority": 1
+        },
+        {
+          "url": "https://pravo.ppt.ru/prikaz/mintrud/n-126-336619",
+          "publisher": "ППТ.РУ",
+          "source_class": "public_fulltext_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 90
+        },
+        {
+          "url": "https://rulaws.ru/acts/Prikaz-Mintruda-Rossii-ot-30.03.2026-N-126/",
+          "publisher": "Кодификация.РФ",
+          "source_class": "public_fulltext_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 95
+        }
+      ]
+    },
+    {
+      "id": "methodology-cofinanced-regional-programs-751",
+      "package_group": "primary",
+      "scope": "federal",
+      "group": "methodology",
+      "federal_section": "methodology",
+      "territory": "Российская Федерация",
+      "title": "Методические рекомендации по реализации мероприятий региональных программ по повышению рождаемости, подлежащих софинансированию из федерального бюджета",
+      "official_title": "Об утверждении методических рекомендаций по реализации мероприятий региональных программ по повышению рождаемости, подлежащих софинансированию из федерального бюджета",
+      "act": "Приказ Минтруда России от 29.12.2025 № 751",
+      "act_identity": {
+        "kind": "Приказ Минтруда России",
+        "date": "2025-12-29",
+        "number": "751"
+      },
+      "status": "Действует",
+      "revision": "первоначальная редакция",
+      "edition_as_of": "2025-12-29",
+      "period": {
+        "start_year": 2026,
+        "end_year": 2030,
+        "label": "2026–2030 годы",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/methodology/methodology-cofinanced-regional-programs-751.pdf",
+      "min_bytes": 15000,
+      "min_text_chars": 12000,
+      "required_phrases": [
+        "методических рекомендаций по реализации мероприятий региональных программ",
+        "29 декабря 2025",
+        "софинансированию из федерального бюджета"
+      ],
+      "official_url": "https://mintrud.gov.ru/ministry/programms/6",
+      "sources": [
+        {
+          "url": "https://mintrud.gov.ru/ministry/programms/6",
+          "publisher": "Минтруд России",
+          "source_class": "official_departmental_collection",
+          "official": true,
+          "mode": "html",
+          "priority": 1
+        },
+        {
+          "url": "https://pravo.ppt.ru/prikaz/mintrud/n-751-325665",
+          "publisher": "ППТ.РУ",
+          "source_class": "public_fulltext_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 90
+        },
+        {
+          "url": "https://bazanpa.ru/mintrud-rossii-prikaz-n751-ot29122025-h7005978/",
+          "publisher": "База НПА",
+          "source_class": "public_fulltext_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 95
+        }
+      ]
+    },
+    {
+      "id": "regional-moscow-family-support-law-60",
+      "package_group": "primary",
+      "scope": "regional",
+      "group": "normative",
+      "territory": "Москва",
+      "title": "О социальной поддержке семей с детьми в городе Москве",
+      "official_title": "О социальной поддержке семей с детьми в городе Москве",
+      "act": "Закон города Москвы от 23.11.2005 № 60",
+      "act_identity": {
+        "kind": "Закон города Москвы",
+        "date": "2005-11-23",
+        "number": "60"
+      },
+      "status": "Действует",
+      "revision": "редакция от 25.12.2024",
+      "edition_as_of": "2024-12-25",
+      "period": {
+        "start_year": 2005,
+        "end_year": null,
+        "label": "действует с 2005 года",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/regional/moscow/regional-moscow-family-support-law-60.pdf",
+      "min_bytes": 20000,
+      "min_text_chars": 15000,
+      "required_phrases": [
+        "О социальной поддержке семей с детьми в городе Москве",
+        "23 ноября 2005",
+        "многодетная семья"
+      ],
+      "official_url": "https://dszn.ru/uploads/magic/ru-RU/Document-0-674-src-1758547592.2506.pdf",
+      "sources": [
+        {
+          "url": "https://dszn.ru/uploads/magic/ru-RU/Document-0-674-src-1758547592.2506.pdf",
+          "publisher": "Департамент труда и социальной защиты населения города Москвы",
+          "source_class": "official_departmental_file",
+          "official": true,
+          "mode": "binary",
+          "format": "pdf",
+          "priority": 1
+        },
+        {
+          "url": "https://base.garant.ru/384375/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 90
+        }
+      ]
+    },
+    {
+      "id": "regional-moscow-social-support-program",
+      "package_group": "primary",
+      "scope": "regional",
+      "group": "implementation",
+      "territory": "Москва",
+      "title": "Государственная программа города Москвы «Социальная поддержка жителей города Москвы»",
+      "official_title": "Об утверждении Государственной программы города Москвы «Социальная поддержка жителей города Москвы»",
+      "act": "Постановление Правительства Москвы от 06.09.2011 № 420-ПП",
+      "act_identity": {
+        "kind": "Постановление Правительства Москвы",
+        "date": "2011-09-06",
+        "number": "420-ПП"
+      },
+      "status": "Действует",
+      "revision": "редакция от 25.03.2025",
+      "edition_as_of": "2025-03-25",
+      "period": {
+        "start_year": 2012,
+        "end_year": null,
+        "label": "действующая государственная программа",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/regional/moscow/regional-moscow-social-support-program.pdf",
+      "min_bytes": 100000,
+      "min_text_chars": 50000,
+      "required_phrases": [
+        "Социальная поддержка жителей города Москвы",
+        "420-ПП",
+        "Государственная программа города Москвы"
+      ],
+      "official_url": "https://www.mos.ru/upload/documents/files/6707/Gosydarstvennaya_programma_goroda_Moskvi_Socialnaya_podderjka_jitelei.pdf",
+      "sources": [
+        {
+          "url": "https://www.mos.ru/upload/documents/files/6707/Gosydarstvennaya_programma_goroda_Moskvi_Socialnaya_podderjka_jitelei.pdf",
+          "publisher": "Официальный сайт Мэра Москвы",
+          "source_class": "official_consolidated_file",
+          "official": true,
+          "mode": "binary",
+          "format": "pdf",
+          "priority": 1
+        },
+        {
+          "url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=120066820",
+          "publisher": "Официальный интернет-портал правовой информации",
+          "source_class": "official_consolidated_text",
+          "official": true,
+          "mode": "html",
+          "priority": 2
+        }
+      ]
+    },
+    {
+      "id": "regional-spb-social-code-728-132",
+      "package_group": "primary",
+      "scope": "regional",
+      "group": "normative",
+      "territory": "Санкт-Петербург",
+      "title": "Социальный кодекс Санкт-Петербурга",
+      "official_title": "Социальный кодекс Санкт-Петербурга",
+      "act": "Закон Санкт-Петербурга от 22.11.2011 № 728-132",
+      "act_identity": {
+        "kind": "Закон Санкт-Петербурга",
+        "date": "2011-11-22",
+        "number": "728-132"
+      },
+      "status": "Действует",
+      "revision": "с изменениями по состоянию на 29.06.2026",
+      "edition_as_of": "2026-06-29",
+      "period": {
+        "start_year": 2012,
+        "end_year": null,
+        "label": "действует с 2012 года",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/regional/saint-petersburg/regional-spb-social-code-728-132.pdf",
+      "min_bytes": 50000,
+      "min_text_chars": 100000,
+      "required_phrases": [
+        "Социальный кодекс Санкт-Петербурга",
+        "728-132",
+        "меры социальной поддержки"
+      ],
+      "official_url": "https://www.assembly.spb.ru/search/document/891859785/",
+      "sources": [
+        {
+          "url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=131043805",
+          "publisher": "Официальный интернет-портал правовой информации",
+          "source_class": "official_consolidated_text",
+          "official": true,
+          "mode": "html",
+          "priority": 1
+        },
+        {
+          "url": "https://www.assembly.spb.ru/search/document/891859785/",
+          "publisher": "Законодательное Собрание Санкт-Петербурга",
+          "source_class": "official_regional_consolidated_text",
+          "official": true,
+          "mode": "html",
+          "priority": 2
+        },
+        {
+          "url": "https://www.consultant.ru/cons/cgi/online.cgi?base=SPB&n=117459&req=doc",
+          "publisher": "КонсультантПлюс",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 90
+        }
+      ]
+    },
+    {
+      "id": "regional-moscow-oblast-family-support-law-1-2006",
+      "package_group": "primary",
+      "scope": "regional",
+      "group": "normative",
+      "territory": "Московская область",
+      "title": "О мерах социальной поддержки семьи и детей в Московской области",
+      "official_title": "О мерах социальной поддержки семьи и детей в Московской области",
+      "act": "Закон Московской области от 12.01.2006 № 1/2006-ОЗ",
+      "act_identity": {
+        "kind": "Закон Московской области",
+        "date": "2006-01-12",
+        "number": "1/2006-ОЗ"
+      },
+      "status": "Действует",
+      "revision": "редакция от 13.02.2026",
+      "edition_as_of": "2026-02-13",
+      "period": {
+        "start_year": 2006,
+        "end_year": null,
+        "label": "действует с 2006 года",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/regional/moscow-oblast/regional-moscow-oblast-family-support-law-1-2006.pdf",
+      "min_bytes": 25000,
+      "min_text_chars": 30000,
+      "required_phrases": [
+        "О мерах социальной поддержки семьи и детей в Московской области",
+        "1/2006-ОЗ",
+        "социальные пособия"
+      ],
+      "official_url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=112011892",
+      "sources": [
+        {
+          "url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=112011892",
+          "publisher": "Официальный интернет-портал правовой информации",
+          "source_class": "official_consolidated_text",
+          "official": true,
+          "mode": "html",
+          "priority": 1
+        },
+        {
+          "url": "https://docs.cntd.ru/document/5812473",
+          "publisher": "Кодекс / Техэксперт",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 90
+        }
+      ]
+    },
+    {
+      "id": "regional-krasnodar-large-family-law-836-kz",
+      "package_group": "primary",
+      "scope": "regional",
+      "group": "normative",
+      "territory": "Краснодарский край",
+      "title": "О социальной поддержке многодетных семей в Краснодарском крае",
+      "official_title": "О социальной поддержке многодетных семей в Краснодарском крае",
+      "act": "Закон Краснодарского края от 22.02.2005 № 836-КЗ",
+      "act_identity": {
+        "kind": "Закон Краснодарского края",
+        "date": "2005-02-22",
+        "number": "836-КЗ"
+      },
+      "status": "Действует",
+      "revision": "с учётом изменений по состоянию на 28.07.2026",
+      "edition_as_of": "2026-07-28",
+      "period": {
+        "start_year": 2005,
+        "end_year": null,
+        "label": "действует с 2005 года",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/regional/krasnodar-krai/regional-krasnodar-large-family-law-836-kz.pdf",
+      "min_bytes": 12000,
+      "min_text_chars": 10000,
+      "required_phrases": [
+        "О социальной поддержке многодетных семей в Краснодарском крае",
+        "836-КЗ",
+        "многодетных семей"
+      ],
+      "official_url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=140009010",
+      "sources": [
+        {
+          "url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=140009010",
+          "publisher": "Официальный интернет-портал правовой информации",
+          "source_class": "official_consolidated_text",
+          "official": true,
+          "mode": "html",
+          "priority": 1
+        },
+        {
+          "url": "https://base.garant.ru/23940836/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 90
+        }
+      ]
+    },
+    {
+      "id": "regional-krasnodar-children-kuban-program",
+      "package_group": "primary",
+      "scope": "regional",
+      "group": "implementation",
+      "territory": "Краснодарский край",
+      "title": "Государственная программа Краснодарского края «Дети Кубани»",
+      "official_title": "Об утверждении государственной программы Краснодарского края «Дети Кубани»",
+      "act": "Постановление главы администрации (губернатора) Краснодарского края от 12.10.2015 № 964",
+      "act_identity": {
+        "kind": "Постановление главы администрации Краснодарского края",
+        "date": "2015-10-12",
+        "number": "964"
+      },
+      "status": "Действует",
+      "revision": "с изменениями по состоянию на 27.02.2026",
+      "edition_as_of": "2026-02-27",
+      "period": {
+        "start_year": 2016,
+        "end_year": null,
+        "label": "действующая государственная программа",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/regional/krasnodar-krai/regional-krasnodar-children-kuban-program.pdf",
+      "min_bytes": 30000,
+      "min_text_chars": 50000,
+      "required_phrases": [
+        "Государственная программа Краснодарского края",
+        "Дети Кубани",
+        "12.10.2015"
+      ],
+      "official_url": "https://publication.pravo.gov.ru/document/2300201510190011",
+      "sources": [
+        {
+          "url": "https://pravo.gov.ru/proxy/ips/?docbody=&nd=140064649",
+          "publisher": "Официальный интернет-портал правовой информации",
+          "source_class": "official_consolidated_text",
+          "official": true,
+          "mode": "html",
+          "priority": 1
+        },
+        {
+          "url": "https://base.garant.ru/36996886/",
+          "publisher": "ГАРАНТ",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 90
+        }
+      ]
+    },
+    {
+      "id": "regional-moscow-social-support-program-amendment-621-pp-2025",
+      "package_group": "supporting",
+      "scope": "regional",
+      "group": "normative",
+      "territory": "Москва",
+      "title": "О внесении изменения в постановление Правительства Москвы от 6 сентября 2011 г. № 420-ПП",
+      "official_title": "О внесении изменения в постановление Правительства Москвы от 6 сентября 2011 г. № 420-ПП",
+      "act": "Постановление Правительства Москвы от 25.03.2025 № 621-ПП",
+      "act_identity": {
+        "kind": "Постановление Правительства Москвы",
+        "date": "2025-03-25",
+        "number": "621-ПП"
+      },
+      "status": "Действует как изменяющий акт",
+      "revision": "первоначальная редакция",
+      "edition_as_of": "2025-03-25",
+      "period": {
+        "start_year": 2025,
+        "end_year": null,
+        "label": "изменения 2025 года",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/regional/moscow/supporting/regional-moscow-social-support-program-amendment-621-pp-2025.pdf",
+      "min_bytes": 8000,
+      "min_text_chars": 1500,
+      "required_phrases": [
+        "25 марта 2025",
+        "621-ПП",
+        "420-ПП"
+      ],
+      "official_url": "https://www.mos.ru/upload/documents/files/6707/Gosydarstvennaya_programma_goroda_Moskvi_Socialnaya_podderjka_jitelei.pdf",
+      "sources": [
+        {
+          "url": "https://www.mos.ru/upload/documents/files/6707/Gosydarstvennaya_programma_goroda_Moskvi_Socialnaya_podderjka_jitelei.pdf",
+          "publisher": "Официальный сайт Мэра Москвы",
+          "source_class": "official_publication_file",
+          "official": true,
+          "mode": "binary",
+          "format": "pdf",
+          "page_range": [
+            1,
+            2
+          ],
+          "priority": 1
+        },
+        {
+          "url": "https://docs.cntd.ru/document/1312918144",
+          "publisher": "Кодекс / Техэксперт",
+          "source_class": "reference_fallback",
+          "official": false,
+          "mode": "html",
+          "priority": 90
+        }
+      ]
+    },
+    {
+      "id": "regional-spb-social-code-amendment-434-72-2026",
+      "package_group": "supporting",
+      "scope": "regional",
+      "group": "normative",
+      "territory": "Санкт-Петербург",
+      "title": "О внесении изменений в Закон Санкт-Петербурга «Социальный кодекс Санкт-Петербурга»",
+      "official_title": "О внесении изменений в Закон Санкт-Петербурга «Социальный кодекс Санкт-Петербурга»",
+      "act": "Закон Санкт-Петербурга от 24.06.2026 № 434-72",
+      "act_identity": {
+        "kind": "Закон Санкт-Петербурга",
+        "date": "2026-06-24",
+        "number": "434-72"
+      },
+      "status": "Действует как изменяющий акт",
+      "revision": "первоначальная редакция",
+      "edition_as_of": "2026-06-24",
+      "period": {
+        "start_year": 2026,
+        "end_year": null,
+        "label": "изменения 2026 года",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/regional/saint-petersburg/supporting/regional-spb-social-code-amendment-434-72-2026.pdf",
+      "min_bytes": 8000,
+      "min_text_chars": 2500,
+      "required_phrases": [
+        "434-72",
+        "Социальный кодекс Санкт-Петербурга",
+        "О внесении изменений"
+      ],
+      "official_url": "https://publication.pravo.gov.ru/document/7800202606300002",
+      "sources": [
+        {
+          "url": "https://publication.pravo.gov.ru/file/pdf?eoNumber=7800202606300002",
+          "publisher": "Официальный интернет-портал правовой информации",
+          "source_class": "official_publication_file",
+          "official": true,
+          "mode": "binary",
+          "format": "pdf",
+          "priority": 1
+        }
+      ]
+    },
+    {
+      "id": "regional-spb-social-code-amendment-450-81-2026",
+      "package_group": "supporting",
+      "scope": "regional",
+      "group": "normative",
+      "territory": "Санкт-Петербург",
+      "title": "О внесении изменений в Закон Санкт-Петербурга «Социальный кодекс Санкт-Петербурга»",
+      "official_title": "О внесении изменений в Закон Санкт-Петербурга «Социальный кодекс Санкт-Петербурга»",
+      "act": "Закон Санкт-Петербурга от 24.06.2026 № 450-81",
+      "act_identity": {
+        "kind": "Закон Санкт-Петербурга",
+        "date": "2026-06-24",
+        "number": "450-81"
+      },
+      "status": "Действует как изменяющий акт",
+      "revision": "первоначальная редакция",
+      "edition_as_of": "2026-06-24",
+      "period": {
+        "start_year": 2026,
+        "end_year": null,
+        "label": "изменения 2026 года",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/regional/saint-petersburg/supporting/regional-spb-social-code-amendment-450-81-2026.pdf",
+      "min_bytes": 8000,
+      "min_text_chars": 2500,
+      "required_phrases": [
+        "450-81",
+        "Социальный кодекс Санкт-Петербурга",
+        "О внесении изменений"
+      ],
+      "official_url": "https://publication.pravo.gov.ru/document/7800202607010018",
+      "sources": [
+        {
+          "url": "https://publication.pravo.gov.ru/file/pdf?eoNumber=7800202607010018",
+          "publisher": "Официальный интернет-портал правовой информации",
+          "source_class": "official_publication_file",
+          "official": true,
+          "mode": "binary",
+          "format": "pdf",
+          "priority": 1
+        }
+      ]
+    },
+    {
+      "id": "regional-krasnodar-large-family-law-amendment-5338-kz-2025",
+      "package_group": "supporting",
+      "scope": "regional",
+      "group": "normative",
+      "territory": "Краснодарский край",
+      "title": "О внесении изменений в некоторые законодательные акты Краснодарского края",
+      "official_title": "О внесении изменений в некоторые законодательные акты Краснодарского края",
+      "act": "Закон Краснодарского края от 04.04.2025 № 5338-КЗ",
+      "act_identity": {
+        "kind": "Закон Краснодарского края",
+        "date": "2025-04-04",
+        "number": "5338-КЗ"
+      },
+      "status": "Действует как изменяющий акт",
+      "revision": "первоначальная редакция",
+      "edition_as_of": "2025-04-04",
+      "period": {
+        "start_year": 2025,
+        "end_year": null,
+        "label": "изменения 2025 года",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/regional/krasnodar-krai/supporting/regional-krasnodar-large-family-law-amendment-5338-kz-2025.pdf",
+      "min_bytes": 8000,
+      "min_text_chars": 2500,
+      "required_phrases": [
+        "5338-КЗ",
+        "О внесении изменений в некоторые законодательные акты Краснодарского края",
+        "836-КЗ"
+      ],
+      "official_url": "https://publication.pravo.gov.ru/document/2300202504110004",
+      "sources": [
+        {
+          "url": "https://publication.pravo.gov.ru/file/pdf?eoNumber=2300202504110004",
+          "publisher": "Официальный интернет-портал правовой информации",
+          "source_class": "official_publication_file",
+          "official": true,
+          "mode": "binary",
+          "format": "pdf",
+          "priority": 1
+        }
+      ]
+    },
+    {
+      "id": "regional-krasnodar-children-kuban-program-amendment-87-2026",
+      "package_group": "supporting",
+      "scope": "regional",
+      "group": "normative",
+      "territory": "Краснодарский край",
+      "title": "О внесении изменений в постановление главы администрации (губернатора) Краснодарского края от 12 октября 2015 г. № 964",
+      "official_title": "О внесении изменений в постановление главы администрации (губернатора) Краснодарского края от 12 октября 2015 г. № 964 «Об утверждении государственной программы Краснодарского края “Дети Кубани”»",
+      "act": "Постановление Губернатора Краснодарского края от 27.02.2026 № 87",
+      "act_identity": {
+        "kind": "Постановление Губернатора Краснодарского края",
+        "date": "2026-02-27",
+        "number": "87"
+      },
+      "status": "Действует как изменяющий акт",
+      "revision": "первоначальная редакция",
+      "edition_as_of": "2026-02-27",
+      "period": {
+        "start_year": 2026,
+        "end_year": null,
+        "label": "изменения 2026 года",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/regional/krasnodar-krai/supporting/regional-krasnodar-children-kuban-program-amendment-87-2026.pdf",
+      "min_bytes": 10000,
+      "min_text_chars": 5000,
+      "required_phrases": [
+        "27 февраля 2026",
+        "Дети Кубани",
+        "964"
+      ],
+      "official_url": "https://publication.pravo.gov.ru/document/2300202603050005",
+      "sources": [
+        {
+          "url": "https://publication.pravo.gov.ru/file/pdf?eoNumber=2300202603050005",
+          "publisher": "Официальный интернет-портал правовой информации",
+          "source_class": "official_publication_file",
+          "official": true,
+          "mode": "binary",
+          "format": "pdf",
+          "priority": 1
+        }
+      ]
+    },
+    {
+      "id": "federal-maternity-capital-balance-payment-1249",
+      "package_group": "extended",
+      "scope": "federal",
+      "group": "implementation",
+      "federal_section": "implementation",
+      "territory": "Российская Федерация",
+      "title": "Правила направления средств материнского (семейного) капитала на получение единовременной выплаты",
+      "official_title": "Об утверждении Правил направления средств (части средств) материнского (семейного) капитала на получение единовременной выплаты",
+      "act": "Постановление Правительства Российской Федерации от 11.09.2024 № 1249",
+      "act_identity": {
+        "kind": "Постановление Правительства Российской Федерации",
+        "date": "2024-09-11",
+        "number": "1249"
+      },
+      "status": "Действует",
+      "revision": "первоначальная редакция",
+      "edition_as_of": "2024-09-11",
+      "period": {
+        "start_year": 2024,
+        "end_year": null,
+        "label": "действует с 2024 года",
+        "temporal_status": "active"
+      },
+      "format": "pdf",
+      "target_path": "site/documents/legal/federal/federal-maternity-capital-balance-payment-1249.pdf",
+      "min_bytes": 8000,
+      "min_text_chars": 5000,
+      "required_phrases": [
+        "материнского семейного капитала",
+        "единовременной выплаты",
+        "1249"
+      ],
+      "official_url": "https://publication.pravo.gov.ru/document/0001202409160017",
+      "sources": [
+        {
+          "url": "https://publication.pravo.gov.ru/file/pdf?eoNumber=0001202409160017",
+          "publisher": "Официальный интернет-портал правовой информации",
+          "source_class": "official_publication_file",
+          "official": true,
+          "mode": "binary",
+          "format": "pdf",
+          "priority": 1
+        },
+        {
+          "url": "https://sfr.gov.ru/order/mother_fam_capital/~10294",
+          "publisher": "Социальный фонд России",
+          "source_class": "official_departmental_text",
+          "official": true,
+          "mode": "html",
+          "priority": 2
+        }
+      ]
+    },
+    {
+      "id": "federal-national-project-family-passport-2025",
+      "package_group": "extended",
+      "scope": "federal",
+      "group": "implementation",
+      "federal_section": "implementation",
+      "territory": "Российская Федерация",
+      "title": "Паспорт национального проекта «Семья»",
+      "official_title": "Паспорт национального проекта «Семья»",
+      "act": "Паспорт национального проекта «Семья» по состоянию на 12.02.2025",
+      "act_identity": {
+        "kind": "Паспорт национального проекта",
+        "date": "2025-02-12",
+        "number": "Семья"
+      },
+      "status": "Действующий проектный документ",
+      "revision": "по состоянию на 12.02.2025",
+      "edition_as_of": "2025-02-12",
+      "period": {
+        "start_year": 2025,
+        "end_year": 2030,
+        "label": "2025–2030 годы",
+        "temporal_status": "active"
+      },
+      "format": "docx",
+      "target_path": "site/documents/legal/federal/federal-national-project-family-passport-2025.docx",
+      "min_bytes": 25000,
+      "min_text_chars": 15000,
+      "required_phrases": [
+        "Паспорт национального проекта",
+        "Семья",
+        "2030"
+      ],
+      "official_url": "https://mintrud.gov.ru/uploads/editor/5b/f9/%D0%9D%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%20%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%20%D0%A1%D0%B5%D0%BC%D1%8C%D1%8F.docx",
+      "sources": [
+        {
+          "url": "https://mintrud.gov.ru/uploads/editor/5b/f9/%D0%9D%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%B0%D0%BB%D1%8B%D0%B9%20%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%20%D0%A1%D0%B5%D0%BC%D1%8C%D1%8F.docx",
+          "publisher": "Минтруд России",
+          "source_class": "official_direct_file",
+          "official": true,
+          "mode": "binary",
+          "format": "docx",
+          "priority": 1
+        }
+      ]
+    }
+  ]
+}

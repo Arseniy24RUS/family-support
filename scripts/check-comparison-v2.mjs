@@ -77,6 +77,17 @@ async function pdfHeader(filepath) {
   }
 }
 
+async function zipHeader(filepath) {
+  const handle = await open(filepath, 'r');
+  try {
+    const buffer = Buffer.alloc(2);
+    await handle.read(buffer, 0, 2, 0);
+    return [...buffer];
+  } finally {
+    await handle.close();
+  }
+}
+
 async function walk(directory) {
   if (!await exists(directory)) return [];
   const values = [];
@@ -201,14 +212,20 @@ if (corpus) {
       fail(`${label}: отсутствует или недопустим federal_section.`);
     }
 
-    if (document.scope === 'regional') regional.push(document);
-    if (document.scope === 'regional') {
+    const isRegionalCoverage = document.scope === 'regional' && document.group === 'regional';
+    if (isRegionalCoverage) regional.push(document);
+    if (isRegionalCoverage) {
       const key = document.availability === 'available' ? document.quality : document.availability;
       if (key in regionalStatuses) regionalStatuses[key] += 1;
     }
 
     if (document.availability === 'available') {
-      if (!document.pdf_url || !document.download_url) fail(`${label}: доступному документу нужны pdf_url и download_url.`);
+      const fileFormat = document.file_format || (document.pdf_url ? 'pdf' : /\.docx$/iu.test(document.original_url || '') ? 'docx' : null);
+      const documentUrl = document.document_url || document.pdf_url || document.original_url;
+      if (!documentUrl || !document.download_url) fail(`${label}: доступному документу нужны document_url и download_url.`);
+      if (!['pdf', 'docx'].includes(fileFormat)) fail(`${label}: доступному документу нужен поддерживаемый file_format.`);
+      if (fileFormat === 'pdf' && !document.pdf_url) fail(`${label}: для PDF отсутствует pdf_url.`);
+      if (fileFormat === 'docx' && !document.original_url) fail(`${label}: для DOCX отсутствует original_url.`);
       if (!Number.isInteger(document.pages) || document.pages < 1) fail(`${label}: некорректное число страниц.`);
       if (!Number.isInteger(document.size_bytes) || document.size_bytes < 5) fail(`${label}: некорректный размер файла.`);
       if (!/^[a-f0-9]{64}$/u.test(document.sha256 || '')) fail(`${label}: некорректная SHA-256.`);
@@ -229,21 +246,25 @@ if (corpus) {
         }
       }
 
-      const pdfPath = resolveSiteUrl(document.pdf_url, `${label}.pdf_url`);
-      if (pdfPath) {
-        checkedFiles.add(pdfPath);
-        if (!await exists(pdfPath)) {
-          fail(`${label}: PDF отсутствует (${document.pdf_url}).`);
+      const documentPath = resolveSiteUrl(documentUrl, `${label}.document_url`);
+      if (documentPath) {
+        checkedFiles.add(documentPath);
+        if (!await exists(documentPath)) {
+          fail(`${label}: файл отсутствует (${documentUrl}).`);
         } else {
-          const info = await stat(pdfPath);
-          if (info.size !== document.size_bytes) fail(`${label}: размер PDF не совпадает с манифестом (${info.size} != ${document.size_bytes}).`);
+          const info = await stat(documentPath);
+          if (info.size !== document.size_bytes) fail(`${label}: размер файла не совпадает с манифестом (${info.size} != ${document.size_bytes}).`);
           if (info.size > 100 * 1024 * 1024) fail(`${label}: файл превышает 100 MiB и не будет принят обычным Git-репозиторием GitHub.`);
-          if (await pdfHeader(pdfPath) !== '%PDF-') fail(`${label}: файл не имеет заголовка PDF.`);
-          if (process.env.FAST_STRATEGY_CHECK !== '1' && /^[a-f0-9]{64}$/u.test(document.sha256 || '')) {
-            const digest = await sha256(pdfPath);
-            if (digest !== document.sha256) fail(`${label}: контрольная сумма PDF не совпадает.`);
+          if (fileFormat === 'pdf' && await pdfHeader(documentPath) !== '%PDF-') fail(`${label}: файл не имеет заголовка PDF.`);
+          if (fileFormat === 'docx') {
+            const [first, second] = await zipHeader(documentPath);
+            if (first !== 0x50 || second !== 0x4b) fail(`${label}: файл не имеет ZIP-заголовка DOCX.`);
           }
-          totalPdfBytes += info.size;
+          if (process.env.FAST_STRATEGY_CHECK !== '1' && /^[a-f0-9]{64}$/u.test(document.sha256 || '')) {
+            const digest = await sha256(documentPath);
+            if (digest !== document.sha256) fail(`${label}: контрольная сумма файла не совпадает.`);
+          }
+          if (fileFormat === 'pdf') totalPdfBytes += info.size;
           totalPages += document.pages;
           availableFiles += 1;
           if (document.scope === 'federal' && document.group !== 'methodology') federalAvailable += 1;
@@ -251,7 +272,7 @@ if (corpus) {
           if (document.scope === 'municipal') municipalAvailable += 1;
         }
       }
-      if (document.download_url !== document.pdf_url) warn(`${label}: download_url отличается от pdf_url; проверьте намеренность.`);
+      if (document.download_url !== documentUrl) warn(`${label}: download_url отличается от document_url; проверьте намеренность.`);
     } else if (document.pdf_url || document.download_url) {
       fail(`${label}: недоступная запись не должна ссылаться на PDF.`);
     }
@@ -295,6 +316,11 @@ if (corpus) {
   const documentsRoot = path.join(site, 'documents', 'strategies');
   for (const filepath of await walk(documentsRoot)) {
     if (!checkedFiles.has(filepath)) warn(`Неиспользуемый файл корпуса: ${path.relative(root, filepath)}.`);
+  }
+  const legalDocumentsRoot = path.join(site, 'documents', 'legal');
+  for (const filepath of await walk(legalDocumentsRoot)) {
+    if (path.basename(filepath) === 'SHA256SUMS') continue;
+    if (!checkedFiles.has(filepath)) warn(`Неиспользуемый юридический документ: ${path.relative(root, filepath)}.`);
   }
 }
 
@@ -359,6 +385,6 @@ if (errors.length) {
 
 console.log([
   'Проверка модуля сравнения пройдена.',
-  corpus?.stats ? `Регионов: ${corpus.stats.regional_total}; доступных PDF: ${corpus.stats.available_files}; страниц: ${corpus.stats.total_pages}.` : '',
+  corpus?.stats ? `Регионов: ${corpus.stats.regional_total}; доступных файлов: ${corpus.stats.available_files}; страниц: ${corpus.stats.total_pages}.` : '',
   warnings.length ? `Предупреждений: ${warnings.length}.` : 'Предупреждений нет.'
 ].filter(Boolean).join(' '));

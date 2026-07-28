@@ -40,10 +40,20 @@ const requiredFiles = [
   'data/regions.json',
   'data/regions-base.json',
   'data/ru-regions.geojson',
+  'data/family-documents-additions.json',
   'data/details/manifest.json'
 ];
 
 for (const file of requiredFiles) await access(resolve(siteRoot, file));
+
+for (const file of [
+  'scripts/lib/family-documents.mjs',
+  'scripts/sync-family-documents.mjs',
+  'scripts/verify-family-documents.mjs',
+  '.github/workflows/sync-family-documents.yml'
+]) {
+  await access(resolve(repositoryRoot, file));
+}
 
 async function readJson(path) {
   return JSON.parse(await readFile(path, 'utf8'));

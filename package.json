@@ -16,7 +16,9 @@
     "test:e2e:headed": "playwright test --headed --project=desktop-chromium",
     "test:e2e:ui": "playwright test --ui",
     "check:comparison": "node scripts/check-comparison-v2.mjs",
-    "test:comparison": "node --test tests/comparison-v2.test.mjs"
+    "test:comparison": "node --test tests/comparison-v2.test.mjs",
+    "documents:sync": "node scripts/sync-family-documents.mjs --scope extended",
+    "documents:verify": "node scripts/verify-family-documents.mjs --scope extended --strict"
   },
   "dependencies": {
     "playwright": "1.61.1"

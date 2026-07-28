@@ -1,0 +1,123 @@
+name: Полнотекстовые документы семейной политики
+
+on:
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: "Состав корпуса"
+        type: choice
+        required: true
+        default: extended
+        options:
+          - primary
+          - extended
+      force_refresh:
+        description: "Повторно получить уже сохранённые документы"
+        type: boolean
+        required: true
+        default: false
+
+permissions:
+  contents: write
+  actions: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+concurrency:
+  group: family-fulltext-documents-main
+  cancel-in-progress: false
+
+jobs:
+  synchronize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Получить актуальную main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Установить Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Установить зависимости
+        run: npm ci
+
+      - name: Установить Chromium и средства проверки документов
+        shell: bash
+        run: |
+          npx playwright install --with-deps chromium
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils unzip
+
+      - name: Получить полный текст документов
+        shell: bash
+        run: |
+          ARGS=(--scope "${{ inputs.scope }}")
+          if [[ "${{ inputs.force_refresh }}" == "true" ]]; then
+            ARGS+=(--force)
+          fi
+          node scripts/sync-family-documents.mjs "${ARGS[@]}"
+
+      - name: Обновить воспроизводимые текстовые профили
+        run: python3 scripts/profile-strategy-texts.py --site-root site
+
+      - name: Строго проверить все обязательные документы
+        run: node scripts/verify-family-documents.mjs --scope "${{ inputs.scope }}" --strict
+
+      - name: Проверить целостность проекта
+        run: npm run check
+
+      - name: Выполнить модульные тесты
+        run: npm test
+
+      - name: Выполнить end-to-end проверки в Chromium
+        run: npm run test:e2e
+        env:
+          CHECK_EXTERNAL_LINKS: "0"
+
+      - name: Сохранить отчёты проверки как артефакт
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: family-documents-verification-${{ inputs.scope }}
+          path: |
+            build/family-documents/build-report.json
+            build/family-documents/verification-report.json
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Закоммитить только проверенный корпус
+        id: commit
+        shell: bash
+        run: |
+          git config user.name "family-support-documents-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            site/documents/legal \
+            site/data/family-documents-additions.json \
+            site/data/family-documents-additions.csv \
+            site/data/family-documents-provenance.json \
+            site/data/strategies.json \
+            site/data/strategies-manifest.csv \
+            site/data/strategies-lexical-profile.csv
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Проверенный корпус не изменился"
+            exit 0
+          fi
+          git commit -m "docs: синхронизировать полнотекстовый корпус семейной политики"
+          git push origin HEAD:main
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Запустить публикацию GitHub Pages
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run update-and-deploy.yml --ref main -f update_data=false
