@@ -103,3 +103,25 @@ methodology-demographic-potential;federal;Российская Федераци�
 federal-family-policy-concept-2025;federal;Российская Федерация;full;5881;standard;7;11,9;19;32,31;18;30,61;6;10,2;1;1,7;12;20,4;4;6,8;3;5,1;5;8,5;13;22,11;0;0,0;6;10,2
 federal-demographic-concept-2025;federal;Российская Федерация;full;2516;standard;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0
 federal-demographic-plan-2021-2025;federal;Российская Федерация;full;4981;standard;0;0,0;3;6,02;10;20,08;9;18,07;1;2,01;0;0,0;0;0,0;2;4,02;2;4,02;8;16,06;0;0,0;3;6,02
+federal-family-code-223-fz;federal;Российская Федерация;full;23102;standard;24;10,39;16;6,93;2;0,87;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;40;17,31;0;0,0;0;0,0;0;0,0
+federal-child-benefits-81-fz;federal;Российская Федерация;full;2302;standard;64;278,02;3;13,03;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;1;4,34;3;13,03;0;0,0;0;0,0;0;0,0
+federal-maternity-capital-256-fz;federal;Российская Федерация;full;2469;standard;4;16,2;11;44,55;0;0,0;0;0,0;0;0,0;1;4,05;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0
+federal-social-insurance-maternity-255-fz;federal;Российская Федерация;full;15136;standard;358;236,52;0;0,0;2;1,32;1;0,66;0;0,0;0;0,0;1;0,66;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0
+federal-monthly-payments-418-fz;federal;Российская Федерация;full;1187;limited;17;143,22;2;16,85;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;2;16,85;0;0,0;0;0,0;0;0,0;2;16,85
+federal-mortgage-large-families-157-fz;federal;Российская Федерация;full;1926;standard;0;0,0;45;233,64;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;1;5,19;0;0,0;0;0,0;0;0,0;0;0,0
+federal-unified-benefit-rules-2330;federal;Российская Федерация;full;18332;standard;611;333,3;6;3,27;1;0,55;0;0,0;9;4,91;14;7,64;0;0,0;6;3,27;1;0,55;0;0,0;1;0,55;0;0,0
+methodology-regional-fertility-programs-126;federal;Российская Федерация;full;18548;standard;60;32,35;70;37,74;44;23,72;50;26,96;32;17,25;70;37,74;13;7,01;20;10,78;3;1,62;19;10,24;32;17,25;35;18,87
+methodology-cofinanced-regional-programs-751;federal;Российская Федерация;full;6074;standard;110;181,1;35;57,62;7;11,52;15;24,7;18;29,63;17;27,99;0;0,0;0;0,0;0;0,0;1;1,65;3;4,94;3;4,94
+regional-moscow-family-support-law-60;regional;Москва;full;1673;standard;43;257,02;3;17,93;1;5,98;0;0,0;1;5,98;2;11,95;0;0,0;5;29,89;0;0,0;0;0,0;0;0,0;0;0,0
+regional-moscow-social-support-program;regional;Москва;full;6765;standard;11;16,26;7;10,35;2;2,96;0;0,0;2;2,96;3;4,43;0;0,0;4;5,91;0;0,0;0;0,0;0;0,0;3;4,43
+regional-spb-social-code-728-132;regional;Санкт-Петербург;full;5652;standard;17;30,08;10;17,69;0;0,0;0;0,0;1;1,77;0;0,0;0;0,0;2;3,54;0;0,0;0;0,0;1;1,77;0;0,0
+regional-moscow-oblast-family-support-law-1-2006;regional;Московская область;full;2486;standard;28;112,63;1;4,02;0;0,0;0;0,0;5;20,11;2;8,05;0;0,0;5;20,11;0;0,0;0;0,0;0;0,0;0;0,0
+regional-krasnodar-large-family-law-836-kz;regional;Краснодарский край;full;1548;standard;7;45,22;0;0,0;1;6,46;0;0,0;0;0,0;16;103,36;0;0,0;2;12,92;0;0,0;0;0,0;0;0,0;0;0,0
+regional-krasnodar-children-kuban-program;regional;Краснодарский край;full;7458;standard;12;16,09;57;76,43;1;1,34;0;0,0;5;6,7;9;12,07;0;0,0;2;2,68;0;0,0;1;1,34;1;1,34;13;17,43
+regional-moscow-social-support-program-amendment-621-pp-2025;regional;Москва;full;977;limited;1;10,24;1;10,24;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;2;20,47;0;0,0;0;0,0;0;0,0;0;0,0
+regional-spb-social-code-amendment-434-72-2026;regional;Санкт-Петербург;full;1401;limited;1;7,14;0;0,0;0;0,0;0;0,0;1;7,14;4;28,55;0;0,0;2;14,28;0;0,0;0;0,0;0;0,0;0;0,0
+regional-spb-social-code-amendment-450-81-2026;regional;Санкт-Петербург;full;1095;limited;2;18,26;2;18,26;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;2;18,26;0;0,0;0;0,0;0;0,0;0;0,0
+regional-krasnodar-large-family-law-amendment-5338-kz-2025;regional;Краснодарский край;full;1245;limited;9;72,29;0;0,0;0;0,0;0;0,0;0;0,0;8;64,26;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0
+regional-krasnodar-children-kuban-program-amendment-87-2026;regional;Краснодарский край;full;2914;standard;7;24,02;11;37,75;0;0,0;0;0,0;1;3,43;5;17,16;0;0,0;0;0,0;0;0,0;2;6,86;0;0,0;2;6,86
+federal-maternity-capital-balance-payment-1249;federal;Российская Федерация;full;1546;standard;25;161,71;2;12,94;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;2;12,94;0;0,0;0;0,0;0;0,0;0;0,0
+federal-national-project-family-passport-2025;federal;Российская Федерация;full;1401;limited;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;13;92,79;0;0,0;0;0,0;1;7,14;8;57,1;0;0,0;0;0,0
