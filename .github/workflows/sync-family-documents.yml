@@ -16,6 +16,11 @@ on:
         type: boolean
         required: true
         default: false
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/sync-family-documents.yml
 
 permissions:
   contents: write
@@ -23,6 +28,8 @@ permissions:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+  SYNC_SCOPE: ${{ inputs.scope || 'extended' }}
+  FORCE_REFRESH: ${{ github.event_name == 'push' || inputs.force_refresh }}
 
 concurrency:
   group: family-fulltext-documents-main
@@ -59,8 +66,8 @@ jobs:
       - name: Получить полный текст документов
         shell: bash
         run: |
-          ARGS=(--scope "${{ inputs.scope }}")
-          if [[ "${{ inputs.force_refresh }}" == "true" ]]; then
+          ARGS=(--scope "$SYNC_SCOPE")
+          if [[ "$FORCE_REFRESH" == "true" ]]; then
             ARGS+=(--force)
           fi
           node scripts/sync-family-documents.mjs "${ARGS[@]}"
@@ -69,7 +76,7 @@ jobs:
         run: python3 scripts/profile-strategy-texts.py --site-root site
 
       - name: Строго проверить все обязательные документы
-        run: node scripts/verify-family-documents.mjs --scope "${{ inputs.scope }}" --strict
+        run: node scripts/verify-family-documents.mjs --scope "$SYNC_SCOPE" --strict
 
       - name: Проверить целостность проекта
         run: npm run check
@@ -86,7 +93,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: family-documents-verification-${{ inputs.scope }}
+          name: family-documents-verification-${{ env.SYNC_SCOPE }}
           path: |
             build/family-documents/build-report.json
             build/family-documents/verification-report.json
