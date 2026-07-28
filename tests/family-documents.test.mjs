@@ -22,6 +22,8 @@ test('scope=extended содержит ровно 22 полнотекстовых
     manifest.documents.filter((item) => manifest.scope_rules.primary.includes(item.package_group)).length,
     20
   );
+  assert.ok(manifest.documents.some((item) => item.format === 'pdf'));
+  assert.ok(manifest.documents.some((item) => item.format === 'docx'));
 });
 
 test('manifest не повторяет id, целевые пути и реквизиты актов', () => {

@@ -21,6 +21,7 @@
     "documents:verify": "node scripts/verify-family-documents.mjs --scope extended --strict"
   },
   "dependencies": {
+    "docx": "^9.7.1",
     "playwright": "1.61.1"
   },
   "devDependencies": {

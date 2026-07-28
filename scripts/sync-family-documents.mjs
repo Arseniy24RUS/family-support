@@ -4,6 +4,7 @@ import { existsSync } from 'node:fs';
 import { mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { Document, Packer, PageBreak, Paragraph, TextRun } from 'docx';
 import {
   actIdentity,
   inspectDocument,
@@ -327,8 +328,62 @@ dd { margin: 0; overflow-wrap: anywhere; }
 </style></head><body>${cover}<main class="archive-document">${extracted.html}</main></body></html>`;
 }
 
+async function writeFulltextDocx(filePath, item, source, finalUrl, retrievedAt, extracted) {
+  const metadata = [
+    ['Реквизиты', item.act],
+    ['Редакция', item.revision],
+    ['Территория', item.territory],
+    ['Источник', `${source.publisher} — ${finalUrl}`],
+    ['Получено', retrievedAt],
+    ['Идентификатор', item.id]
+  ];
+  const children = [
+    new Paragraph({
+      children: [new TextRun({ text: 'Полнотекстовая архивно-справочная копия', bold: true, size: 20 })]
+    }),
+    new Paragraph({
+      children: [new TextRun({ text: item.title, bold: true, size: 34 })],
+      spacing: { before: 240, after: 360 }
+    }),
+    ...metadata.map(([label, value]) => new Paragraph({
+      children: [
+        new TextRun({ text: `${label}: `, bold: true }),
+        new TextRun(String(value ?? ''))
+      ],
+      spacing: { after: 100 }
+    })),
+    new Paragraph({
+      children: [new TextRun({
+        text: 'Копия предназначена для исследовательского и справочного использования. Юридически значимый статус и последующие изменения следует сверять с официальным источником.',
+        italics: true
+      })],
+      spacing: { before: 240, after: 240 }
+    }),
+    new Paragraph({ children: [new PageBreak()] })
+  ];
+
+  for (const line of extracted.text.split(/\n+/u).map((value) => value.trim()).filter(Boolean)) {
+    for (let offset = 0; offset < line.length; offset += 3000) {
+      children.push(new Paragraph({
+        children: [new TextRun(line.slice(offset, offset + 3000))],
+        spacing: { after: 100 }
+      }));
+    }
+  }
+
+  const document = new Document({
+    creator: 'family-support document sync',
+    title: item.title,
+    description: `${item.act}; ${item.revision}`,
+    sections: [{ children }]
+  });
+  await writeFile(filePath, await Packer.toBuffer(document));
+}
+
 async function renderHtmlSource(context, item, source, targetPath) {
-  if (item.format !== 'pdf') throw new Error('HTML-источник нельзя сохранить как DOCX');
+  if (!['pdf', 'docx'].includes(item.format)) {
+    throw new Error(`HTML-источник нельзя сохранить в формате ${item.format}`);
+  }
   const openedPages = new Set();
   let page = await context.newPage();
   openedPages.add(page);
@@ -363,25 +418,29 @@ async function renderHtmlSource(context, item, source, targetPath) {
 
     const retrievedAt = new Date().toISOString();
     const finalUrl = page.url();
-    const printPage = await context.newPage();
-    openedPages.add(printPage);
-    await printPage.setContent(printableHtml(item, source, finalUrl, retrievedAt, extracted), {
-      waitUntil: 'load',
-      timeout: 30000
-    });
     await mkdir(path.dirname(targetPath), { recursive: true });
     const temporary = `${targetPath}.part`;
     await rm(temporary, { force: true });
-    await printPage.pdf({
-      path: temporary,
-      format: 'A4',
-      printBackground: true,
-      preferCSSPageSize: true,
-      displayHeaderFooter: true,
-      headerTemplate: '<span></span>',
-      footerTemplate: `<div style="width:100%;font-size:8px;color:#555;padding:0 12mm;display:flex;justify-content:space-between;font-family:sans-serif"><span>${escapeHtml(item.id)}</span><span><span class="pageNumber"></span> / <span class="totalPages"></span></span></div>`,
-      margin: { top: '8mm', bottom: '12mm', left: '0mm', right: '0mm' }
-    });
+    if (item.format === 'pdf') {
+      const printPage = await context.newPage();
+      openedPages.add(printPage);
+      await printPage.setContent(printableHtml(item, source, finalUrl, retrievedAt, extracted), {
+        waitUntil: 'load',
+        timeout: 30000
+      });
+      await printPage.pdf({
+        path: temporary,
+        format: 'A4',
+        printBackground: true,
+        preferCSSPageSize: true,
+        displayHeaderFooter: true,
+        headerTemplate: '<span></span>',
+        footerTemplate: `<div style="width:100%;font-size:8px;color:#555;padding:0 12mm;display:flex;justify-content:space-between;font-family:sans-serif"><span>${escapeHtml(item.id)}</span><span><span class="pageNumber"></span> / <span class="totalPages"></span></span></div>`,
+        margin: { top: '8mm', bottom: '12mm', left: '0mm', right: '0mm' }
+      });
+    } else {
+      await writeFulltextDocx(temporary, item, source, finalUrl, retrievedAt, extracted);
+    }
     const inspection = await inspectDocument(temporary, item);
     if (!inspection.ok) {
       await rm(temporary, { force: true });
@@ -396,7 +455,11 @@ async function renderHtmlSource(context, item, source, targetPath) {
       source_is_official: Boolean(source.official),
       source_http_status: httpStatus,
       content_type: response?.headers()['content-type'] ?? 'text/html',
-      method: aggregate.componentCount ? 'rendered_aggregated_fulltext_pdf' : 'rendered_fulltext_pdf',
+      method: item.format === 'docx'
+        ? 'converted_fulltext_docx'
+        : aggregate.componentCount
+          ? 'rendered_aggregated_fulltext_pdf'
+          : 'rendered_fulltext_pdf',
       component_count: aggregate.componentCount,
       component_http_statuses: aggregate.componentStatuses,
       retrieved_at: retrievedAt,

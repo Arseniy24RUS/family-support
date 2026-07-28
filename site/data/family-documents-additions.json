@@ -1355,9 +1355,9 @@
         "label": "2025–2030 годы",
         "temporal_status": "active"
       },
-      "format": "pdf",
-      "target_path": "site/documents/legal/federal/federal-national-project-family-passport-2025.pdf",
-      "min_bytes": 25000,
+      "format": "docx",
+      "target_path": "site/documents/legal/federal/federal-national-project-family-passport-2025.docx",
+      "min_bytes": 7000,
       "min_text_chars": 15000,
       "required_phrases": [
         "Паспорт национального проекта",

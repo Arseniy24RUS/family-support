@@ -97,7 +97,9 @@ export function validateManifest(manifest, scope = 'extended') {
       if (!/^https:\/\//u.test(String(source.url ?? ''))) errors.push(`${label}: URL источника должен быть HTTPS`);
       if (!source.publisher || !source.source_class) errors.push(`${label}: источник без издателя или класса`);
       if (!['html', 'binary'].includes(source.mode)) errors.push(`${label}: источник с неизвестным mode`);
-      if (source.mode === 'html' && item.format !== 'pdf') errors.push(`${label}: HTML-источник допустим только для PDF`);
+      if (source.mode === 'html' && !['pdf', 'docx'].includes(item.format)) {
+        errors.push(`${label}: HTML-источник нельзя преобразовать в формат ${item.format}`);
+      }
       if (source.page_range && (source.mode !== 'binary' || item.format !== 'pdf')) {
         errors.push(`${label}: page_range допустим только для бинарного PDF`);
       }
@@ -174,9 +176,20 @@ export function extractDocxText(filePath) {
 
 export function docxPageCount(filePath) {
   const result = run('unzip', ['-p', filePath, 'docProps/app.xml']);
-  if (result.error || result.status !== 0) return null;
-  const match = String(result.stdout ?? '').match(/<Pages>(\d+)<\/Pages>/u);
-  return match ? Number(match[1]) : null;
+  if (!result.error && result.status === 0) {
+    const match = String(result.stdout ?? '').match(/<Pages>(\d+)<\/Pages>/u);
+    if (match) return Number(match[1]);
+  }
+
+  // Generators do not know the final layout and often omit docProps/Pages
+  // until Word opens the file. Explicit page breaks still provide a stable,
+  // independently inspectable lower bound without executing Office.
+  const document = run('unzip', ['-p', filePath, 'word/document.xml']);
+  if (document.error || document.status !== 0) return null;
+  const xml = String(document.stdout ?? '');
+  const explicitBreaks = xml.match(/<w:br\b[^>]*w:type=(?:"|')page(?:"|')[^>]*\/?>/gu)?.length ?? 0;
+  const renderedBreaks = xml.match(/<w:lastRenderedPageBreak\b[^>]*\/?>/gu)?.length ?? 0;
+  return Math.max(explicitBreaks, renderedBreaks) + 1;
 }
 
 export function requiredPhraseErrors(text, item) {
