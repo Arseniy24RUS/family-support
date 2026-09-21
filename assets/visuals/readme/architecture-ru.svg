@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="560" viewBox="0 0 1100 560" role="img" aria-labelledby="title desc">
+  <title id="title">Рабочий поток платформы мер поддержки семей</title>
+  <desc id="desc">Статическая платформа загружает каталог, позволяет выбрать регион и критерии, а затем открывает справочную карточку меры с оговоркой об официальной проверке.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2 2 L10 6 L2 10 Z" fill="#155bb5"/>
+    </marker>
+    <style>
+      .bg{fill:#f7f9fd}.panel{fill:#fff;stroke:#d7e2ef;stroke-width:3;rx:20}.box{fill:#edf5ff;stroke:#3f7dcc;stroke-width:3;rx:14}.warn{fill:#fff7e6;stroke:#d7992d;stroke-width:3;rx:14}.out{fill:#eff8f1;stroke:#5ea36b;stroke-width:3;rx:14}.title{font:700 30px Arial, sans-serif;fill:#14233a}.label{font:700 24px Arial, sans-serif;fill:#14233a}.small{font:20px Arial, sans-serif;fill:#34465e}.arrow{stroke:#155bb5;stroke-width:4;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect class="bg" width="1100" height="560"/>
+  <text class="title" x="42" y="54">Справочный навигатор от региона к карточке меры</text>
+  <rect class="panel" x="34" y="88" width="1032" height="420"/>
+  <rect class="box" x="60" y="136" width="280" height="142"/>
+  <text class="label" x="90" y="176">Снимок каталога</text>
+  <text class="small" x="90" y="210">2 377 записей</text>
+  <text class="small" x="90" y="238">89 регионов</text>
+  <text class="small" x="90" y="266">32 файла деталей</text>
+  <path class="arrow" d="M342 207 H406"/>
+  <rect class="box" x="406" y="116" width="270" height="110"/>
+  <text class="label" x="434" y="158">Ввод</text>
+  <text class="small" x="434" y="192">регион и критерии</text>
+  <rect class="warn" x="406" y="266" width="270" height="124"/>
+  <text class="label" x="434" y="306">Подбор</text>
+  <text class="small" x="434" y="340">детерминированные</text>
+  <text class="small" x="434" y="368">текстовые правила</text>
+  <path class="arrow" d="M541 226 V263"/>
+  <path class="arrow" d="M678 328 H780"/>
+  <rect class="out" x="780" y="135" width="260" height="118"/>
+  <text class="label" x="810" y="177">Группы</text>
+  <text class="small" x="810" y="211">по релевантности</text>
+  <rect class="out" x="780" y="302" width="260" height="126"/>
+  <text class="label" x="810" y="344">Карточка</text>
+  <text class="small" x="810" y="378">шаги и документы</text>
+  <text class="small" x="810" y="406">оговорка о проверке</text>
+  <path class="arrow" d="M912 254 V300"/>
+  <text class="small" x="72" y="476">Граница: подбор объясняет тематическую близость.</text>
+  <text class="small" x="72" y="504">Он не подтверждает право и не заменяет ведомство.</text>
+</svg>

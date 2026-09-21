@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="560" viewBox="0 0 1100 560" role="img" aria-labelledby="title desc">
+  <title id="title">Family support platform workflow</title>
+  <desc id="desc">The static platform loads catalog data, lets a visitor select a region and criteria, and opens reference-only measure cards with official-link caveats.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2 2 L10 6 L2 10 Z" fill="#155bb5"/>
+    </marker>
+    <style>
+      .bg{fill:#f7f9fd}.panel{fill:#fff;stroke:#d7e2ef;stroke-width:3;rx:20}.box{fill:#edf5ff;stroke:#3f7dcc;stroke-width:3;rx:14}.warn{fill:#fff7e6;stroke:#d7992d;stroke-width:3;rx:14}.out{fill:#eff8f1;stroke:#5ea36b;stroke-width:3;rx:14}.title{font:700 30px Arial, sans-serif;fill:#14233a}.label{font:700 24px Arial, sans-serif;fill:#14233a}.small{font:20px Arial, sans-serif;fill:#34465e}.arrow{stroke:#155bb5;stroke-width:4;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect class="bg" width="1100" height="560"/>
+  <text class="title" x="42" y="54">Reference navigator from region to measure card</text>
+  <rect class="panel" x="34" y="88" width="1032" height="420"/>
+  <rect class="box" x="60" y="136" width="280" height="142"/>
+  <text class="label" x="90" y="176">Catalog snapshot</text>
+  <text class="small" x="90" y="210">2,377 records</text>
+  <text class="small" x="90" y="238">89 regions</text>
+  <text class="small" x="90" y="266">32 detail files</text>
+  <path class="arrow" d="M342 207 H406"/>
+  <rect class="box" x="406" y="116" width="270" height="110"/>
+  <text class="label" x="434" y="158">Visitor input</text>
+  <text class="small" x="434" y="192">region and criteria</text>
+  <rect class="warn" x="406" y="266" width="270" height="124"/>
+  <text class="label" x="434" y="306">Local matcher</text>
+  <text class="small" x="434" y="340">deterministic</text>
+  <text class="small" x="434" y="368">text rules</text>
+  <path class="arrow" d="M541 226 V263"/>
+  <path class="arrow" d="M678 328 H780"/>
+  <rect class="out" x="780" y="135" width="260" height="118"/>
+  <text class="label" x="810" y="177">Result groups</text>
+  <text class="small" x="810" y="211">ranked relevance</text>
+  <rect class="out" x="780" y="302" width="260" height="126"/>
+  <text class="label" x="810" y="344">Measure card</text>
+  <text class="small" x="810" y="378">steps and documents</text>
+  <text class="small" x="810" y="406">official-link caveat</text>
+  <path class="arrow" d="M912 254 V300"/>
+  <text class="small" x="72" y="476">Boundary: matching explains possible relevance.</text>
+  <text class="small" x="72" y="504">It does not confirm eligibility or replace an authority.</text>
+</svg>
