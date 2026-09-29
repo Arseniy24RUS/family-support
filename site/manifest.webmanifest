@@ -9,8 +9,8 @@
   "theme_color": "#ffffff",
   "icons": [
     {
-      "src": "./assets/favicon.png",
-      "sizes": "64x64",
+      "src": "./favicon.png",
+      "sizes": "120x120",
       "type": "image/png"
     }
   ]
