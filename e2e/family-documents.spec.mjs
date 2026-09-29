@@ -40,9 +40,10 @@ test.describe('полнотекстовые документы семейной 
     }
   });
 
-  test('каждая новая карточка находится через поиск и открывает карточку просмотрщика', async ({ page }) => {
-    await page.goto('/documents.html');
-    for (const item of documents) {
+  // Each document gets an isolated page and timeout, including on slower mobile runs.
+  for (const item of documents) {
+    test(`карточка ${item.id} находится через поиск и открывает просмотрщик`, async ({ page }) => {
+      await page.goto('/documents.html');
       const scope = item.scope === 'federal' ? 'federal' : 'territorial';
       await page.locator(`[data-document-scope="${scope}"]`).click();
       await page.locator('#strategy-search-input').fill(item.id);
@@ -51,8 +52,9 @@ test.describe('полнотекстовые документы семейной 
       await card.click();
       await expect(page.locator('#strategy-viewer-document-title'), item.id).toHaveText(item.title);
       await page.locator('#close-strategy-viewer').click();
-    }
-  });
+      await expect(page.locator('#close-strategy-viewer')).not.toBeVisible();
+    });
+  }
 
   test('региональный фильтр показывает нормативные документы выбранного субъекта', async ({ page }) => {
     await page.goto('/documents.html');
