@@ -34,7 +34,8 @@ regional-novosibirskaia-oblast;regional;Новосибирская област�
 regional-omskaia-oblast;regional;Омская область;full;17751;standard;56;31,55;54;30,42;22;12,39;35;19,72;7;3,94;48;27,04;9;5,07;1;0,56;6;3,38;18;10,14;11;6,2;6;3,38
 regional-orenburgskaia-oblast;regional;Оренбургская область;full;12161;standard;47;38,65;55;45,23;41;33,71;16;13,16;6;4,93;32;26,31;18;14,8;3;2,47;0;0,0;1;0,82;11;9,05;5;4,11
 regional-orlovskaia-oblast;regional;Орловская область;full;11538;standard;63;54,6;38;32,93;44;38,13;43;37,27;16;13,87;73;63,27;6;5,2;0;0,0;1;0,87;9;7,8;2;1,73;9;7,8
-regional-penzenskaia-oblast;regional;Пензенская область;partial;756;limited;1;13,23;0;0,0;0;0,0;12;158,73;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0
+regional-penzenskaia-oblast;regional;Пензенская область;full;22355;standard;110;49,21;97;43,39;27;12,08;65;29,08;29;12,97;75;33,55;5;2,24;11;4,92;5;2,24;14;6,26;18;8,05;14;6,26
+regional-penza-program-measures-443-pp-2025;regional;Пензенская область;full;756;limited;1;13,23;0;0,0;0;0,0;12;158,73;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0
 regional-permskii-krai;regional;Пермский край;full;15185;standard;38;25,02;50;32,93;18;11,85;26;17,12;11;7,24;33;21,73;0;0,0;0;0,0;9;5,93;5;3,29;5;3,29;2;1,32
 regional-primorskii-krai;regional;Приморский край;full;16007;standard;48;29,99;87;54,35;29;18,12;45;28,11;13;8,12;39;24,36;3;1,87;4;2,5;0;0,0;11;6,87;23;14,37;5;3,12
 regional-pskovskaia-oblast;regional;Псковская область;full;6993;standard;35;50,05;64;91,52;24;34,32;27;38,61;4;5,72;25;35,75;9;12,87;0;0,0;0;0,0;9;12,87;8;11,44;12;17,16
@@ -125,3 +126,4 @@ regional-krasnodar-large-family-law-amendment-5338-kz-2025;regional;Красно
 regional-krasnodar-children-kuban-program-amendment-87-2026;regional;Краснодарский край;full;2914;standard;7;24,02;11;37,75;0;0,0;0;0,0;1;3,43;5;17,16;0;0,0;0;0,0;0;0,0;2;6,86;0;0,0;2;6,86
 federal-maternity-capital-balance-payment-1249;federal;Российская Федерация;full;1546;standard;25;161,71;2;12,94;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;2;12,94;0;0,0;0;0,0;0;0,0;0;0,0
 federal-national-project-family-passport-2025;federal;Российская Федерация;full;1401;limited;0;0,0;0;0,0;0;0,0;0;0,0;0;0,0;13;92,79;0;0,0;0;0,0;1;7,14;8;57,1;0;0,0;0;0,0
+
