@@ -68,7 +68,7 @@
           <i data-lucide="shield-check" aria-hidden="true"></i>
           <div>
             <strong>Это не решение о назначении</strong>
-            <p>Алгоритм ищет тематически релевантные карточки и объясняет совпадения. Окончательное право определяется уполномоченным органом по официальным сведениям.</p>
+            <p>Подбор учитывает территорию и обязательные условия карточек, затем сопоставляет их с выбранной темой. Если ответов не хватает, система предложит уточнения. Окончательное право определяет уполномоченный орган.</p>
           </div>
         </aside>
       </div>
@@ -80,7 +80,7 @@
     </section>
 
     <section class="site-container module-workspace" aria-label="Анкета и результаты подбора">
-      <form class="module-panel profile-form" id="profile-form">
+      <form class="module-panel profile-form" id="profile-form" autocomplete="off">
         <div class="module-panel__heading">
           <div>
             <span class="step-label">Шаг 1</span>
@@ -94,13 +94,21 @@
           <select id="situation-region" required>
             <option value="">Выберите субъект Российской Федерации</option>
           </select>
-          <small>В результат войдут федеральные записи и записи выбранного региона.</small>
+          <small>Подбор учитывает региональные меры и федеральные программы с проверкой территориальных ограничений.</small>
         </label>
 
         <fieldset class="form-fieldset">
           <legend>Что произошло или изменилось в семье?</legend>
           <div class="situation-grid" id="situation-grid"></div>
         </fieldset>
+
+        <label class="field-label" for="situation-target-region" id="situation-target-region-field" hidden>
+          <span>Регион жилья или участка, если отличается</span>
+          <select id="situation-target-region" disabled>
+            <option value="">Совпадает с регионом проживания</option>
+          </select>
+          <small>Для программ покупки жилья, аренды или получения земли.</small>
+        </label>
 
         <aside class="student-family-definition" id="student-family-definition" hidden>
           <i data-lucide="scale" aria-hidden="true"></i>
@@ -117,14 +125,14 @@
 
         <fieldset class="form-fieldset form-fieldset--facts">
           <legend><span class="step-label">Шаг 2</span> Уточняющие обстоятельства</legend>
-          <p class="fieldset-hint">Отмечайте только те пункты, которые имеют отношение к семье. Эти ответы не сохраняются в адресе страницы.</p>
+          <p class="fieldset-hint" id="profile-facts-hint">Для известных условий выберите «Да» или «Нет». «Не указано» означает, что потребуется уточнение. Ответы остаются в текущем сеансе браузера и не включаются в ссылку.</p>
           <div class="fact-grid" id="fact-grid"></div>
         </fieldset>
 
         <label class="field-label" for="profile-query">
           <span>Дополнительные слова <small>необязательно</small></span>
-          <textarea id="profile-query" rows="3" maxlength="240" placeholder="Например: самозанятый родитель, ребёнку два года, нет места в детском саду"></textarea>
-          <small>Поле используется только для поиска совпадений в текущем сеансе.</small>
+          <textarea id="profile-query" rows="3" maxlength="240" placeholder="Например: аренда жилья, оплата питания, транспортные расходы"></textarea>
+          <small>Уточняют тему поиска. Обстоятельства семьи задаются ответами «Да» или «Нет». Текст обрабатывается только в текущем сеансе.</small>
         </label>
 
         <button class="primary-action primary-action--wide" type="submit">
@@ -148,11 +156,17 @@
         <div class="results-placeholder" id="results-placeholder">
           <i data-lucide="route" aria-hidden="true"></i>
           <h3>Заполните короткую анкету</h3>
-          <p>Система покажет релевантные карточки, основания их включения и условия, которые необходимо проверить.</p>
+          <p>Система проверит территорию и обязательные условия, покажет карточки по выбранной теме и предложит уточнить недостающие сведения.</p>
         </div>
         <div id="profile-summary" class="profile-summary" hidden></div>
         <div id="matching-warning" class="inline-warning" hidden></div>
-        <div id="matching-results" class="matching-results" aria-live="polite"></div>
+        <section id="matching-clarifications" class="matching-clarifications" aria-labelledby="matching-clarifications-title" hidden>
+          <h3 id="matching-clarifications-title">Уточните условия семьи</h3>
+          <p id="matching-clarifications-hint"></p>
+          <div class="fact-grid" id="clarification-grid"></div>
+        </section>
+        <p id="matching-count" class="matching-count" role="status" hidden></p>
+        <div id="matching-results" class="matching-results"></div>
       </section>
     </section>
   </main>

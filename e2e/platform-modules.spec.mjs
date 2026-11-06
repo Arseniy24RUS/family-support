@@ -50,7 +50,7 @@ test.describe('комплексное расширение платформы', 
 
     await page.locator('#situation-region').selectOption({ index: 1 });
     await page.locator('input[name="life-situation"]').first().check();
-    await page.locator('input[name="profile-fact"]').first().check();
+    await page.locator('select[name="profile-fact"]').first().selectOption('yes');
     await page.locator('#profile-query').fill('пособие и отпуск');
     await page.locator('#profile-form button[type="submit"]').click();
 

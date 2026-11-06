@@ -1,10 +1,11 @@
+import { normalizeText, tokenize } from './platform-core.js';
 import {
-  measureCategoryValues,
-  measureMatchesRegion,
-  measureSearchText,
-  normalizeText,
-  tokenize
-} from './platform-core.js';
+  PROFILE_FACTS,
+  evaluateMeasureEligibility,
+  profileFactAnswer
+} from './life-situation-eligibility.js';
+
+export { PROFILE_FACTS };
 
 const situation = (id, title, description, icon, patterns, categories = []) => ({
   id,
@@ -26,13 +27,13 @@ export const LIFE_SITUATIONS = Object.freeze([
     'уход.{0,20}ребен', 'до полутора лет', 'до 1[,.]?5', 'до трех лет', 'до 3 лет', 'ясл', 'молочн.{0,15}кухн'
   ], ['выплат', 'пособ', 'образ', 'детсад', 'здоров', 'медиц']),
   situation('low-income', 'Снижение дохода или нуждаемость', 'Адресные выплаты и услуги, зависящие от дохода семьи.', 'wallet-cards', [
-    'малоимущ', 'нуждаем', 'среднедуш', 'прожиточн.{0,15}миним', 'низк.{0,15}доход', 'единое пособ', 'социальн.{0,15}контракт'
+    'малоимущ', 'малообеспеч', 'нуждающ.{0,15}сем', 'доход.{0,50}(ниже|не превыш)', 'низк.{0,15}доход', 'невысок.{0,15}доход', 'единое пособ', 'социальн.{0,15}контракт'
   ], ['выплат', 'пособ', 'социал', 'льгот']),
   situation('large-family', 'Третий ребёнок или многодетная семья', 'Меры для семей с тремя и более детьми.', 'users-round', [
-    'многодет', 'трет.{0,12}ребен', 'трое детей', 'трех и более дет', 'четырех и более дет', 'региональн.{0,15}капитал'
+    'многодет', 'трет.{0,12}ребен', 'трое детей', 'трех и более дет', 'четырех и более дет'
   ], ['выплат', 'пособ', 'жиль', 'ипотек', 'налог', 'льгот']),
   situation('disability', 'Инвалидность или особые потребности ребёнка', 'Выплаты, реабилитация, уход, образование и технические средства.', 'accessibility', [
-    'ребен.{0,15}инвалид', 'дет.{0,15}инвалид', 'ограниченн.{0,15}возможност', '\\bовз\\b', 'реабилитац', 'техническ.{0,15}средств', 'уход.{0,20}инвалид'
+    'ребен.{0,15}инвалид', 'дет.{0,15}инвалид', 'ограниченн.{0,15}возможност', '(?:^|\\s)овз(?=\\s|$)', 'реабилитац', 'техническ.{0,15}средств', 'уход.{0,20}инвалид'
   ], ['здоров', 'медиц', 'социал', 'льгот', 'образ']),
   situation('adoption', 'Усыновление, опека или приёмная семья', 'Поддержка усыновителей, опекунов и приёмных родителей.', 'hand-heart', [
     'усынов', 'удочер', 'опек', 'попечител', 'приемн.{0,15}сем', 'замещающ.{0,15}сем'
@@ -44,10 +45,10 @@ export const LIFE_SITUATIONS = Object.freeze([
     'студенческ.{0,15}сем', 'родител.{0,12}студент', 'студент.{0,12}родител', 'беременн.{0,15}студент'
   ], ['студенческ', 'образ']),
   situation('education', 'Школа, колледж или вуз', 'Питание, проезд, обучение, общежитие и общие образовательные гарантии.', 'graduation-cap', [
-    'школ', 'обучен', 'образован', 'студент', 'вуз', 'университет', 'колледж', 'общежити', 'школьн.{0,15}питан'
+    '(?<!до)школ', 'обучен', 'образован', 'студент', 'вуз', 'университет', 'колледж', 'общежити', 'кружк', 'секци'
   ], ['образ', 'школ', 'проезд', 'транспорт']),
   situation('housing', 'Жилищный вопрос', 'Ипотека, субсидии, земельные участки и улучшение жилищных условий.', 'house', [
-    'жиль', 'жилищ', 'ипотек', 'земел.{0,15}участ', 'первоначальн.{0,15}взнос', 'погашен.{0,15}кредит'
+    'жиль', 'жилищ', 'ипотек', 'земел.{0,15}участ', 'первоначальн.{0,15}взнос', 'погашен.{0,15}кредит', '(?:^|\\s)жку(?=\\s|$)', '(?:^|\\s)жкх(?=\\s|$)', 'коммунальн', 'газификац'
   ], ['жиль', 'ипотек', 'земел', 'жкх', 'коммун']),
   situation('employment', 'Потеря работы или изменение занятости', 'Содействие занятости, обучение, социальный контракт и выплаты.', 'briefcase-business', [
     'безработ', 'потер.{0,15}работ', 'занятост', 'трудоустрой', 'профессиональн.{0,15}обучен', 'социальн.{0,15}контракт', 'самозанят'
@@ -62,25 +63,8 @@ export const LIFE_SITUATIONS = Object.freeze([
     'неполн.{0,15}сем', 'одинок.{0,15}родител', 'единственн.{0,15}родител', 'одна воспитывает', 'один воспитывает', 'алимент'
   ], ['выплат', 'пособ', 'социал', 'льгот']),
   situation('move', 'Переезд или смена регистрации', 'Меры, для которых важны место жительства, регистрация и срок проживания.', 'map-pin-house', [
-    'регистрац', 'мест.{0,15}жительств', 'мест.{0,15}пребыван', 'проживан.{0,20}регион', 'пропис', 'переезд'
+    'смен.{0,15}регистрац', 'смен.{0,15}мест.{0,15}жительств', 'переезд', 'переселен'
   ], ['социал', 'льгот'])
-]);
-
-const fact = (id, label, patterns) => ({ id, label, patterns });
-
-export const PROFILE_FACTS = Object.freeze([
-  fact('child-under-3', 'Есть ребёнок младше трёх лет', ['до трех лет', 'до 3 лет', 'ранн.{0,15}возраст', 'уход.{0,15}ребен', 'ясл']),
-  fact('three-plus-children', 'В семье трое и более детей', ['многодет', 'трое детей', 'трех и более дет', 'трет.{0,12}ребен']),
-  fact('low-income', 'Доход семьи предположительно ниже регионального порога', ['малоимущ', 'нуждаем', 'среднедуш', 'прожиточн.{0,15}миним', 'низк.{0,15}доход', 'единое пособ']),
-  fact('child-disabled', 'У ребёнка установлена инвалидность или ОВЗ', ['ребен.{0,15}инвалид', 'дет.{0,15}инвалид', '\\bовз\\b', 'ограниченн.{0,15}возможност']),
-  fact('adoptive-family', 'Семья усыновила ребёнка или оформила опеку', ['усынов', 'удочер', 'опек', 'попечител', 'приемн.{0,15}сем']),
-  fact('single-parent', 'Ребёнка воспитывает один родитель', ['неполн.{0,15}сем', 'одинок.{0,15}родител', 'единственн.{0,15}родител', 'алимент']),
-  fact('student-family', 'Оба супруга учатся в СПО/вузе либо учится единственный родитель; возраст до 35 лет', ['студенческ.{0,15}сем', 'родител.{0,12}студент', 'студент.{0,12}родител']),
-  fact('military-family', 'Есть военнослужащий или участник боевых действий', ['военнослуж', 'мобилиз', 'участник.{0,15}(сво|боев)', 'ветеран.{0,15}боев']),
-  fact('employment-change', 'Изменился статус занятости или снизился трудовой доход', ['безработ', 'занятост', 'трудоустрой', 'самозанят', 'социальн.{0,15}контракт']),
-  fact('preschool-no-place', 'Ребёнку не предоставлено место в детском саду', ['не предоставлен.{0,20}мест', 'очеред.{0,15}детск.{0,10}сад', 'компенсац.{0,20}детск.{0,10}сад']),
-  fact('housing-need', 'Семье требуется улучшение жилищных условий', ['улучшен.{0,20}жилищ', 'жиль', 'ипотек', 'земел.{0,15}участ']),
-  fact('rural', 'Семья проживает в сельской местности', ['сельск.{0,15}местност', 'сельск.{0,15}территор', 'на селе'])
 ]);
 
 const compiledPatterns = new Map();
@@ -92,13 +76,6 @@ function matchesPattern(text, pattern) {
 
 function matchingPatterns(text, patterns) {
   return patterns.filter((pattern) => matchesPattern(text, pattern));
-}
-
-function normalizedCategoryMatch(categories, candidates) {
-  return categories.some((category) => {
-    const normalized = normalizeText(category);
-    return candidates.some((candidate) => normalized.includes(normalizeText(candidate)));
-  });
 }
 
 const constraintDetectors = Object.freeze([
@@ -113,108 +90,103 @@ const constraintDetectors = Object.freeze([
 function buildChecks(text) {
   return constraintDetectors
     .filter(({ pattern }) => pattern.test(text))
-    .map(({ label }) => `Проверьте ${label}`)
-    .slice(0, 3);
+    .map(({ label }) => `Проверьте ${label}`);
 }
 
-function tierForScore(score) {
-  if (score >= 9) return 'high';
-  if (score >= 4.5) return 'check';
-  return 'related';
+function topicText(value, situationId) {
+  // Purposes such as spending maternity capital on education are valid topic
+  // evidence even though they are not mandatory recipient conditions.
+  let text = normalizeText(String(value ?? '').split(/(?<=[.!?])\s+/u)
+    .filter((sentence) => !/сами по себе|сам по себе|не дают права|не дает права/iu.test(sentence)).join(' '));
+  if (situationId === 'education') text = text.replace(/дошкольн\p{L}*\s+образован\p{L}*/gu, '');
+  return text;
 }
 
+/** Eligibility is a three-valued condition check; relevance only orders surviving cards. */
 export function scoreMeasureForProfile(measure, profile) {
   const selectedSituation = LIFE_SITUATIONS.find((item) => item.id === profile?.situationId);
-  if (!selectedSituation || !measureMatchesRegion(measure, profile?.region)) return null;
-  const isStudentFamilyMeasure = measure?.audiences?.includes('Студенческие семьи');
-  if (selectedSituation.id === 'student-family' && !isStudentFamilyMeasure) return null;
+  if (!selectedSituation || !measure) return null;
+  const eligibility = evaluateMeasureEligibility(measure, profile);
+  if (eligibility.status === 'excluded') return null;
 
-  const title = normalizeText(measure?.title);
-  const text = measureSearchText(measure);
-  let score = 0;
-  const reasons = [];
-  const matchedSituation = matchingPatterns(text, selectedSituation.patterns);
-  const matchedSituationTitle = matchingPatterns(title, selectedSituation.patterns);
-
+  // Category names, benefit amounts, source names and region labels are not evidence
+  // that a measure addresses the selected life event.
+  const title = topicText(measure.title, selectedSituation.id);
+  const text = topicText([measure.title, measure.summary].join(' '), selectedSituation.id);
+  const isStudentFamilyMeasure = measure.audiences?.includes('Студенческие семьи');
+  const matchedTitle = matchingPatterns(title, selectedSituation.patterns);
+  const matchedBody = matchingPatterns(text, selectedSituation.patterns);
   if (selectedSituation.id === 'student-family') {
-    score += measure.student_family_relevance === 'targeted' ? 8 : 6;
+    if (!isStudentFamilyMeasure && !matchedBody.length) return null;
+  } else if (!matchedBody.length) return null;
+
+  let score = matchedTitle.length ? Math.min(7, 4.5 + matchedTitle.length * 0.75)
+    : Math.min(5, 2.5 + matchedBody.length * 0.5);
+  const reasons = [`Название или описание связано с ситуацией «${selectedSituation.title}»`];
+  if (selectedSituation.id === 'student-family' && isStudentFamilyMeasure) {
+    score = measure.student_family_relevance === 'targeted' ? 8 : 6;
     reasons.push(measure.student_family_relevance === 'targeted'
       ? 'Мера прямо адресована студенческим семьям или родителям-студентам'
-      : 'Мера непосредственно связана с беременностью или рождением ребёнка у обучающейся');
-  } else if (matchedSituationTitle.length) score += Math.min(7, 4.5 + matchedSituationTitle.length * 0.75);
-  else if (matchedSituation.length) score += Math.min(5, 2.5 + matchedSituation.length * 0.5);
-
-  if (matchedSituation.length && selectedSituation.id !== 'student-family') {
-    reasons.push(`Текст карточки связан с ситуацией «${selectedSituation.title}»`);
+      : 'Мера предусматривает поддержку обучающихся при беременности или рождении ребёнка');
   }
-
-  if (normalizedCategoryMatch(measureCategoryValues(measure), selectedSituation.categories)) {
-    score += 1.25;
-    reasons.push('Категория меры релевантна выбранной ситуации');
-  }
-
-  const selectedFacts = PROFILE_FACTS.filter((item) => profile?.factIds?.includes(item.id));
-  for (const selectedFact of selectedFacts) {
-    if (selectedFact.id === 'student-family') {
-      if (!isStudentFamilyMeasure) continue;
-      score += 2.75;
-      reasons.push('Учтено соответствие официальной категории «студенческая семья»');
-      continue;
-    }
-    const titleMatches = matchingPatterns(title, selectedFact.patterns);
-    const bodyMatches = titleMatches.length ? titleMatches : matchingPatterns(text, selectedFact.patterns);
-    if (!bodyMatches.length) continue;
-    score += titleMatches.length ? 2.75 : 1.5;
-    reasons.push(`Учтён признак: ${selectedFact.label.toLocaleLowerCase('ru-RU')}`);
-  }
-
-  const queryTokens = tokenize(profile?.query, { minLength: 4 }).slice(0, 6);
-  const matchedTokens = queryTokens.filter((token) => text.includes(token));
+  for (const item of eligibility.matchedFacts) reasons.push(`Подтверждено: ${item.label}`);
+  const matchedTokens = tokenize(profile?.query, { minLength: 4 })
+    .filter((token) => text.includes(token));
   if (matchedTokens.length) {
     score += Math.min(3.5, matchedTokens.length * 0.9);
-    reasons.push(`Совпали дополнительные слова: ${matchedTokens.join(', ')}`);
+    reasons.push(`Дополнительные слова уточняют тему: ${matchedTokens.join(', ')}`);
   }
-
-  if (measure?.level === 'regional' && measure?.region === profile?.region) score += 0.35;
-  if (score < 2.5 || selectedSituation.id !== 'student-family' && !matchedSituation.length && reasons.length < 2) return null;
-
-  reasons.push(measure?.level === 'federal'
-    ? 'Федеральная запись учитывается для любого выбранного региона'
-    : `Региональная запись относится к субъекту «${profile.region}»`);
-
+  if (measure.level === 'regional') {
+    score += 0.35;
+    reasons.push(`Региональная мера для субъекта «${profile.region}»`);
+  } else {
+    reasons.push(eligibility.territoryConfirmed
+      ? 'Федеральная мера: учтены ограничения территории действия'
+      : 'Территорию действия федеральной программы требуется уточнить');
+  }
   return {
     measure,
     score: Number(score.toFixed(2)),
-    tier: tierForScore(score),
-    reasons: [...new Set(reasons)].slice(0, 4),
+    tier: eligibility.status === 'eligible' ? 'high' : 'check',
+    eligibility,
+    missingFacts: eligibility.missingFacts,
+    reasons: [...new Set(reasons)],
     checks: buildChecks(text)
   };
 }
 
-export function matchMeasuresToProfile(measures, profile, { limit = 60 } = {}) {
+export function matchMeasuresToProfile(measures, profile) {
   const ranked = measures
     .map((measure) => scoreMeasureForProfile(measure, profile))
     .filter(Boolean)
-    .sort((a, b) => b.score - a.score
+    .sort((a, b) => (a.tier === b.tier ? 0 : a.tier === 'high' ? -1 : 1)
+      || b.score - a.score
       || (a.measure.level === b.measure.level ? 0 : a.measure.level === 'regional' ? -1 : 1)
-      || String(a.measure.title).localeCompare(String(b.measure.title), 'ru'))
-    .slice(0, Math.max(1, limit));
-
+      || String(a.measure.title).localeCompare(String(b.measure.title), 'ru'));
+  const questions = new Map();
+  for (const result of ranked) {
+    for (const item of result.missingFacts) {
+      const current = questions.get(item.id);
+      questions.set(item.id, { ...item, count: (current?.count ?? 0) + 1 });
+    }
+  }
   return {
     high: ranked.filter((item) => item.tier === 'high'),
     check: ranked.filter((item) => item.tier === 'check'),
-    related: ranked.filter((item) => item.tier === 'related'),
-    all: ranked
+    related: [],
+    all: ranked,
+    questions: [...questions.values()].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label, 'ru'))
   };
 }
 
 export function profileSummary(profile) {
   const selectedSituation = LIFE_SITUATIONS.find((item) => item.id === profile?.situationId);
-  const facts = PROFILE_FACTS.filter((item) => profile?.factIds?.includes(item.id));
   return {
     situation: selectedSituation?.title ?? '',
     region: profile?.region ?? '',
-    facts: facts.map((item) => item.label),
+    targetRegion: profile?.targetRegion ?? '',
+    facts: PROFILE_FACTS.filter((item) => profileFactAnswer(profile, item.id) === true).map((item) => item.label),
+    negativeFacts: PROFILE_FACTS.filter((item) => profileFactAnswer(profile, item.id) === false).map((item) => item.label),
     query: String(profile?.query ?? '').trim()
   };
 }

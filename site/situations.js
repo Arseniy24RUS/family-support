@@ -33,12 +33,17 @@ const state = {
   details: null,
   profile: null,
   matches: null,
+  factAnswers: {},
+  clarificationFacts: new Map(),
+  started: false,
   activeResult: null
 };
 
 const elements = {
   form: document.querySelector('#profile-form'),
   region: document.querySelector('#situation-region'),
+  targetRegion: document.querySelector('#situation-target-region'),
+  targetRegionField: document.querySelector('#situation-target-region-field'),
   situationGrid: document.querySelector('#situation-grid'),
   studentFamilyDefinition: document.querySelector('#student-family-definition'),
   factGrid: document.querySelector('#fact-grid'),
@@ -47,6 +52,11 @@ const elements = {
   placeholder: document.querySelector('#results-placeholder'),
   profileSummary: document.querySelector('#profile-summary'),
   warning: document.querySelector('#matching-warning'),
+  clarifications: document.querySelector('#matching-clarifications'),
+  clarificationTitle: document.querySelector('#matching-clarifications-title'),
+  clarificationHint: document.querySelector('#matching-clarifications-hint'),
+  clarificationGrid: document.querySelector('#clarification-grid'),
+  count: document.querySelector('#matching-count'),
   results: document.querySelector('#matching-results'),
   tools: document.querySelector('#results-tools'),
   copyLink: document.querySelector('#copy-profile-link'),
@@ -106,32 +116,68 @@ function renderSituationChoices() {
   elements.situationGrid.replaceChildren(fragment);
 }
 
-function renderFactChoices() {
-  const fragment = document.createDocumentFragment();
-  for (const item of PROFILE_FACTS) {
-    const label = document.createElement('label');
-    label.className = 'fact-option';
-    const input = document.createElement('input');
-    input.type = 'checkbox';
-    input.name = 'profile-fact';
-    input.value = item.id;
-    const box = document.createElement('span');
-    box.className = 'fact-option__box';
-    box.append(icon('check'));
-    const text = document.createElement('span');
-    text.textContent = item.label;
-    label.append(input, box, text);
-    fragment.append(label);
+function factAnswerValue(answer) {
+  return answer === true ? 'yes' : answer === false ? 'no' : 'unknown';
+}
+
+function createFactChoice(item, { clarification = false } = {}) {
+  const label = document.createElement('label');
+  label.className = 'fact-option';
+  const id = `${clarification ? 'clarification' : 'profile-fact'}-${item.id}`;
+  label.htmlFor = id;
+  const text = document.createElement('span');
+  text.id = `${id}-label`;
+  text.textContent = item.label;
+  const select = document.createElement('select');
+  select.id = id;
+  select.name = clarification ? 'clarification-fact' : 'profile-fact';
+  select.dataset.factId = item.id;
+  select.setAttribute('aria-labelledby', text.id);
+  for (const [value, title] of [['unknown', 'Не указано'], ['yes', 'Да'], ['no', 'Нет']]) {
+    const option = document.createElement('option');
+    option.value = value;
+    option.textContent = title;
+    select.append(option);
   }
-  elements.factGrid.replaceChildren(fragment);
+  select.value = factAnswerValue(state.factAnswers[item.id]);
+  label.append(text, select);
+  if (clarification) {
+    const hint = document.createElement('small');
+    hint.id = `${id}-hint`;
+    const count = Number(item.count) || 0;
+    hint.textContent = count
+      ? `Карточек с этим условием: ${count.toLocaleString('ru-RU')}.`
+      : 'Ответ учтён. Его можно изменить.';
+    select.setAttribute('aria-describedby', hint.id);
+    label.append(hint);
+  } else {
+    select.setAttribute('aria-describedby', 'profile-facts-hint');
+  }
+  return label;
+}
+
+function renderFactChoices() {
+  elements.factGrid.replaceChildren(...PROFILE_FACTS
+    .filter((item) => item.primary !== false)
+    .map((item) => createFactChoice(item)));
+}
+
+function setFactAnswer(select) {
+  const id = select.dataset.factId;
+  state.factAnswers[id] = select.value === 'yes' ? true : select.value === 'no' ? false : null;
+  for (const other of document.querySelectorAll('select[data-fact-id]')) {
+    if (other.dataset.factId === id) other.value = factAnswerValue(state.factAnswers[id]);
+  }
 }
 
 function populateRegions() {
   for (const region of state.regions) {
-    const option = document.createElement('option');
-    option.value = region;
-    option.textContent = region;
-    elements.region.append(option);
+    for (const select of [elements.region, elements.targetRegion]) {
+      const option = document.createElement('option');
+      option.value = region;
+      option.textContent = region;
+      select.append(option);
+    }
   }
 }
 
@@ -139,22 +185,31 @@ function selectedSituationId() {
   return elements.form.elements.namedItem('life-situation')?.value || '';
 }
 
-function updateStudentFamilyDefinition() {
-  elements.studentFamilyDefinition.hidden = selectedSituationId() !== 'student-family';
-}
-
-function selectedFactIds() {
-  return [...elements.form.querySelectorAll('input[name="profile-fact"]:checked')]
-    .map((input) => input.value);
+function updateSituationFields() {
+  const situationId = selectedSituationId();
+  elements.studentFamilyDefinition.hidden = situationId !== 'student-family';
+  const showTargetRegion = situationId === 'housing' || situationId === 'move';
+  elements.targetRegionField.hidden = !showTargetRegion;
+  elements.targetRegion.disabled = !showTargetRegion;
 }
 
 function currentProfile() {
+  const situationId = selectedSituationId();
   return {
     region: elements.region.value,
-    situationId: selectedSituationId(),
-    factIds: selectedFactIds(),
+    targetRegion: situationId === 'housing' || situationId === 'move' ? elements.targetRegion.value : '',
+    situationId,
+    factAnswers: { ...state.factAnswers },
     query: elements.query.value.trim()
   };
+}
+
+function answeredFactLabels(profile) {
+  const labels = new Map(PROFILE_FACTS.map((item) => [item.id, item.label]));
+  for (const item of state.clarificationFacts.values()) labels.set(item.id, item.label);
+  return Object.entries(profile.factAnswers || {})
+    .filter(([, answer]) => answer === true || answer === false)
+    .map(([id, answer]) => `${labels.get(id) || id}: ${answer ? 'Да' : 'Нет'}`);
 }
 
 function publicProfileUrl(profile = currentProfile()) {
@@ -194,9 +249,7 @@ function updateDataStatus() {
 }
 
 function statusLabel(tier) {
-  if (tier === 'high') return 'Наиболее релевантна по тексту';
-  if (tier === 'check') return 'Требуется проверить условия';
-  return 'Связанная мера';
+  return tier === 'high' ? 'Соответствует указанным условиям' : 'Нужно уточнить условия';
 }
 
 function createTag(text, modifier = '') {
@@ -257,6 +310,9 @@ function createResultCard(result) {
 
   const reasons = createReasonList('Почему показана', result.reasons, 'matching-card__reasons');
   if (reasons) article.append(reasons);
+  const missingFacts = result.missingFacts || [];
+  const missing = createReasonList('Уточните для этой меры', missingFacts.map((item) => item.label), 'matching-card__missing');
+  if (missing) article.append(missing);
   const checks = createReasonList('Что проверить', result.checks, 'matching-card__checks');
   if (checks) article.append(checks);
 
@@ -266,6 +322,19 @@ function createResultCard(result) {
   source.textContent = `Источник: ${sourceName(measure)}`;
   const actions = document.createElement('div');
   actions.className = 'matching-card__actions';
+
+  if (missingFacts.length) {
+    const clarify = document.createElement('button');
+    clarify.type = 'button';
+    clarify.className = 'text-button';
+    clarify.textContent = 'Уточнить условия';
+    clarify.addEventListener('click', () => {
+      const field = document.getElementById(`clarification-${missingFacts[0].id}`);
+      field?.focus({ preventScroll: true });
+      field?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+    actions.append(clarify);
+  }
 
   const details = document.createElement('button');
   details.type = 'button';
@@ -313,7 +382,13 @@ function renderProfileSummary(profile) {
   heading.textContent = 'Параметры подбора';
   const chips = document.createElement('div');
   chips.className = 'profile-summary__chips';
-  for (const text of [summary.region, summary.situation, ...summary.facts]) {
+  const targetRegion = summary.targetRegion || profile.targetRegion;
+  for (const text of [
+    summary.region,
+    summary.situation,
+    ...(targetRegion ? [`Регион жилья или участка: ${targetRegion}`] : []),
+    ...answeredFactLabels(profile)
+  ]) {
     if (!text) continue;
     const chip = document.createElement('span');
     chip.textContent = text;
@@ -343,59 +418,104 @@ function renderCoverageWarning(profile) {
   elements.warning.append(text);
 }
 
-function renderMatches() {
+function renderClarifications() {
+  const questions = state.matches.questions || [];
+  const retained = [...state.clarificationFacts.values()]
+    .filter((item) => state.factAnswers[item.id] === true || state.factAnswers[item.id] === false)
+    .map((item) => [item.id, { ...item, count: 0 }]);
+  state.clarificationFacts = new Map(retained);
+  for (const question of questions) state.clarificationFacts.set(question.id, question);
+  elements.clarifications.hidden = !state.clarificationFacts.size;
+  elements.clarificationTitle.textContent = questions.length ? 'Уточните условия семьи' : 'Уточнения учтены';
+  elements.clarificationHint.textContent = questions.length
+    ? 'Для части карточек не хватает ответов. Выберите «Да» или «Нет», если условие известно. Ответ «Не указано» оставит карточку в группе уточнений. Результаты обновятся сразу.'
+    : 'Ответы применены к подбору. При изменении ответа результаты обновятся автоматически.';
+  elements.clarificationGrid.replaceChildren(...[...state.clarificationFacts.values()]
+    .map((item) => createFactChoice(item, { clarification: true })));
+}
+
+function renderMatches({ scroll = false } = {}) {
   elements.results.replaceChildren();
   elements.placeholder.hidden = true;
   elements.tools.hidden = false;
+  renderClarifications();
   renderProfileSummary(state.profile);
   renderCoverageWarning(state.profile);
+  elements.count.hidden = false;
+  const total = state.matches.all.length;
+  elements.count.textContent = `Показано: ${total.toLocaleString('ru-RU')} ${pluralMeasures(total)}. `
+    + `Соответствуют указанным условиям: ${state.matches.high.length.toLocaleString('ru-RU')}. `
+    + `Нужно уточнить: ${state.matches.check.length.toLocaleString('ru-RU')}.`;
 
   if (!state.matches.all.length) {
     const empty = document.createElement('div');
     empty.className = 'results-empty';
     empty.append(icon('search-x'));
     const title = document.createElement('h3');
-    title.textContent = 'Тематические совпадения не найдены';
+    title.textContent = 'Карточки по заданным условиям не найдены';
     const text = document.createElement('p');
-    text.textContent = 'Измените жизненную ситуацию или дополнительные слова. Отсутствие результата не доказывает отсутствие права на поддержку.';
+    text.textContent = 'Проверьте регион, жизненную ситуацию и ответы. Отсутствие результата не доказывает отсутствие права на поддержку.';
     empty.append(title, text);
     elements.results.append(empty);
     refreshIcons();
+    if (scroll) elements.count.scrollIntoView({ behavior: 'smooth', block: 'start' });
     return;
   }
 
   const groups = [
     renderGroup(
-      'Наиболее релевантные по тексту',
-      'Название или описание напрямую связано с выбранной ситуацией и отмеченными обстоятельствами.',
-      state.matches.high.slice(0, 15),
+      'Соответствуют указанным условиям',
+      'Карточки связаны с выбранной ситуацией; распознанные обязательные условия подтверждены вашими ответами. Перед обращением проверьте полные условия в официальном источнике.',
+      state.matches.high,
       'high'
     ),
     renderGroup(
-      'Требуется проверить дополнительные условия',
-      'Карточки тематически подходят, но применимость зависит от дохода, возраста, регистрации, занятости или других критериев.',
-      state.matches.check.slice(0, 20),
+      'Нужно уточнить условия',
+      'Применимость этих карточек пока не подтверждена. Для каждой меры указаны недостающие сведения; после уточнения карточка перейдёт в подходящие или будет исключена.',
+      state.matches.check,
       'check'
-    ),
-    renderGroup(
-      'Связанные меры',
-      'Более широкие направления, которые могут быть полезны в данной жизненной ситуации.',
-      state.matches.related.slice(0, 12),
-      'related'
     )
   ].filter(Boolean);
   elements.results.append(...groups);
   refreshIcons();
-  elements.results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (scroll) {
+    (elements.clarifications.hidden ? elements.count : elements.clarifications)
+      .scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function clearResults() {
+  state.profile = null;
+  state.matches = null;
+  elements.results.replaceChildren();
+  elements.profileSummary.replaceChildren();
+  elements.count.textContent = '';
+  elements.profileSummary.hidden = true;
+  elements.warning.hidden = true;
+  elements.clarifications.hidden = true;
+  elements.count.hidden = true;
+  elements.tools.hidden = true;
+  elements.placeholder.hidden = false;
+}
+
+function updateMatches({ scroll = false, focusId = '' } = {}) {
+  if (!elements.form.checkValidity()) {
+    clearResults();
+    syncPublicQuery(currentProfile());
+    return;
+  }
+  state.profile = currentProfile();
+  state.matches = matchMeasuresToProfile(state.measures, state.profile);
+  syncPublicQuery(state.profile);
+  renderMatches({ scroll });
+  if (focusId) document.getElementById(focusId)?.focus({ preventScroll: true });
 }
 
 function handleSubmit(event) {
   event.preventDefault();
   if (!elements.form.reportValidity()) return;
-  state.profile = currentProfile();
-  state.matches = matchMeasuresToProfile(state.measures, state.profile);
-  syncPublicQuery(state.profile);
-  renderMatches();
+  state.started = true;
+  updateMatches({ scroll: true });
 }
 
 function createDetailSection(titleText, values, ordered = false) {
@@ -464,6 +584,9 @@ function renderDetail(result, detail) {
   }
   explanation.append(explanationTitle, reasonList);
   fragment.append(explanation);
+
+  const unresolved = createDetailSection('Условия, требующие уточнения', (result.missingFacts || []).map((item) => item.label));
+  if (unresolved) fragment.append(unresolved);
 
   const sections = [
     createDetailSection('Как оформить', detail.steps, true),
@@ -576,25 +699,30 @@ function closeDialog() {
 
 function planText() {
   const summary = profileSummary(state.profile);
+  const answers = answeredFactLabels(state.profile);
   const lines = [
     'ПРЕДВАРИТЕЛЬНЫЙ НАВИГАТОР МЕР ПОДДЕРЖКИ',
     `Сформировано: ${new Intl.DateTimeFormat('ru-RU', { dateStyle: 'long' }).format(new Date())}`,
     '',
     `Регион: ${summary.region}`,
+    ...((summary.targetRegion || state.profile.targetRegion)
+      ? [`Регион жилья или участка: ${summary.targetRegion || state.profile.targetRegion}`] : []),
     `Жизненная ситуация: ${summary.situation}`,
-    summary.facts.length ? `Уточняющие обстоятельства: ${summary.facts.join('; ')}` : 'Уточняющие обстоятельства: не указаны',
+    answers.length ? `Ответы об обстоятельствах: ${answers.join('; ')}` : 'Уточняющие обстоятельства: не указаны',
     ...(summary.query ? [`Дополнительный запрос: ${summary.query}`] : []),
     '',
-    'ВАЖНО: это тематический подбор по тексту каталога, а не подтверждение права. Условия необходимо проверить в официальном источнике.',
+    `Всего карточек: ${state.matches.all.length}. Соответствуют указанным условиям: ${state.matches.high.length}. Нужно уточнить: ${state.matches.check.length}.`,
+    'Подбор учитывает тему, территорию и распознанные обязательные условия. Карточки с недостающими ответами требуют уточнения. Окончательное право и полные условия необходимо проверить в официальном источнике.',
     ''
   ];
 
-  state.matches.all.slice(0, 30).forEach((result, index) => {
+  state.matches.all.forEach((result, index) => {
     const measure = result.measure;
     lines.push(`${index + 1}. ${measure.title}`);
     lines.push(`   Статус: ${statusLabel(result.tier)}`);
     lines.push(`   Уровень: ${levelLabel(measure)}${measure.region ? `, ${measure.region}` : ''}`);
     lines.push(`   Почему показана: ${result.reasons.join('; ')}`);
+    if (result.missingFacts?.length) lines.push(`   Уточнить: ${result.missingFacts.map((item) => item.label).join('; ')}`);
     if (result.checks.length) lines.push(`   Проверить: ${result.checks.join('; ')}`);
     lines.push(`   Карточка: ${new URL(catalogMeasureUrl(measure, { region: state.profile.region }), location.href).href}`);
     lines.push('');
@@ -605,18 +733,27 @@ function planText() {
 function bindEvents() {
   elements.form.addEventListener('submit', handleSubmit);
   elements.form.addEventListener('change', (event) => {
-    if (event.target?.name === 'life-situation') updateStudentFamilyDefinition();
+    if (event.target?.matches('select[data-fact-id]')) setFactAnswer(event.target);
+    if (event.target?.name === 'life-situation') updateSituationFields();
+    if (state.started) updateMatches();
+  });
+  elements.query.addEventListener('input', () => {
+    if (state.started) updateMatches();
+  });
+  elements.clarifications.addEventListener('change', (event) => {
+    if (!event.target?.matches('select[data-fact-id]')) return;
+    const focusId = event.target.id;
+    setFactAnswer(event.target);
+    updateMatches({ focusId });
   });
   elements.form.addEventListener('reset', () => {
     window.setTimeout(() => {
-      state.profile = null;
-      state.matches = null;
-      elements.results.replaceChildren();
-      elements.profileSummary.hidden = true;
-      elements.warning.hidden = true;
-      elements.tools.hidden = true;
-      elements.placeholder.hidden = false;
-      updateStudentFamilyDefinition();
+      state.factAnswers = {};
+      state.clarificationFacts.clear();
+      state.started = false;
+      clearResults();
+      elements.clarificationGrid.replaceChildren();
+      updateSituationFields();
       history.replaceState(null, '', location.pathname);
     });
   });
@@ -663,7 +800,7 @@ async function init() {
     populateRegions();
     updateDataStatus();
     const restored = restorePublicQuery();
-    updateStudentFamilyDefinition();
+    updateSituationFields();
     refreshIcons();
     if (restored) elements.form.requestSubmit();
   } catch (error) {
